@@ -1060,31 +1060,31 @@ msgstr ""
 #: looperget_flask/templates/pages/function_options/trigger_options.html:12
 #: looperget_flask/templates/pages/output_options.html:17
 msgid "Save"
-msgstr ""
+msgstr "저장"
 
 #: config_translations.py:162
 msgid "Save Order"
-msgstr ""
+msgstr "저장 명령"
 
 #: config_translations.py:164
 msgid "Scale"
-msgstr ""
+msgstr "비율"
 
 #: config_translations.py:166
 msgid "Unscaled Unit Min"
-msgstr ""
+msgstr "최소 단위 미지정"
 
 #: config_translations.py:168
 msgid "Unscaled Unit Max"
-msgstr ""
+msgstr "최대 단위 미지정"
 
 #: config_translations.py:170
 msgid "Rescaled Unit Min"
-msgstr ""
+msgstr "최소 단위 재지정"
 
 #: config_translations.py:172
 msgid "Rescaled Unit Max"
-msgstr ""
+msgstr "최대 단위 재지정"
 
 #: config_translations.py:174
 #: looperget_flask/templates/pages/form_options/FTDI.html:23
@@ -1097,11 +1097,11 @@ msgstr ""
 
 #: config_translations.py:176
 msgid "Sensitivity"
-msgstr ""
+msgstr "민감도"
 
 #: config_translations.py:180
 msgid "Settings"
-msgstr ""
+msgstr "설정"
 
 #: config_translations.py:182
 #: looperget_flask/templates/pages/function_options/conditional_options/measurement.html:2
@@ -1113,28 +1113,28 @@ msgstr ""
 
 #: config_translations.py:184
 msgid "Stops"
-msgstr ""
+msgstr "정지"
 
 #: config_translations.py:186 looperget_flask/templates/flash_messages.html:7
 msgid "Success"
-msgstr ""
+msgstr "성공"
 
 #: config_translations.py:188
 #: looperget_flask/templates/pages/function_options/conditional_options/measurement_past_sum.html:2
 msgid "Sum"
-msgstr ""
+msgstr "합"
 
 #: config_translations.py:190
 msgid "System"
-msgstr ""
+msgstr "시스템"
 
 #: config_translations.py:192
 msgid "Tag"
-msgstr ""
+msgstr "태그"
 
 #: config_translations.py:194
 msgid "Text"
-msgstr ""
+msgstr "문자"
 
 #: config_translations.py:196 looperget_flask/forms/forms_settings.py:354
 #: looperget_flask/forms/forms_settings.py:360
@@ -1146,29 +1146,29 @@ msgstr ""
 
 #: config_translations.py:198
 msgid "Time-lapse"
-msgstr ""
+msgstr "타임랩스"
 
 #: config_translations.py:200
 msgid "Timer"
-msgstr ""
+msgstr "타이머"
 
 #: config_translations.py:202
 msgid "Trigger"
-msgstr ""
+msgstr "트리거"
 
 #: config_translations.py:204
 msgid "Unlock"
-msgstr ""
+msgstr "잠금해제"
 
 #: config_translations.py:206
 msgid "Up"
-msgstr ""
+msgstr "올리다"
 
 #: actions/command_bash.py:32 config_translations.py:208
 #: config_translations.py:277 inputs/linux_command.py:58
 #: outputs/on_off_shell.py:67 outputs/pwm_python.py:232 outputs/pwm_shell.py:68
 msgid "User"
-msgstr ""
+msgstr "사용자"
 
 #: actions/output_value.py:47 config_translations.py:210
 #: config_translations.py:310 config_translations.py:311
@@ -1182,15 +1182,15 @@ msgstr ""
 #: config_translations.py:314 config_translations.py:381
 #: inputs/anyleaf_orp.py:52 looperget_flask/forms/forms_settings.py:121
 msgid "Voltage"
-msgstr ""
+msgstr "볼트"
 
 #: config_translations.py:216 looperget_flask/forms/forms_settings.py:163
 msgid "Widget"
-msgstr ""
+msgstr "위젯"
 
 #: config_translations.py:220
 msgid "1-Wire Device ID"
-msgstr ""
+msgstr "1-와이어 장치 ID"
 
 #: config_translations.py:223 functions/camera_libcamera.py:299
 #: inputs/as7262.py:83 looperget_flask/forms/forms_camera.py:63
@@ -1202,11 +1202,11 @@ msgstr ""
 #: functions/camera_libcamera.py:251 functions/camera_libcamera.py:398
 #: functions/camera_libcamera.py:407
 msgid "Resolution"
-msgstr ""
+msgstr "해상도"
 
 #: config_translations.py:229
 msgid "Sample Speed"
-msgstr ""
+msgstr "샘플 속도"
 
 #: config_translations.py:232
 msgid "Baud Rate"
@@ -1340,7 +1340,7 @@ msgstr ""
 #: widgets/widget_pid.py:244 widgets/widget_python_code.py:161
 #: widgets/widget_python_code.py:169
 msgid "Seconds"
-msgstr ""
+msgstr "초"
 
 #: config_translations.py:248
 msgid "Time to wait until failure"
