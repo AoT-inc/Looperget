@@ -37,7 +37,7 @@ Looperget은 **라즈베리파이(Raspberry Pi)**에서 실행되는 오픈 소�
 
 .. code:: bash
 
-    curl -sSL https://raw.githubusercontent.com/AoT-inc/Looperget/main/install/setup.sh | sudo bash
+    curl -L https://aot-inc.github.io/Looperget/install | bash
 
 
 이 명령어는 Looperget의 설치 스크립트를 다운로드하고 실행하여 자동으로 설치를 진행합니다.
