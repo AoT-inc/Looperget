@@ -1,0 +1,144 @@
+/* looperget.css – 기존 위젯 디자인(버튼, 슬라이드 토글 등)을 재현 */
+
+/* 기본 변수: simplex 테마 변수와 유사하게 */
+:root {
+    --bg-active: #FFF9E3;        /* 작동(활성) 상태 배경 */
+    --bg-paused: #fff3cd;        /* 일시정지 상태 배경 */
+    --bg-inactive: #E9E9E9;      /* 비활성 상태 배경 */
+    --pid-btn-bg: #F4D624;       /* 버튼 기본 배경 (기존 디자인 참고) */
+    --pid-btn-hover-bg: #929292;  /* 버튼 호버 배경 */
+    --pid-text-color: #000;      /* 버튼 및 텍스트 색상 */
+    --font-size: 1em;            /* 기본 폰트 크기 */
+  }
+  
+  /* 최외곽 위젯 컨테이너 및 배경 – 위젯 전체를 채우고 0.5em 여백 */
+  .pid-widget-container {
+    width: 100%;
+    height: 100%;
+    margin: 0.5em;
+    box-sizing: border-box;
+  }
+  .pid-background {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* 배경 상태 클래스: JS에서 토글(활성, 일시정지, 비활성) */
+  .active-background {
+    background-color: var(--bg-active) !important;
+  }
+  .pause-background {
+    background-color: var(--bg-paused) !important;
+  }
+  .inactive-background {
+    background-color: var(--bg-inactive) !important;
+  }
+  
+  /* 프레임 영역(헤더, 컨트롤 패널)에 0.5em 여백 */
+  .pid-frame1,
+  .pid-frame2 {
+    margin: 0.5em;
+  }
+  
+  /* === 슬라이드 토글 버튼 === */
+  /* 기존 위젯에서는 아래와 같이 체크박스 + 슬라이더 영역을 사용합니다.
+     (HTML 예시)
+     <label class="toggle-switch-timer" id="toggle_label_{{each_widget.unique_id}}">
+       <input type="checkbox" id="toggle_input_{{each_widget.unique_id}}" onclick="togglePID_AoT('{{each_widget.unique_id}}')">
+       <span class="slider-timer"></span>
+     </label>
+  */
+  .toggle-switch-timer {
+    position: relative;
+    display: inline-block;
+    width: 3em;
+    height: 1.5em;
+    margin: 0.5em;
+    box-sizing: border-box;
+  }
+  
+  /* 체크박스는 보이지 않도록 처리 */
+  .toggle-switch-timer input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+  
+  /* 슬라이더 영역: 기존 슬라이드 버튼 모양 (회색 트랙에 원형 핸들) */
+  .slider-timer {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border: 1px solid #929292;
+    border-radius: 1em;
+    box-sizing: border-box;
+    transition: background-color 0.2s;
+  }
+  
+  /* 슬라이더 핸들: 원형, 기본 위치 */
+  .slider-timer:before {
+    content: "";
+    position: absolute;
+    height: 1.1em;
+    width: 1.1em;
+    left: 0.2em;
+    bottom: 0.2em;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-sizing: border-box;
+  }
+  
+  /* 체크된 상태: 핸들이 오른쪽으로 이동, 트랙 색상 변경 */
+  .toggle-switch-timer input:checked + .slider-timer {
+    background-color: var(--bg-active);
+  }
+  .toggle-switch-timer input:checked + .slider-timer:before {
+    transform: translateX(1.3em);
+  }
+  
+  /* === 제어 버튼 (목표, 중지, 고정, 복귀) === */
+  /* 기존 위젯에서는 버튼 클래스 'btn-aot-pid'를 사용했으나,
+     통일성을 위해 여기서는 .loobox-btn 으로 정의하며 기존 디자인과 동일하게 재현합니다.
+     (폰트 크기 1em, 내부 여백 0.3em~0.5em, 테두리 없음 또는 얇은 테두리 등)
+  */
+  .loobox-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size);
+    padding: 0.3em 0.5em;
+    margin: 0.5em;
+    border: none;
+    border-radius: 0.3em;
+    background-color: var(--pid-btn-bg);
+    color: var(--pid-text-color);
+    cursor: pointer;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+  
+  .loobox-btn:hover {
+    background-color: var(--pid-btn-hover-bg);
+    color: #fff;
+  }
+  
+  /* 복귀 버튼: 특별한 스타일이 필요하면 .return 클래스를 추가 (여기서는 기본 버튼과 동일 처리) */
+  .loobox-btn.return {
+    /* 필요 시 너비 조정 등 추가 가능 */
+  }
+  
+  /* === 입력창 (목표 입력) === */
+  .pid-input {
+    font-size: var(--font-size);
+    padding: 0.3em;
+    margin: 0.5em;
+    border: 1px solid #929292;
+    border-radius: 0.3em;
+    box-sizing: border-box;
+  }

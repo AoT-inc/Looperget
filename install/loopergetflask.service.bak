@@ -1,0 +1,21 @@
+[Unit]
+Description=Looperget web user interface
+After=network.target
+
+[Service]
+User=root
+Group=looperget
+WorkingDirectory=/opt/Looperget/looperget
+ExecStart=/opt/Looperget/env/bin/python -m gunicorn \
+--workers 1 \
+--worker-class gthread \
+--threads 2 \
+--timeout 300 \
+--pid /var/run/loopergetflask.pid \
+--bind unix:/usr/local/loopergetflask.sock start_flask_ui:app
+
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target

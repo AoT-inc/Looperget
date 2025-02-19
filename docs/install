@@ -1,0 +1,32 @@
+#
+#  install - Looperget install script
+#
+
+INSTALL_DIRECTORY=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )
+
+if [ "$EUID" -eq 0 ]; then
+    printf "root 계정으로 실행하지 마시오: \"/bin/bash %s/install\"\n" "${INSTALL_DIRECTORY}"
+    exit 1
+fi
+
+if [ -d /opt/Looperget ]; then
+  printf "## Error: 설치가 취소 되었습니다. /opt/Looperget 디렉터리가 이미 존재 합니다. /opt/Looperget 디렉터리를 삭제하고 실행하세요. /opt/Looperget/install/setup.sh.\n"
+  exit 1
+fi
+
+# Install dependencies
+sudo apt update
+sudo apt install -y jq dialog python3 wget
+
+# Create install directory
+sudo mkdir -p /opt/Looperget
+sudo chown -R ${USER}: /opt/Looperget
+cd /opt
+
+# Download and install
+curl -s https://api.github.com/repos/kizniche/Looperget/releases/latest | \
+jq -r '.tarball_url' | wget -i - -O looperget-latest.tar.gz
+tar xzf looperget-latest.tar.gz -C Looperget --strip-components=1
+rm -f looperget-latest.tar.gz
+cd Looperget/install
+sudo /bin/bash ./setup.sh

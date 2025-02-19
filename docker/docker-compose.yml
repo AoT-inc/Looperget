@@ -1,0 +1,132 @@
+version: "3.7"
+
+services:
+
+  looperget_influxdb:
+    container_name: looperget_influxdb
+    build:
+      context: ../
+      dockerfile: docker/influxdb/Dockerfile
+    env_file:
+      - 'influxdb/env.influxdb'
+    volumes:
+      - looperget_influxdb:/var/lib/influxdb
+
+  looperget_nginx:
+    container_name: looperget_nginx
+    restart: always
+    build:
+      context: ../
+      dockerfile: docker/nginx/Dockerfile
+    volumes:
+      - looperget:/usr/local/looperget
+      - looperget_log:/var/log/looperget
+      - looperget_ssl_certs:/home/looperget/looperget/looperget_flask/ssl_certs
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - looperget_flask
+
+  looperget_daemon:
+    container_name: looperget_daemon
+    image: app
+    restart: always
+    environment:
+      - TZ=America/New_York  # See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for valid time zones
+    volumes:
+      - looperget:/usr/local/looperget
+      - looperget_env:/home/looperget/env
+      - looperget_databases:/home/looperget/databases
+      - looperget_cameras:/home/looperget/cameras
+      - looperget_custom_functions:/home/looperget/looperget/functions/custom_functions
+      - looperget_custom_actions:/home/looperget/looperget/actions/custom_actions
+      - looperget_custom_inputs:/home/looperget/looperget/inputs/custom_inputs
+      - looperget_custom_outputs:/home/looperget/looperget/outputs/custom_outputs
+      - looperget_custom_widgets:/home/looperget/looperget/widgets/custom_widgets
+      - looperget_custom_user_scripts:/home/looperget/looperget/user_scripts
+      - looperget_log:/var/log/looperget
+      - looperget_ssl_certs:/home/looperget/looperget/looperget_flask/ssl_certs
+      - /dev:/dev
+      - /sys:/sys
+      - /opt:/opt
+    privileged: true
+    command: bash -c "wget --quiet --no-check-certificate -p http://looperget_nginx/ -O /dev/null && 
+                      PYTHONPATH=/home/looperget /home/looperget/env/bin/python looperget_daemon.py"
+    depends_on:
+      - looperget_flask
+
+  looperget_flask:
+    container_name: looperget_flask
+    image: app
+    hostname: Looperget  # Change to your desired hostname
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    restart: always
+    environment:
+      - TZ=America/New_York  # See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for valid time zones
+    volumes:
+      - looperget:/usr/local/looperget
+      - looperget_env:/home/looperget/env
+      - looperget_databases:/home/looperget/databases
+      - looperget_cameras:/home/looperget/cameras
+      - looperget_custom_functions:/home/looperget/looperget/functions/custom_functions
+      - looperget_custom_actions:/home/looperget/looperget/actions/custom_actions
+      - looperget_custom_inputs:/home/looperget/looperget/inputs/custom_inputs
+      - looperget_custom_outputs:/home/looperget/looperget/outputs/custom_outputs
+      - looperget_custom_widgets:/home/looperget/looperget/widgets/custom_widgets
+      - looperget_custom_user_scripts:/home/looperget/looperget/user_scripts
+      - looperget_custom_user_css:/home/looperget/looperget/looperget_flask/static/css/user_css
+      - looperget_custom_user_js:/home/looperget/looperget/looperget_flask/static/js/user_js
+      - looperget_custom_user_fonts:/home/looperget/looperget/looperget_flask/static/fonts/user_fonts
+      - looperget_log:/var/log/looperget
+      - looperget_ssl_certs:/home/looperget/looperget/looperget_flask/ssl_certs
+      - looperget_influxdb:/var/lib/influxdb
+      - /dev:/dev
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # Permits container to restart itself
+    privileged: true
+    command: /home/looperget/env/bin/python -m gunicorn --workers 1 --bind unix:/usr/local/looperget/loopergetflask.sock start_flask_ui:app
+    depends_on:
+      - looperget_influxdb
+
+# Uncomment the following blocks and rebuild to enable Grafana and/or Telegraf
+
+#  looperget_telegraf:
+#    image: telegraf:latest
+#    container_name: looperget_telegraf
+#    volumes:
+#      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+#    depends_on:
+#      - looperget_influxdb
+
+#  looperget_grafana:
+#    image: grafana/grafana:latest
+#    container_name: looperget_grafana
+#    env_file:
+#      - './grafana/env.grafana'
+#    volumes:
+#      - looperget_grafana:/var/lib/grafana
+#    ports:
+#      - "3000:3000"
+#    depends_on:
+#      - looperget_influxdb
+
+volumes:
+  looperget:
+  looperget_env:
+  looperget_cameras:
+  looperget_custom_functions:
+  looperget_custom_actions:
+  looperget_custom_inputs:
+  looperget_custom_outputs:
+  looperget_custom_widgets:
+  looperget_custom_user_scripts:
+  looperget_custom_user_css:
+  looperget_custom_user_js:
+  looperget_custom_user_fonts:
+  looperget_databases:
+  looperget_ssl_certs:
+  looperget_log:
+  looperget_influxdb:
+  looperget_grafana:
