@@ -259,7 +259,7 @@
                 {{ _('함수') }}
               </a>
               <a class="dropdown-item {% if active_page == 'method_list' %} active{% endif %}" href="{{ url_for('routes_method.method_list') }}">
-                {{ _('매서드') }}
+                {{ _('참조궤적') }}
               </a>
             </div>
           </li>
@@ -272,7 +272,7 @@
                 {{_('실시간 측정')}}
               </a>
               <a class="dropdown-item{% if active_page == 'graph_async' %} active{% endif %}" href="{{url_for('routes_page.page_graph_async')}}">
-                {{_('비동기 그래프')}}
+                {{_('그래프')}}
               </a>
               <a class="dropdown-item {% if active_page == 'camera' %} active{% endif %}" href="{{ url_for('routes_page.page_camera') }}">
                 {{ _('카메라') }}
