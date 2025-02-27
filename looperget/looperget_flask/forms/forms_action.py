@@ -25,5 +25,5 @@ class Actions(FlaskForm):
         'Action ID', widget=widgets.HiddenInput())
 
     add_action = SubmitField(TRANSLATIONS['add']['title'])
-    save_action = SubmitField(TRANSLATIONS['저장']['title'])
-    delete_action = SubmitField(TRANSLATIONS['삭제']['title'])
+    save_action = SubmitField(TRANSLATIONS['save']['title'])
+    delete_action = SubmitField(TRANSLATIONS['delete']['title'])
