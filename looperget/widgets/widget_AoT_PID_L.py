@@ -468,10 +468,16 @@ function togglePID_AoT(wid) {
   let toggleInput = document.getElementById("toggle_input_" + wid);
   let actBtn      = document.getElementById("hidden_pid_activate_" + wid);
   let deactBtn    = document.getElementById("hidden_pid_deactivate_" + wid);
-
+  
   if(toggleInput.checked) {
+    {% if not misc.hide_alert_info %}
+    toastr.info('Command sent to Activate PID');
+    {% endif %}
     if(actBtn) actBtn.click();
   } else {
+    {% if not misc.hide_alert_info %}
+    toastr.info('Command sent to Deactivate PID');
+    {% endif %}
     if(deactBtn) deactBtn.click();
   }
 }
@@ -481,6 +487,9 @@ function setSetpointAoT(wid) {
   let sp_id   = btn_set.name.split('/')[0]; 
   let sp_val  = document.getElementById("pid_setpoint_" + sp_id).value;
   if(sp_val) {
+    {% if not misc.hide_alert_info %}
+    toastr.info('Command sent to set PID setpoint');
+    {% endif %}
     let cmd = btn_set.name + sp_val;
     sendPIDCommandAoT(cmd);
   }
@@ -488,18 +497,28 @@ function setSetpointAoT(wid) {
 
 function sendPIDCommandAoT(cmd) {
   $.ajax({
-    type:'GET',
-    url:'/pid_mod_unique_id/' + cmd,
-    success:function(res){
+    type: 'GET',
+    url: '/pid_mod_unique_id/' + cmd,
+    {% if not misc.hide_alert_success %}
+    success: function(res) {
       if(typeof res === "object") {
+        {% if not misc.hide_alert_warning %}
         toastr.error(JSON.stringify(res));
+        {% endif %}
       } else {
         toastr.success(res);
       }
     },
-    error:function(err){
+    {% else %}
+    success: function(res){},
+    {% endif %}
+    {% if not misc.hide_alert_warning %}
+    error: function(err) {
       toastr.error("Error: " + JSON.stringify(err));
     }
+    {% else %}
+    error: function(err){},
+    {% endif %}
   });
 }
 
@@ -596,23 +615,6 @@ function getPidDataAoT(wid, pidid, max_age, decs) {
     },
     error:function(err){
       printPidErrorAoT(wid);
-      toastr.error("Error: " + JSON.stringify(err));
-    }
-  });
-}
-
-function sendPIDCommandAoT(cmd) {
-  $.ajax({
-    type:'GET',
-    url:'/pid_mod_unique_id/' + cmd,
-    success:function(res){
-      if(typeof res === "object") {
-        toastr.error(JSON.stringify(res));
-      } else {
-        toastr.success(res);
-      }
-    },
-    error:function(err){
       toastr.error("Error: " + JSON.stringify(err));
     }
   });

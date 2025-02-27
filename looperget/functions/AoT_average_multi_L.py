@@ -30,7 +30,7 @@ FUNCTION_INFORMATION = {
     'measurements_dict': measurements_dict,
     'enable_channel_unit_select': True,
 
-    'message': '이 기능은 선택된 측정값을 읽어와, 유효한 데이터만 평균을 구한 후, 결과를 지정한 Measurement와 단위로 저장합니다.'
+    'message': '이 기능은 선택된 측정값들을 읽어와, 유효한 데이터만 평균을 구한 후, 결과를 지정한 Measurement와 단위로 저장합니다.'
                '유효하지 않거나 오래된 측정값(최대 유효 시간 초과)은 평균에서 제외합니다.',
 
     'options_enabled': [

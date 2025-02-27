@@ -140,7 +140,35 @@ WIDGET_INFORMATION = {
     'no_class': True,
 
     # 위젯 설명 (한글화)
-    'message': '원형(Angular) 게이지를 표시합니다. 게이지가 올바르게 표시되도록 최대값 옵션을 마지막 구간(High)에 맞춰 설정하세요.',
+    'message': '데이터를 원형 게이지를 표시합니다. 게이지가 올바르게 표시되도록 최대값 옵션을 마지막 구간(High)에 맞춰 설정하세요.'
+               '온도, 습도, VPD 등의 사전 설정을 선택하면, 최소/최대값 및 색상 구간이 자동으로 설정됩니다.',
+
+    'execute_at_creation': execute_at_creation,
+    'execute_at_modification': execute_at_modification,
+    'generate_page_variables': generate_page_variables,
+
+    'dependencies_module': [
+        ('bash-commands',
+        [
+            '/opt/Looperget/looperget/looperget_flask/static/js/user_js/highstock-9.1.2.js',
+            '/opt/Looperget/looperget/looperget_flask/static/js/user_js/highcharts-more-9.1.2.js'
+        ],
+        [
+            'rm -rf Highcharts-Stock-9.1.2.zip',
+            'wget https://code.highcharts.com/zips/Highcharts-Stock-9.1.2.zip 2>&1',
+            'unzip Highcharts-Stock-9.1.2.zip -d Highcharts-Stock-9.1.2',
+            'cp -rf Highcharts-Stock-9.1.2/code/highstock.js /opt/Looperget/looperget/looperget_flask/static/js/user_js/highstock-9.1.2.js',
+            'cp -rf Highcharts-Stock-9.1.2/code/highstock.js.map /opt/Looperget/looperget/looperget_flask/static/js/user_js/highstock.js.map',
+            'cp -rf Highcharts-Stock-9.1.2/code/highcharts-more.js /opt/Looperget/looperget/looperget_flask/static/js/user_js/highcharts-more-9.1.2.js',
+            'cp -rf Highcharts-Stock-9.1.2/code/highcharts-more.js.map /opt/Looperget/looperget/looperget_flask/static/js/user_js/highcharts-more.js.map',
+            'rm -rf Highcharts-Stock-9.1.2.zip',
+            'rm -rf Highcharts-Stock-9.1.2'
+        ])
+    ],
+
+    'dependencies_message': 'Highcharts는 오픈 소스 및 개인 사용 목적으로 무료로 사용할 수 있습니다.'
+                            '그러나 이 소프트웨어를 상업용 제품의 일부로 사용하는 경우, 사용자 또는 제조업체가 이 소프트웨어를 사용하기 위한 상업용 라이선스를 취득해야 할 수도 있습니다. '
+                            '가장 정확한 정보는 https://shop.highsoft.com 에서 Highcharts로 문의하시기 바랍니다.',
 
     'execute_at_creation': execute_at_creation,
     'execute_at_modification': execute_at_modification,
@@ -149,7 +177,6 @@ WIDGET_INFORMATION = {
     'widget_width': 5,
     'widget_height': 10,
 
-    # 커스텀 옵션 (한글화, Stops 기본값 5로 변경)
     'custom_options': [
         {
             'id': 'measurement',
@@ -220,7 +247,38 @@ WIDGET_INFORMATION = {
             ],
             'name': '사전 설정',
             'phrase': '사전 설정값을 선택하면, 최소/최대값 등 기본 설정이 자동으로 반영됩니다.'
-        }
+        },
+        {
+            # ★ 데이터 폰트 크기
+            'id': 'text_font_size',
+            'type': 'float',
+            'default_value': 1.5,
+            'name': '데이터 문자 크기',
+            'phrase': '게이지 내부 데이터의 문자 크기를 설정하세요. 기본값 1.5는 중간 크기입니다.'
+        },
+        {
+            # ★ 단위 폰트 크기
+            'id': 'unit_font_size',
+            'type': 'float',
+            'default_value': 0.7,
+            'name': '단위 문자 크기',
+            'phrase': '게이지 내부 단위의 문자 크기를 설정하세요. 기본값 0.7은 작은 크기입니다.'
+        },
+        {
+            # ★ 단위 폰트 크기
+            'id': 'unit_font_tick',
+            'type': 'float',
+            'default_value': 500,
+            'name': '단위 문자 굵기',
+            'phrase': '게이지 내부 문자 굵기를 설정하세요. 기본값 500은 중간 굵기입니다.'
+        },
+        {
+            'id': 'text_y_offset',
+            'type': 'float',
+            'default_value': 30,
+            'name': '데이터 위치 오프셋',
+            'phrase': '게이지 내부 데이터 텍스트의 수직 위치 오프셋을 설정하세요 (숫자만 입력, 단위는 자동 처리)'
+        }        
     ],
 
     'widget_dashboard_head': """{% if "highstock" not in dashboard_dict %}
@@ -348,27 +406,21 @@ WIDGET_INFORMATION = {
     },
 
     pane: {
-        startAngle: -150,
-        endAngle: 150,
+        startAngle: -120,
+        endAngle: 120,
         background: [{
-            backgroundColor: '#c1c1c1',
-            borderWidth: 0,
-            outerRadius: '105%',
-            innerRadius: '103%'
+        backgroundColor: 'none',
+          borderWidth: 0,
+          outerRadius: '0%',
+          innerRadius: '0%'
         }]
-    },
+        },
 
     yAxis: {
         min: {{widget_options['min']}},
         max: {{widget_options['max']}},
         title: {
-      {%- if measurement_id in dict_measure_units and
-             dict_measure_units[measurement_id] in dict_units and
-             dict_units[dict_measure_units[measurement_id]]['unit'] -%}
-          text: '{{dict_units[dict_measure_units[measurement_id]]['unit']}}',
-      {% else %}
           text: '',
-      {%- endif -%}
           y: 20
         },
 
@@ -376,15 +428,15 @@ WIDGET_INFORMATION = {
         maxColor: "#3e3f46",
 
         minorTickInterval: 'auto',
-        minorTickWidth: 1,
-        minorTickLength: 10,
+        minorTickWidth: 0,
+        minorTickLength: 0,
         minorTickPosition: 'inside',
         minorTickColor: '#666',
 
-        tickPixelInterval: 30,
-        tickWidth: 2,
+        tickPixelInterval: 50,
+        tickWidth: 0,
         tickPosition: 'inside',
-        tickLength: 10,
+        tickLength: 0,
         tickColor: '#666',
         labels: {
             step: 2,
@@ -403,55 +455,78 @@ WIDGET_INFORMATION = {
     },
 
     series: [{
-        name: '
-        {%- for each_input in input if each_input.unique_id == device_id -%}
-          {%- if measurement_id in device_measurements_dict -%}
+      name: '
+      {%- for each_input in input if each_input.unique_id == device_id -%}
+        {%- if measurement_id in device_measurements_dict -%}
           {{each_input.name}} (
             {%- if not device_measurements_dict[measurement_id].single_channel -%}
               {{'CH' + (device_measurements_dict[measurement_id].channel|int)|string}}
             {%- endif -%}
             {%- if device_measurements_dict[measurement_id].measurement -%}
-          {{', ' + dict_measurements[device_measurements_dict[measurement_id].measurement]['name']}}
+              {{', ' + dict_measurements[device_measurements_dict[measurement_id].measurement]['name']}}
             {%- endif -%}
           {%- endif -%}
-        {%- endfor -%}
-        
-        {%- for each_function in function if each_function.unique_id == device_id -%}
-          {{each_function.measure|safe}}
-        {%- endfor -%}
-
-        {%- for each_pid in pid if each_pid.unique_id == device_id -%}
-          {{each_pid.measure|safe}}
-        {%- endfor -%})',
-        data: [null],
-        dataLabels: {
-          style: {"fontSize": "14px"},
-          format: '{point.y:,.{{widget_options['decimal_places']}}f}'
+      {%- endfor -%}
+      
+      {%- for each_function in function if each_function.unique_id == device_id -%}
+        {{each_function.measure|safe}}
+      {%- endfor -%}
+      
+      {%- for each_pid in pid if each_pid.unique_id == device_id -%}
+        {{each_pid.measure|safe}}
+      {%- endfor -%}
+      )',
+      data: [null],
+      dataLabels: {
+        enabled: true,
+        useHTML: true,
+        crop: false,
+        overflow: 'allow',
+        allowOverlap: true,
+        borderWidth: 0,
+        backgroundColor: 'none',
+        style: {
+          textOutline: 'none',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: '{{ widget_options.get("text_font_tick", 500) }}',
+          fontSize: '{{ widget_options.get("text_font_size", 2) }}em'
         },
-        yAxis: 0,
-        dial: {
-          backgroundColor: '{% if current_user.theme in dark_themes %}#e3e4f4{% else %}#3e3f46{% endif %}',
-          baseWidth: 5
-        },
-        tooltip: {
-        {%- for each_input in input if each_input.unique_id == device_id %}
-             pointFormatter: function () {
-              return this.series.name + ':<b> ' + Highcharts.numberFormat(this.y, 2) + ' {{dict_units[device_measurements_dict[measurement_id].unit]['unit']}}</b><br>';
-            },
-        {%- endfor -%}
-            valueSuffix: '
-        {%- for each_input in input if each_input.unique_id == device_id -%}
-          {{' ' + dict_units[device_measurements_dict[measurement_id].unit]['unit']}}
-        {%- endfor -%}
-        
-        {%- for each_function in function if each_function.unique_id == device_id -%}
-          {{' ' + each_function.measure_units|safe}}
-        {%- endfor -%}
-
-        {%- for each_pid in pid if each_pid.unique_id == device_id -%}
-          {{' ' + each_pid.measure_units|safe}}
-        {%- endfor -%}'
+        y: {{ widget_options.get("text_y_offset", 30) }},
+        formatter: function() {
+          var dec = {{ widget_options.get("decimal_places", 1) }};
+          var val = (this.y === null) ? '' : Highcharts.numberFormat(this.y, dec);
+          var dataFontSize = {{ widget_options.get("text_font_size", 1.5) }};
+          var unitFontSize = {{ widget_options.get("unit_font_size", 0.7) }};
+          // 기존 방식으로 단위 가져오기
+          var unitLabel = '{{ dict_units[device_measurements_dict[measurement_id].unit]["unit"] }}';
+          return '<span style="font-size:' + dataFontSize + 'em;">' + val + '</span>' +
+                '<span style="font-size:' + unitFontSize + 'em; margin-left:0.2em;">' + unitLabel + '</span>';
         }
+      },
+      yAxis: 0,
+      dial: {
+        backgroundColor: '{% if current_user.theme in dark_themes %}#e3e4f4{% else %}#3e3f46{% endif %}',
+        baseWidth: 5
+      },
+      tooltip: {
+      {%- for each_input in input if each_input.unique_id == device_id %}
+        pointFormatter: function () {
+          return this.series.name + ':<b> ' + Highcharts.numberFormat(this.y, 2) + ' {{ dict_units[device_measurements_dict[measurement_id].unit]["unit"] }}</b><br>';
+        },
+      {%- endfor -%}
+        valueSuffix: '
+      {%- for each_input in input if each_input.unique_id == device_id -%}
+        {{' ' + dict_units[device_measurements_dict[measurement_id].unit]["unit"]}}
+      {%- endfor -%}
+      
+      {%- for each_function in function if each_function.unique_id == device_id -%}
+        {{' ' + each_function.measure_units|safe}}
+      {%- endfor -%}
+      
+      {%- for each_pid in pid if each_pid.unique_id == device_id -%}
+        {{' ' + each_pid.measure_units|safe}}
+      {%- endfor -%}'
+      }
     }],
 
     credits: {

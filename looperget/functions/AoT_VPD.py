@@ -49,7 +49,8 @@ FUNCTION_INFORMATION = {
     'function_name_unique': 'AoT_VPD',  # 1. 고유 함수명 변경
     'function_name': 'AoT VPD',        # 1. 함수 이름 변경
     'measurements_dict': measurements_dict,
-    'message': '이 함수는 잎 온도와 습도를 기반으로 증기압 부족분(VPD)을 계산합니다.',
+    'message': '이 함수는 잎 온도와 습도를 기반으로 증기압 부족분(VPD)을 계산합니다.'
+               '잎의 온도가 입력되지 않은 경우, 잎의 온도 대신 잎 온도에 오프셋을 적용합니다.',
 
     'options_enabled': [
         'custom_options'
@@ -131,8 +132,8 @@ FUNCTION_INFORMATION = {
             'type': 'integer',
             'default_value': 360,
             'required': False,
-            'name': "{}: {} ({})".format(lazy_gettext('잎 온도'), lazy_gettext('최대 사용 연령'), lazy_gettext('초')),
-            'phrase': lazy_gettext('사용할 측정값의 최대 연령')
+            'name': "{}: {} ({})".format(lazy_gettext('잎 온도'), lazy_gettext('최대 사용 시간'), lazy_gettext('초')),
+            'phrase': lazy_gettext('사용할 측정값의 최대 시간')
         },
         {
             'id': 'leaf_temp_offset',
