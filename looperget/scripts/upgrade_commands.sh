@@ -616,8 +616,8 @@ case "${1:-''}" in
         chown -R looperget:looperget /var/Looperget-backups
         chown -R looperget:looperget /opt/Looperget
 
-        find "${LOOPERGET_PATH}" -type d -exec chmod u+wx,g+wx {} +
-        find "${LOOPERGET_PATH}" -type f -exec chmod u+w,g+w,o+r {} +
+        find "${LOOPERGET_PATH}" -type d -exec chmod 755 {} \;
+        find "${LOOPERGET_PATH}" -type f -exec chmod 644 {} \;
         chmod 770 /opt/Looperget  # Exclude other users from viewing files
 
         chown root:looperget "${LOOPERGET_PATH}"/looperget/scripts/looperget_wrapper
