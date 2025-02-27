@@ -1,6 +1,7 @@
 #
 #  install - Looperget install script
 #
+#  sudo /bin/bash /opt/Looperget/install/setup.sh
 
 INSTALL_DIRECTORY=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )
 
