@@ -24,7 +24,7 @@ sudo chown -R ${USER}: /opt/Looperget
 cd /opt
 
 # Download and install
-curl -s https://api.github.com/repos/kizniche/Looperget/releases/latest | \
+curl -s https://api.github.com/repos/AoT-inc/Looperget/releases/latest | \
 jq -r '.tarball_url' | wget -i - -O looperget-latest.tar.gz
 sudo tar xzf looperget-latest.tar.gz -C Looperget --strip-components=1
 sudo rm -f looperget-latest.tar.gz
