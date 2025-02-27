@@ -74,21 +74,21 @@ clear
 LANGUAGE=$(dialog --title "Looperge+ AI 설치 프로그램" \
                   --backtitle "Looperget" \
                   --menu "사용자 인터페이스 언어 선택" 23 68 14 \
+                  "ko": "한국어 (Korean)" \
                   "en": "English" \
-                  "ko": "한국어" \
-                  "de": "Deutsche" \
-                  "es": "Español" \
-                  "fr": "Français" \
-                  "it": "Italiano" \
-                  "nl": "Nederlands" \
-                  "nn": "Norsk" \
-                  "pl": "Polski" \
-                  "pt": "Português" \
-                  "ru": "русский язык" \
-                  "sr": "српски" \
-                  "sv": "Svenska" \
-                  "tr": "Türkçe" \
-                  "zh": "中文" \
+                  "de": "Deutsche (German)" \
+                  "es": "Español (Spanish)" \
+                  "fr": "Français (French)" \
+                  "it": "Italiano (Italian)" \
+                  "nl": "Nederlands (Dutch)" \
+                  "nn": "Norsk (Norwegian)" \
+                  "pl": "Polski (Polish)" \
+                  "pt": "Português (Portuguese)" \
+                  "ru": "русский язык (Russian)" \
+                  "sr": "српски (Serbian)" \
+                  "sv": "Svenska (Swedish)" \
+                  "tr": "Türkçe (Turkish)" \
+                  "zh": "中文 (Chinese)" \
                   3>&1 1>&2 2>&3)
 exitstatus=$?
 if [ $exitstatus != 0 ]; then
