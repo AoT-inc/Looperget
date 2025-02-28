@@ -10,7 +10,7 @@ from looperget.utils.database import db_retrieve_table_daemon
 ACTION_INFORMATION = {
     'name_unique': 'create_log_line',
     'name': f"{TRANSLATIONS['create']['title']}: Daemon Log Line",
-    'message': lazy_gettext('Create a log line in the daemon log.'),
+    'message': lazy_gettext('데몬 로그에 로그 라인을 생성합니다.'),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -20,8 +20,9 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will add a line to the Daemon log. '
-             'Executing <strong>self.run_action("ACTION_ID", value={"log_level": "info", "log_text": "this is a log line"})</strong> will execute the action with the specified log level and log line text. If a log line text is not specified, then the action message will be used as the text.',
+    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong>를 실행하면 데몬 로그에 로그 라인이 추가됩니다. '
+             'Executing <strong>self.run_action("ACTION_ID", value={"log_level": "info", "log_text": "this is a log line"})</strong>를 실행하면 지정된 로그 레벨과 로그 라인 텍스트로 작업이 실행됩니다. '
+             '로그 라인 텍스트가 지정되지 않으면 작업 메시지가 텍스트로 사용됩니다.',
 
     'custom_options': [
         {
@@ -35,16 +36,16 @@ ACTION_INFORMATION = {
                 ('error', 'Error'),
                 ('debug', 'Debug')
             ],
-            'name': 'Log Level',
-            'phrase': 'The log level to insert the text into the log'
+            'name': '로그 레벨',
+            'phrase': '로그에 텍스트를 삽입할 로그 레벨을 지정합니다.'
         },
         {
             'id': 'log_text',
             'type': 'text',
             'default_value': 'Log Line Text',
             'required': False,
-            'name': 'Log Line Text',
-            'phrase': 'The text to insert in the Daemon log'
+            'name': '로그 라인 텍스트',
+            'phrase': '데몬 로그에 삽입할 텍스트'
         }
     ]
 }
@@ -83,7 +84,7 @@ class ActionModule(AbstractFunctionAction):
         if not log_text:
             log_text = dict_vars['message']
 
-        dict_vars['message'] += f" Adding text '{log_text}' to Daemon log at log level {log_level}"
+        dict_vars['message'] += f" 로그 레벨 {log_level}로 데몬 로그에 '{log_text}' 텍스트를 추가합니다."
 
         if log_level == 'info':
             self.logger.info(log_text)
@@ -95,7 +96,7 @@ class ActionModule(AbstractFunctionAction):
             self.logger.debug(log_text)
 
         if log_level != 'debug':
-            self.logger.debug(f"Message: {dict_vars['message']}")
+            self.logger.debug(f"메시지: {dict_vars['message']}")
 
         return dict_vars
 

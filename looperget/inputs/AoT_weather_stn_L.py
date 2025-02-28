@@ -27,7 +27,7 @@ INPUT_INFORMATION = {
     'measurements_rescale': False,
 
     'message': '기상청 API 허브에서 무료 API 키를 발급받고 가까운 관측지점의 STN을 입력하세요.'
-               '참고: 무료 API는 하루 20000회의 호출이 가능하며, 1회 호출당 1개의 관측지점 데이터를 반환합니다.',
+               '참고: 무료 API는 하루 20000회 호출이 가능하며, 1회 호출당 1개의 관측지점 데이터를 반환합니다.',
 
     'options_enabled': [
         'measurements_select',

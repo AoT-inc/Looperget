@@ -10,7 +10,7 @@ from looperget.utils.database import db_retrieve_table_daemon
 
 ACTION_INFORMATION = {
     'name_unique': 'system_shutdown',
-    'name': "{}: {}".format(TRANSLATIONS['system']['title'], lazy_gettext('Shutdown')),
+    'name': "{}: {}".format(TRANSLATIONS['system']['title'], lazy_gettext('종료')),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -20,9 +20,8 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': 'Shutdown the System',
-
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will shut down the system in 10 seconds.',
+    'message': '시스템을 종료합니다.',
+    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 10초 후에 시스템이 종료됩니다.',
 }
 
 
@@ -36,7 +35,7 @@ class ActionModule(AbstractFunctionAction):
         action = db_retrieve_table_daemon(
             Actions, unique_id=self.unique_id)
         self.setup_custom_options(
-            ACTION_INFORMATION['custom_options'], action)
+            ACTION_INFORMATION.get('custom_options', {}), action)
 
         if not testing:
             self.try_initialize()
@@ -45,7 +44,7 @@ class ActionModule(AbstractFunctionAction):
         self.action_setup = True
 
     def run_action(self, dict_vars):
-        dict_vars['message'] += " System shutting down in 10 seconds."
+        dict_vars['message'] += " 10초 후에 시스템이 종료됩니다."
         cmd = f'{INSTALL_DIRECTORY}/looperget/scripts/looperget_wrapper shutdown 2>&1'
         subprocess.Popen(cmd, shell=True)
 

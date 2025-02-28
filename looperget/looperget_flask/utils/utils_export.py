@@ -8,6 +8,7 @@ import subprocess
 import threading
 import time
 import zipfile
+import urllib.parse
 
 from flask import send_file, url_for
 from flask_babel import gettext
@@ -46,32 +47,42 @@ def export_measurements(form):
         controller=TRANSLATIONS['measurement']['title'])
     error = []
 
-    if form.validate():
-        try:
-            if not error:
-                start_time = form.date_range.data.split(' - ')[0]
-                start_seconds = int(time.mktime(
-                    time.strptime(start_time, '%m/%d/%Y %H:%M')))
-                end_time = form.date_range.data.split(' - ')[1]
-                end_seconds = int(time.mktime(
-                    time.strptime(end_time, '%m/%d/%Y %H:%M')))
-
-                unique_id = form.measurement.data.split(',')[0]
-                measurement_id = form.measurement.data.split(',')[1]
-
-                url = '/export_data/{id}/{meas}/{start}/{end}'.format(
-                    id=unique_id,
-                    meas=measurement_id,
-                    start=start_seconds, end=end_seconds)
-                return url
-        except Exception as err:
-            error.append(gettext("오류: %(err)s") % {'err': err})
-    else:
+    if not form.validate():
         flash_form_errors(form)
-        return
+        return url_for('routes_page.page_export')
 
-    flash_success_errors(error, action, url_for('routes_page.page_export'))
+    try:
+        # 입력 데이터 로그 기록 (디버깅 목적)
+        logger.info("date_range: %s, measurement: %s", form.date_range.data, form.measurement.data)
 
+        # 날짜 범위 파싱
+        start_time_str, end_time_str = form.date_range.data.split(' - ')
+        start_seconds = int(time.mktime(time.strptime(start_time_str, '%m/%d/%Y %H:%M')))
+        end_seconds = int(time.mktime(time.strptime(end_time_str, '%m/%d/%Y %H:%M')))
+
+        # 측정 데이터 파싱
+        measurement_parts = form.measurement.data.split(',')
+        if len(measurement_parts) < 2:
+            raise ValueError("측정 데이터 형식이 올바르지 않습니다. (예: id,measurement_id)")
+        unique_id, measurement_id = measurement_parts[0], measurement_parts[1]
+
+        # non‑ASCII 문자 문제 해결: URL 인코딩 적용
+        unique_id = urllib.parse.quote(unique_id, safe='')
+        measurement_id = urllib.parse.quote(measurement_id, safe='')
+
+        # CSV Export를 위한 URL 구성
+        url = '/export_data/{id}/{meas}/{start}/{end}'.format(
+            id=unique_id,
+            meas=measurement_id,
+            start=start_seconds,
+            end=end_seconds
+        )
+        return url
+    except Exception as err:
+        logger.exception("export_measurements() 처리 중 예외 발생")
+        error.append(gettext("오류: %(err)s") % {'err': err})
+        flash_success_errors(error, action, url_for('routes_page.page_export'))
+        return url_for('routes_page.page_export')
 
 def export_settings():
     """
@@ -90,7 +101,7 @@ def export_settings():
                 mimetype='application/zip',
                 as_attachment=True,
                 download_name=
-                    'Looperget_{mver}_설정_{aver}_{host}_{dt}.zip'.format(
+                    'Looperget_{mver}_setup_{aver}_{host}_{dt}.zip'.format(
                         mver=LOOPERGET_VERSION, aver=ALEMBIC_VERSION,
                         host=socket.gethostname().replace(' ', ''),
                         dt=datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
@@ -154,8 +165,8 @@ def thread_import_settings(tmp_folder):
         cmd = f"{INSTALL_DIRECTORY}/looperget/scripts/looperget_wrapper upgrade_database | ts '[%Y-%m-%d %H:%M:%S]' >> {IMPORT_LOG_FILE} 2>&1"
         _, _, _ = cmd_output(cmd, user="root")
 
-        # 종속성 설치/업데이트 (시간이 걸릴 수 있음)
-        append_to_log(IMPORT_LOG_FILE, f"\n[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 종속성 설치 중 (잠시만 기다려 주세요)...\n")
+        # 패키지 설치/업데이트 (시간이 걸릴 수 있음)
+        append_to_log(IMPORT_LOG_FILE, f"\n[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 패키지 설치 중 (잠시만 기다려 주세요)...\n")
         cmd = f"{INSTALL_DIRECTORY}/looperget/scripts/looperget_wrapper update_dependencies | ts '[%Y-%m-%d %H:%M:%S]' >> {IMPORT_LOG_FILE} 2>&1"
         _, _, _ = cmd_output(cmd, user="root")
 

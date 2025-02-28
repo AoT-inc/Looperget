@@ -24,10 +24,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': lazy_gettext('Resume a PID.'),
+    'message': lazy_gettext('PID를 재개합니다.'),
 
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will resume the selected PID Controller. '
-             'Executing <strong>self.run_action("ACTION_ID", value="959019d1-c1fa-41fe-a554-7be3366a9c5b")</strong> will resume the PID Controller with the specified ID.',
+    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 선택한 PID 컨트롤러가 재개됩니다. '
+             '<strong>self.run_action("ACTION_ID", value="959019d1-c1fa-41fe-a554-7be3366a9c5b")</strong>를 실행하면 지정된 ID의 PID 컨트롤러가 재개됩니다.',
 
     'custom_options': [
         {
@@ -37,8 +37,8 @@ ACTION_INFORMATION = {
             'options_select': [
                 'PID'
             ],
-            'name': lazy_gettext('Controller'),
-            'phrase': 'Select the PID Controller to resume'
+            'name': lazy_gettext('컨트롤러'),
+            'phrase': '재개할 PID 컨트롤러를 선택하세요'
         }
     ]
 }
@@ -72,15 +72,15 @@ class ActionModule(AbstractFunctionAction):
             PID, unique_id=controller_id, entry='first')
 
         if not pid:
-            msg = f" Error: PID Controller with ID '{controller_id}' not found."
+            msg = f"오류: ID '{controller_id}'에 해당하는 PID 컨트롤러를 찾을 수 없습니다."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
-        dict_vars['message'] += f" Resume PID {controller_id} ({pid.name})."
+        dict_vars['message'] += f"PID {controller_id} ({pid.name})를 재개합니다."
 
         if not pid.is_paused:
-            dict_vars['message'] += " Notice: PID is not paused!"
+            dict_vars['message'] += " 알림: PID가 일시 정지 상태가 아닙니다!"
         elif pid.is_activated:
             with session_scope(LOOPERGET_DB_PATH) as new_session:
                 mod_pid = new_session.query(PID).filter(

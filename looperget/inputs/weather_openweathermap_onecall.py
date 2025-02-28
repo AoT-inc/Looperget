@@ -63,9 +63,9 @@ INPUT_INFORMATION = {
     'url_additional': 'https://openweathermap.org',
     'measurements_rescale': False,
 
-    'message': 'Obtain a free API key at openweathermap.org. '
-               'Notes: The free API subscription is limited to 60 calls per minute. '
-               'If a Day (Future) time is selected, Minimum and Maximum temperatures are available as measurements.',
+    'message': 'openweathermap.org에서 무료 API 키를 발급받으세요. '
+               '참고: 무료 API 구독은 분당 60회 호출로 제한됩니다. '
+               '만약 Day (Future) 시간이 선택되면, 최소 및 최대 온도가 측정값으로 제공됩니다.',
 
     'options_enabled': [
         'measurements_select',
@@ -83,96 +83,96 @@ INPUT_INFORMATION = {
             'type': 'text',
             'default_value': '',
             'required': True,
-            'name': lazy_gettext('API Key'),
-            'phrase': "The API Key for this service's API"
+            'name': lazy_gettext('API 키'),
+            'phrase': "이 서비스의 API를 위한 API 키"
         },
         {
             'id': 'latitude',
             'type': 'float',
             'default_value': 33.441792,
             'required': True,
-            'name': lazy_gettext('Latitude (decimal)'),
-            'phrase': "The latitude to acquire weather data"
+            'name': lazy_gettext('위도 (소수점)'),
+            'phrase': "날씨 데이터를 가져올 위도"
         },
         {
             'id': 'longitude',
             'type': 'float',
             'default_value': -94.037689,
             'required': True,
-            'name': lazy_gettext('Longitude (decimal)'),
-            'phrase': "The longitude to acquire weather data"
+            'name': lazy_gettext('경도 (소수점)'),
+            'phrase': "날씨 데이터를 가져올 경도"
         },
         {
             'id': 'weather_time',
             'type': 'select',
             'default_value': 'current',
             'options_select': [
-                ('current', 'Current (Present)'),
-                ('day1', '1 Day (Future)'),
-                ('day2', '2 Day (Future)'),
-                ('day3', '3 Day (Future)'),
-                ('day4', '4 Day (Future)'),
-                ('day5', '5 Day (Future)'),
-                ('day6', '6 Day (Future)'),
-                ('day7', '7 Day (Future)'),
-                ('hour1', '1 Hour (Future)'),
-                ('hour2', '2 Hours (Future)'),
-                ('hour3', '3 Hours (Future)'),
-                ('hour4', '4 Hours (Future)'),
-                ('hour5', '5 Hours (Future)'),
-                ('hour6', '6 Hours (Future)'),
-                ('hour7', '7 Hours (Future)'),
-                ('hour8', '8 Hours (Future)'),
-                ('hour9', '9 Hours (Future)'),
-                ('hour10', '10 Hours (Future)'),
-                ('hour11', '11 Hours (Future)'),
-                ('hour12', '12 Hours (Future)'),
-                ('hour13', '13 Hours (Future)'),
-                ('hour14', '14 Hours (Future)'),
-                ('hour15', '15 Hours (Future)'),
-                ('hour16', '16 Hours (Future)'),
-                ('hour17', '17 Hours (Future)'),
-                ('hour18', '18 Hours (Future)'),
-                ('hour19', '19 Hours (Future)'),
-                ('hour20', '20 Hours (Future)'),
-                ('hour21', '21 Hours (Future)'),
-                ('hour22', '22 Hours (Future)'),
-                ('hour23', '23 Hours (Future)'),
-                ('hour24', '24 Hours (Future)'),
-                ('hour25', '25 Hours (Future)'),
-                ('hour26', '26 Hours (Future)'),
-                ('hour27', '27 Hours (Future)'),
-                ('hour28', '28 Hours (Future)'),
-                ('hour29', '29 Hours (Future)'),
-                ('hour30', '30 Hours (Future)'),
-                ('hour31', '31 Hours (Future)'),
-                ('hour32', '32 Hours (Future)'),
-                ('hour33', '33 Hours (Future)'),
-                ('hour34', '34 Hours (Future)'),
-                ('hour35', '35 Hours (Future)'),
-                ('hour36', '36 Hours (Future)'),
-                ('hour37', '37 Hours (Future)'),
-                ('hour38', '38 Hours (Future)'),
-                ('hour39', '39 Hours (Future)'),
-                ('hour40', '40 Hours (Future)'),
-                ('hour41', '41 Hours (Future)'),
-                ('hour42', '42 Hours (Future)'),
-                ('hour43', '43 Hours (Future)'),
-                ('hour44', '44 Hours (Future)'),
-                ('hour45', '45 Hours (Future)'),
-                ('hour46', '46 Hours (Future)'),
-                ('hour47', '47 Hours (Future)'),
-                ('hour48', '48 Hours (Future)')
+                ('current', '현재 (현재)'),
+                ('day1', '1일 (미래)'),
+                ('day2', '2일 (미래)'),
+                ('day3', '3일 (미래)'),
+                ('day4', '4일 (미래)'),
+                ('day5', '5일 (미래)'),
+                ('day6', '6일 (미래)'),
+                ('day7', '7일 (미래)'),
+                ('hour1', '1시간 (미래)'),
+                ('hour2', '2시간 (미래)'),
+                ('hour3', '3시간 (미래)'),
+                ('hour4', '4시간 (미래)'),
+                ('hour5', '5시간 (미래)'),
+                ('hour6', '6시간 (미래)'),
+                ('hour7', '7시간 (미래)'),
+                ('hour8', '8시간 (미래)'),
+                ('hour9', '9시간 (미래)'),
+                ('hour10', '10시간 (미래)'),
+                ('hour11', '11시간 (미래)'),
+                ('hour12', '12시간 (미래)'),
+                ('hour13', '13시간 (미래)'),
+                ('hour14', '14시간 (미래)'),
+                ('hour15', '15시간 (미래)'),
+                ('hour16', '16시간 (미래)'),
+                ('hour17', '17시간 (미래)'),
+                ('hour18', '18시간 (미래)'),
+                ('hour19', '19시간 (미래)'),
+                ('hour20', '20시간 (미래)'),
+                ('hour21', '21시간 (미래)'),
+                ('hour22', '22시간 (미래)'),
+                ('hour23', '23시간 (미래)'),
+                ('hour24', '24시간 (미래)'),
+                ('hour25', '25시간 (미래)'),
+                ('hour26', '26시간 (미래)'),
+                ('hour27', '27시간 (미래)'),
+                ('hour28', '28시간 (미래)'),
+                ('hour29', '29시간 (미래)'),
+                ('hour30', '30시간 (미래)'),
+                ('hour31', '31시간 (미래)'),
+                ('hour32', '32시간 (미래)'),
+                ('hour33', '33시간 (미래)'),
+                ('hour34', '34시간 (미래)'),
+                ('hour35', '35시간 (미래)'),
+                ('hour36', '36시간 (미래)'),
+                ('hour37', '37시간 (미래)'),
+                ('hour38', '38시간 (미래)'),
+                ('hour39', '39시간 (미래)'),
+                ('hour40', '40시간 (미래)'),
+                ('hour41', '41시간 (미래)'),
+                ('hour42', '42시간 (미래)'),
+                ('hour43', '43시간 (미래)'),
+                ('hour44', '44시간 (미래)'),
+                ('hour45', '45시간 (미래)'),
+                ('hour46', '46시간 (미래)'),
+                ('hour47', '47시간 (미래)'),
+                ('hour48', '48시간 (미래)')
             ],
-            'name': lazy_gettext('Time'),
-            'phrase': 'Select the time for the current or forecast weather'
+            'name': lazy_gettext('시간'),
+            'phrase': '현재 또는 예보 날씨에 대한 시간을 선택하세요'
         }
     ]
 }
 
 
 class InputModule(AbstractInput):
-    """A sensor support class that gets weather for a latitude/longitude location."""
+    """위도/경도 위치의 날씨를 가져오는 센서 지원 클래스."""
     def __init__(self, input_dev, testing=False):
         super().__init__(input_dev, testing=testing, name=__name__)
 
@@ -208,9 +208,9 @@ class InputModule(AbstractInput):
             self.logger.debug("Time Dict: {}".format(self.weather_time_dict))
 
     def get_measurement(self):
-        """Gets the weather data."""
+        """날씨 데이터를 가져옵니다."""
         if not self.api_url:
-            self.logger.error("API Key, Latitude, and Longitude required")
+            self.logger.error("API 키, 위도, 경도가 필요합니다.")
             return
 
         self.return_dict = copy.deepcopy(measurements_dict)
@@ -218,11 +218,11 @@ class InputModule(AbstractInput):
         try:
             response = requests.get(self.api_url)
             x = response.json()
-            self.logger.debug("Response: {}".format(x))
+            self.logger.debug("응답: {}".format(x))
 
             if self.weather_time_dict["time"] == "current":
                 if 'current' not in x:
-                    self.logger.error("No response. Check your configuration.")
+                    self.logger.error("응답이 없습니다. 설정을 확인하세요.")
                     return
                 temperature = x["current"]["temp"]
                 pressure = x["current"]["pressure"]
@@ -233,7 +233,7 @@ class InputModule(AbstractInput):
                     self.value_set(8, 0)
             elif self.weather_time_dict["time"] == "hour":
                 if 'hourly' not in x:
-                    self.logger.error("No response. Check your configuration.")
+                    self.logger.error("응답이 없습니다. 설정을 확인하세요.")
                     return
                 temperature = x["hourly"][self.weather_time_dict["amount"] - 1]["temp"]
                 pressure = x["hourly"][self.weather_time_dict["amount"] - 1]["pressure"]
@@ -244,7 +244,7 @@ class InputModule(AbstractInput):
                     self.value_set(8, self.weather_time_dict["amount"])
             elif self.weather_time_dict["time"] == "day":
                 if 'daily' not in x:
-                    self.logger.error("No response. Check your configuration.")
+                    self.logger.error("응답이 없습니다. 설정을 확인하세요.")
                     return
                 temperature = x["daily"][self.weather_time_dict["amount"]]["temp"]["day"]
                 temperature_min = x["daily"][self.weather_time_dict["amount"]]["temp"]["min"]
@@ -261,13 +261,13 @@ class InputModule(AbstractInput):
                 if self.is_enabled(8):
                     self.value_set(8, self.weather_time_dict["amount"] * 24)
             else:
-                self.logger.error("Invalid weather time")
+                self.logger.error("유효하지 않은 날씨 시간")
                 return
         except Exception as e:
-            self.logger.error("Error acquiring weather information: {}".format(e))
+            self.logger.error("날씨 정보를 가져오는 중 오류 발생: {}".format(e))
             return
 
-        self.logger.debug("Temp: {}, Hum: {}, Press: {}, Wind Speed: {}, Wind Direction: {}".format(
+        self.logger.debug("온도: {}, 습도: {}, 기압: {}, 풍속: {}, 풍향: {}".format(
             temperature, humidity, pressure, wind_speed, wind_deg))
 
         if self.is_enabled(0):

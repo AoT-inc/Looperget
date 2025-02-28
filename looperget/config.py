@@ -494,6 +494,7 @@ USER_ROLES = [
 
 # Web UI themes
 THEMES = [
+    ('/static/css/bootstrap-4-themes/looperget.css', 'Looperget'),
     ('/static/css/bootstrap-4-themes/cerulean.css', 'Cerulean'),
     ('/static/css/bootstrap-4-themes/cosmo.css', 'Cosmo'),
     ('/static/css/bootstrap-4-themes/cyborg.css', 'Cyborg'),
@@ -513,8 +514,7 @@ THEMES = [
     ('/static/css/bootstrap-4-themes/spacelab.css', 'Spacelab'),
     ('/static/css/bootstrap-4-themes/superhero.css', 'Superhero'),
     ('/static/css/bootstrap-4-themes/united.css', 'United'),
-    ('/static/css/bootstrap-4-themes/yeti.css', 'Yeti'),
-    ('/static/css/bootstrap-4-themes/looperget.css', 'Looperget')
+    ('/static/css/bootstrap-4-themes/yeti.css', 'Yeti')
 ]
 
 THEMES_DARK = [

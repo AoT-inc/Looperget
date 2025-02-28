@@ -10,7 +10,7 @@ from looperget.utils.send_data import send_email
 
 ACTION_INFORMATION = {
     'name_unique': 'email',
-    'name': 'Send Email',
+    'name': '이메일 보내기',
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -20,10 +20,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': 'Send an email.',
+    'message': '이메일을 전송합니다.',
 
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will email the specified recipient(s) using the SMTP credentials in the system configuration. Separate multiple recipients with commas. The body of the email will be the self-generated message. '
-             'Executing <strong>self.run_action("ACTION_ID", value={"email_address": ["email1@email.com", "email2@email.com"], "message": "My message"})</strong> will send an email to the specified recipient(s) with the specified message.',
+    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 시스템 구성에 설정된 SMTP 자격증명을 사용하여 지정된 수신자에게 이메일을 전송합니다. 여러 수신자는 콤마로 구분합니다. 이메일 본문은 자동 생성된 메시지가 됩니다. '
+             '<strong>self.run_action("ACTION_ID", value={"email_address": ["email1@email.com", "email2@email.com"], "message": "My message"})</strong>를 실행하면 지정된 수신자에게 지정된 메시지로 이메일을 전송합니다.',
 
     'custom_options': [
         {
@@ -31,8 +31,8 @@ ACTION_INFORMATION = {
             'type': 'text',
             'default_value': 'email@domain.com',
             'required': True,
-            'name': 'E-Mail Address',
-            'phrase': 'E-mail recipient(s) (separate multiple addresses with commas)'
+            'name': '이메일',
+            'phrase': '수신자 이메일 (여러 주소는 콤마로 구분)'
         }
     ]
 }
@@ -66,7 +66,7 @@ class ActionModule(AbstractFunctionAction):
                 email_recipients = [self.email]
 
         if not email_recipients:
-            msg = f" Error: No recipients specified."
+            msg = f" 오류: 수신자가 지정되지 않았습니다."
             self.logger.error(msg)
             dict_vars['message'] += msg
             return dict_vars
@@ -79,7 +79,7 @@ class ActionModule(AbstractFunctionAction):
         # If the emails per hour limit has not been exceeded
         smtp_wait_timer, allowed_to_send_notice = check_allowed_to_email()
         if allowed_to_send_notice:
-            dict_vars['message'] += f" Email '{self.email}'."
+            dict_vars['message'] += f" 이메일 '{self.email}'."
             if not message_send:
                 message_send = dict_vars['message']
             smtp = db_retrieve_table_daemon(SMTP, entry='first')

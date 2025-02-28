@@ -51,9 +51,8 @@ OUTPUT_INFORMATION = {
     'channels_dict': channels_dict,
     'output_types': ['volume', 'on_off'],
 
-    'message': "This output turns a GPIO pin HIGH and LOW to control power to a generic peristaltic pump. "
-               "The peristaltic pump can then be turned on for a duration or, after determining the pump's maximum "
-               "flow rate, instructed to dispense a specific volume at the maximum rate or at a specified rate.",
+    'message': "이 출력은 일반 연축 펌프의 전원을 제어하기 위해 GPIO 핀을 HIGH와 LOW 상태로 전환합니다. "
+               "이후 연축 펌프는 일정 시간 동안 작동하거나, 펌프의 최대 유량이 결정된 후 최대 유량 또는 지정된 유량에 따라 특정 부피를 분사하도록 지시할 수 있습니다.",
 
     'options_enabled': [
         'button_on',
@@ -68,12 +67,8 @@ OUTPUT_INFORMATION = {
 
     'interfaces': ['GPIO'],
     
-    'custom_options_message': "To accurately dispense specific volumes, the following options need to be correctly "
-                              "set. To determine the flow rate of your pump, first purge the fluid line to remove "
-                              "air. Next, turn the pump on for 60 seconds and collect the fluid that's dispensed. "
-                              "Last, measure and enter the amount of fluid that was dispensed, in ml, into the "
-                              "Fastest Rate (ml/min) field. Your pump should now be calibrated to dispense volumes "
-                              "accurately." ,
+    'custom_options_message': "정확하게 특정 부피를 분사하기 위해서는 다음 옵션들을 올바르게 설정해야 합니다. 펌프의 유량을 결정하기 위해 먼저 유체 라인에서 공기를 제거하여 청소하십시오." 
+                              "그 후, 펌프를 60초 동안 작동시켜 분사된 유체를 모으고, 마지막으로 모은 유체의 양(ml)을 '최고 속도 (ml/분)' 필드에 입력하세요. 이제 펌프가 정확하게 부피를 분사하도록 보정됩니다." ,
     'custom_channel_options': [
         {
             'id': 'pin',
@@ -81,8 +76,8 @@ OUTPUT_INFORMATION = {
             'default_value': None,
             'required': False,
             'constraints_pass': constraints_pass_positive_or_zero_value,
-            'name': "{}: {} ({})".format(lazy_gettext('Pin'), lazy_gettext('GPIO'), lazy_gettext('BCM')),
-            'phrase': lazy_gettext('The pin to control the state of')
+            'name': "{}: {} ({})".format(lazy_gettext('핀'), lazy_gettext('GPIO'), lazy_gettext('BCM')),
+            'phrase': lazy_gettext('상태를 제어할 핀')
         },
         {
             'id': 'on_state',
@@ -92,8 +87,8 @@ OUTPUT_INFORMATION = {
                 (1, 'HIGH'),
                 (0, 'LOW')
             ],
-            'name': lazy_gettext('On State'),
-            'phrase': 'The state of the GPIO that corresponds to an On state'
+            'name': lazy_gettext('켜짐 상태'),
+            'phrase': 'GPIO에서 켜짐 상태에 해당하는 값'
         },
         {
             'id': 'fastest_dispense_rate_ml_min',
@@ -101,7 +96,7 @@ OUTPUT_INFORMATION = {
             'default_value': 150.0,
             'constraints_pass': constraints_pass_positive_value,
             'name': 'Fastest Rate (ml/min)',
-            'phrase': 'The fastest rate that the pump can dispense (ml/min)'
+            'phrase': '펌프가 가장 빠르게 분사할 수 있는 속도 (ml/분)'
         },
         {
             'id': 'minimum_sec_on_per_min',
@@ -109,7 +104,7 @@ OUTPUT_INFORMATION = {
             'default_value': 1.0,
             'constraints_pass': constraints_pass_positive_value,
             'name': 'Minimum On (Seconds)',
-            'phrase': 'The minimum duration the pump should be turned on for every 60 second period'
+            'phrase': '60초 동안 펌프가 최소한 켜져 있어야 하는 시간 (초)'
         },
         {
             'id': 'flow_mode',
@@ -120,23 +115,23 @@ OUTPUT_INFORMATION = {
                 ('specify_flow_rate', 'Specify Flow Rate')
             ],
             'name': 'Flow Rate Method',
-            'phrase': 'The flow rate to use when pumping a volume'
+            'phrase': '펌프로 분사할 때 사용할 유량 방식'
         },
         {
             'id': 'flow_rate',
             'type': 'float',
             'default_value': 10.0,
             'constraints_pass': constraints_pass_positive_value,
-            'name': "{} ({})".format(lazy_gettext('Desired Flow Rate'), lazy_gettext('ml/min')),
-            'phrase': 'Desired flow rate in ml/minute when Specify Flow Rate set'
+            'name': "{} ({})".format(lazy_gettext('희망 유량'), lazy_gettext('ml/분')),
+            'phrase': 'Specify Flow Rate가 설정되었을 때 원하는 유량 (ml/분)'
         },
         {
             'id': 'amps',
             'type': 'float',
             'default_value': 0.0,
             'required': True,
-            'name': "{} ({})".format(lazy_gettext('Current'), lazy_gettext('Amps')),
-            'phrase': 'The current draw of the device being controlled'
+            'name': "{} ({})".format(lazy_gettext('현재'), lazy_gettext('암페어')),
+            'phrase': '제어되는 장치의 전류 소모'
         }
     ]
 }

@@ -20,7 +20,7 @@ INPUT_INFORMATION = {
     'measurements_name': 'GPIO State',
     'measurements_dict': measurements_dict,
 
-    'message': 'Measures the state of a GPIO pin, returning either 0 (low) or 1 (high).',
+    'message': 'GPIO 핀의 상태를 측정하여 0(낮음) 또는 1(높음)을 반환합니다.',
 
     'options_enabled': [
         'gpio_location',
@@ -45,8 +45,8 @@ INPUT_INFORMATION = {
                 ('pull_down', 'Pull Down'),
                 ('pull_up', 'Pull Up')
             ],
-            'name': 'Pin Mode',
-            'phrase': 'Enables or disables the pull-up or pull-down resistor'
+            'name': '핀 모드',
+            'phrase': '풀업 또는 풀다운 저항을 활성화하거나 비활성화합니다.'
         }
     ]
 }

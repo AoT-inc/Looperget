@@ -24,10 +24,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': lazy_gettext('Activate a controller.'),
+    'message': lazy_gettext('컨트롤러를 활성화합니다.'),
 
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will activate the selected Controller. '
-             'Executing <strong>self.run_action("ACTION_ID", value={"controller_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b"})</strong> will activate the controller with the specified ID. Don\'t forget to change the controller_id value to an actual Controller ID that exists in your system.',
+    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 선택된 컨트롤러가 활성화됩니다. '
+             '<strong>self.run_action("ACTION_ID", value={"controller_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b"})</strong>를 실행하면 지정된 ID의 컨트롤러가 활성화됩니다. 시스템에 존재하는 실제 컨트롤러 ID로 controller_id 값을 변경하는 것을 잊지 마십시오.',
 
     'custom_options': [
         {
@@ -42,8 +42,8 @@ ACTION_INFORMATION = {
                 'PID',
                 'Trigger'
             ],
-            'name': lazy_gettext('Controller'),
-            'phrase': 'Select the controller to activate'
+            'name': lazy_gettext('컨트롤러'),
+            'phrase': '활성화할 컨트롤러를 선택하세요'
         }
     ]
 }
@@ -82,15 +82,15 @@ class ActionModule(AbstractFunctionAction):
          controller_entry) = which_controller(controller_id)
 
         if not controller_entry:
-            msg = f" Error: Controller with ID '{controller_id}' not found."
+            msg = f"오류: ID '{controller_id}'의 컨트롤러를 찾을 수 없습니다."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
-        dict_vars['message'] += f" Activate Controller {controller_id} ({controller_entry.name})."
+        dict_vars['message'] += f"컨트롤러 {controller_id} ({controller_entry.name})를 활성화합니다."
 
         if controller_entry.is_activated:
-            dict_vars['message'] += " Notice: Controller is already active!"
+            dict_vars['message'] += " 알림: 컨트롤러가 이미 활성화되어 있습니다!"
         else:
             with session_scope(LOOPERGET_DB_PATH) as new_session:
                 mod_cont = new_session.query(controller_object).filter(

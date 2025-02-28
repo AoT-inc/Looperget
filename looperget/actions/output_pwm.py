@@ -22,10 +22,11 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': lazy_gettext('Set a PWM Output to set a duty cycle.'),
+    'message': lazy_gettext('PWM 출력의 작동 시간 비율을 설정합니다.'),
 
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will set the PWM output duty cycle. '
-             'Executing <strong>self.run_action("ACTION_ID", value={"output_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "channel": 0, "duty_cycle": 42})</strong> will set the duty cycle of the PWM output with the specified ID and channel. Don\'t forget to change the output_id value to an actual Output ID that exists in your system.',
+    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 PWM 출력의  작동 시간 비율이 설정됩니다. '
+             '<strong>self.run_action("ACTION_ID", value={"output_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "channel": 0, "duty_cycle": 42})</strong>를 실행하면 지정된 ID와 채널의 PWM 출력의 작동 시간 비율이 설정됩니다. '
+             '시스템에 존재하는 실제 Output ID로 output_id 값을 변경하는 것을 잊지 마십시오.',
 
     'custom_options': [
         {
@@ -37,7 +38,7 @@ ACTION_INFORMATION = {
                 'Output_Channels',
             ],
             'name': 'Output',
-            'phrase': 'Select an output to control'
+            'phrase': '제어할 출력을 선택하세요'
         },
         {
             'id': 'duty_cycle',
@@ -45,8 +46,8 @@ ACTION_INFORMATION = {
             'default_value': 0.0,
             'required': True,
             'constraints_pass': constraints_pass_positive_or_zero_value,
-            'name': lazy_gettext('Duty Cycle'),
-            'phrase': lazy_gettext('Duty cycle for the PWM (percent, 0.0 - 100.0)')
+            'name': lazy_gettext('작동 시간 비율'),
+            'phrase': lazy_gettext('PWM의 작동 시간 비율 (백분율, 0.0 - 100.0)')
         }
     ]
 }
@@ -93,12 +94,12 @@ class ActionModule(AbstractFunctionAction):
             Output, unique_id=output_id, entry='first')
 
         if not output:
-            msg = f" Error: Output with ID '{output_id}' not found."
+            msg = f"오류: ID '{output_id}'에 해당하는 출력이 존재하지 않습니다."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
-        dict_vars['message'] += f" Set output {output_id} CH{channel} ({output.name}) duty cycle to {duty_cycle} %."
+        dict_vars['message'] += f"출력 {output_id} CH{channel} ({output.name})의 작동 시간 비율을 {duty_cycle} %로 설정합니다."
 
         output_on = threading.Thread(
             target=self.control.output_on,

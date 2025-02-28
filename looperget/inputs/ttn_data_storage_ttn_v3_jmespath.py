@@ -48,23 +48,20 @@ channels_dict = {
 INPUT_INFORMATION = {
     'input_name_unique': 'TTN_DATA_STORAGE_TTN_V3_JMESPATH',
     'input_manufacturer': 'The Things Network',
-    'input_name': 'The Things Network: Data Storage (TTN v3, Payload jmespath Expression)',
-    'input_name_short': 'TTN (v3) Data Storage',
+    'input_name': 'The Things Network: 데이터 저장 (TTN v3, 페이로드 jmespath 표현식)',
+    'input_name_short': 'TTN (v3) 데이터 저장',
     'input_library': 'requests, jmespath',
-    'measurements_name': 'Variable measurements',
+    'measurements_name': '가변 측정값',
     'measurements_dict': measurements_dict,
     'channels_dict': channels_dict,
 
-    'message': 'This Input receives and stores measurements from the Data Storage Integration on The Things Network. '
-               'The given Payload jmespath Expression is used as a JMESPATH expression to find the '
-               'corresponding value that will be stored for that channel. Be sure you select and '
-               'save the Measurement Unit for each channel. Once the unit has been saved, '
-               'you can convert to other units in the Convert Measurement section.'
-               ' Example expressions for jmespath (https://jmespath.org) include '
-               '<i>temperature</i>, <i>sensors[0].temperature</i>, and <i>bathroom.temperature</i> which refer to '
-               'the temperature as a direct key within the first entry of sensors or as a subkey '
-               'of bathroom, respectively. Jmespath elements and keys that contain special characters '
-               'have to be enclosed in double quotes, e.g. <i>"sensor-1".temperature</i>.',
+    'message': '이 입력은 The Things Network의 데이터 저장 통합에서 측정값을 수신하고 저장합니다. '
+               '제공된 페이로드 jmespath 표현식은 해당 채널에 저장될 값을 찾기 위해 JMESPATH 표현식으로 사용됩니다. '
+               '각 채널에 대해 측정 단위를 선택하고 저장했는지 확인하세요. 단위가 저장되면, 측정 변환 섹션에서 다른 단위로 변환할 수 있습니다. '
+               'jmespath (https://jmespath.org)의 예시 표현식으로는 <i>temperature</i>, <i>sensors[0].temperature</i>, '
+               '및 <i>bathroom.temperature</i>가 있으며, 이는 각각 센서 배열의 첫 번째 항목에 있는 직접 키 또는 '
+               'bathroom의 하위 키로 온도를 나타냅니다. 특수 문자가 포함된 jmespath 요소와 키는 반드시 큰따옴표로 감싸야 합니다. '
+               '예: <i>"sensor-1".temperature</i>.',
 
     'measurements_variable_amount': True,
     'channel_quantity_same_as_measurements': True,
@@ -88,24 +85,24 @@ INPUT_INFORMATION = {
             'type': 'text',
             'default_value': '',
             'required': True,
-            'name': 'Application ID',
-            'phrase': 'The Things Network Application ID'
+            'name': '애플리케이션 ID',
+            'phrase': 'The Things Network 애플리케이션 ID'
         },
         {
             'id': 'app_api_key',
             'type': 'text',
             'default_value': '',
             'required': True,
-            'name': 'App API Key',
-            'phrase': 'The Things Network Application API Key'
+            'name': '앱 API 키',
+            'phrase': 'The Things Network 애플리케이션 API 키'
         },
         {
             'id': 'device_id',
             'type': 'text',
             'default_value': '',
             'required': True,
-            'name': 'Device ID',
-            'phrase': 'The Things Network Device ID'
+            'name': '디바이스 ID',
+            'phrase': 'The Things Network 디바이스 ID'
         }
     ],
 
@@ -123,8 +120,8 @@ INPUT_INFORMATION = {
             'type': 'text',
             'default_value': '',
             'required': True,
-            'name': 'Payload jmespath Expression',
-            'phrase': 'The TTN jmespath expression to return the value to store'
+            'name': '페이로드 jmespath 표현식',
+            'phrase': '저장할 값을 반환하기 위한 TTN jmespath 표현식'
         }
     ]
 }

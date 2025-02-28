@@ -41,16 +41,14 @@ measurements_dict = {
 INPUT_INFORMATION = {
     'input_name_unique': 'OPENWEATHERMAP_CALL_WEATHER',
     'input_manufacturer': 'Weather',
-    'input_name': 'OpenWeatherMap (City, Current)',
-    'input_name_short': 'OpenWeather City',
-    'measurements_name': 'Humidity/Temperature/Pressure/Wind',
+    'input_name': 'OpenWeatherMap (도시, 현재)',
+    'input_name_short': 'OpenWeather 도시',
+    'measurements_name': '습도/온도/기압/풍속',
     'measurements_dict': measurements_dict,
     'url_additional': 'https://openweathermap.org',
     'measurements_rescale': False,
 
-    'message': 'Obtain a free API key at openweathermap.org. '
-               'If the city you enter does not return measurements, try another city. '
-               'Note: the free API subscription is limited to 60 calls per minute',
+    'message': 'openweathermap.org에서 무료 API 키를 발급받으세요. 입력한 도시에서 측정값이 반환되지 않는 경우, 다른 도시를 시도해 보세요. 참고: 무료 API 구독은 분당 60회 호출로 제한됩니다.',
 
     'options_enabled': [
         'measurements_select',
@@ -64,23 +62,23 @@ INPUT_INFORMATION = {
             'type': 'text',
             'default_value': '',
             'required': True,
-            'name': lazy_gettext('API Key'),
-            'phrase': "The API Key for this service's API"
+            'name': lazy_gettext('API 키'),
+            'phrase': "이 서비스의 API를 위한 API 키"
         },
         {
             'id': 'city',
             'type': 'text',
             'default_value': '',
             'required': True,
-            'name': lazy_gettext('City'),
-            'phrase': "The city to acquire the weather data"
+            'name': lazy_gettext('도시'),
+            'phrase': "날씨 데이터를 가져올 도시"
         }
     ]
 }
 
 
 class InputModule(AbstractInput):
-    """A sensor support class that gets weather for a city."""
+    """도시의 날씨를 가져오는 센서 지원 클래스."""
     def __init__(self, input_dev, testing=False):
         super().__init__(input_dev, testing=testing, name=__name__)
 
@@ -100,9 +98,9 @@ class InputModule(AbstractInput):
             self.logger.debug("URL: {}".format(self.api_url))
 
     def get_measurement(self):
-        """Gets the weather data."""
+        """날씨 데이터를 가져옵니다."""
         if not self.api_url:
-            self.logger.error("API Key and City required")
+            self.logger.error("API 키와 도시가 필요합니다.")
             return
 
         self.return_dict = copy.deepcopy(measurements_dict)
@@ -110,7 +108,7 @@ class InputModule(AbstractInput):
         try:
             response = requests.get(self.api_url)
             x = response.json()
-            self.logger.debug("Response: {}".format(x))
+            self.logger.debug("응답: {}".format(x))
 
             if x["cod"] != "404":
                 temperature = x["main"]["temp"]
@@ -119,13 +117,13 @@ class InputModule(AbstractInput):
                 wind_speed = x["wind"]["speed"]
                 wind_deg = x["wind"]["deg"]
             else:
-                self.logger.error("City Not Found")
+                self.logger.error("도시를 찾을 수 없습니다.")
                 return
         except Exception as e:
-            self.logger.error("Error acquiring weather information: {}".format(e))
+            self.logger.error("날씨 정보를 가져오는 중 오류 발생: {}".format(e))
             return
 
-        self.logger.debug("Temp: {}, Hum: {}, Press: {}, Wind Speed: {}, Wind Direction: {}".format(
+        self.logger.debug("온도: {}, 습도: {}, 기압: {}, 풍속: {}, 풍향: {}".format(
             temperature, humidity, pressure, wind_speed, wind_deg))
 
         if self.is_enabled(0):

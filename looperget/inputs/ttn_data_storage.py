@@ -54,7 +54,7 @@ INPUT_INFORMATION = {
     'measurements_dict': measurements_dict,
     'channels_dict': channels_dict,
 
-    'message': 'This Input receives and stores measurements from the Data Storage Integration on The Things Network.',
+    'message': '이 입력은 The Things Network의 Data Storage Integration에서 측정값을 수신하여 저장합니다.',
 
     'measurements_variable_amount': True,
     'channel_quantity_same_as_measurements': True,
@@ -78,7 +78,7 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': True,
             'name': 'Application ID',
-            'phrase': 'The Things Network Application ID'
+            'phrase': 'The Things Network 애플리케이션 ID'
         },
         {
             'id': 'app_api_key',
@@ -86,7 +86,7 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': True,
             'name': 'App API Key',
-            'phrase': 'The Things Network Application API Key'
+            'phrase': 'The Things Network 애플리케이션 API Key'
         },
         {
             'id': 'device_id',
@@ -94,7 +94,7 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': True,
             'name': 'Device ID',
-            'phrase': 'The Things Network Device ID'
+            'phrase': 'The Things Network 디바이스 ID'
         }
     ],
 
@@ -113,7 +113,7 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': True,
             'name': 'Variable Name',
-            'phrase': 'The TTN variable name'
+            'phrase': 'The TTN 변수 이름'
         }
     ]
 }

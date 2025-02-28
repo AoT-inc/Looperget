@@ -55,9 +55,9 @@ INPUT_INFORMATION = {
     'measurements_dict': measurements_dict,
     'channels_dict': channels_dict,
 
-    'message': 'This Input receives and stores measurements from the Data Storage Integration on The Things Network. '
-               'If you have key/value pairs as your payload, enter the key name in Variable Name and the '
-               'corresponding value for that key will be stored in the measurement database.',
+    'message': '이 입력은 The Things Network의 Data Storage Integration에서 측정값을 수신하여 저장합니다. '
+               '페이로드에 키/값 쌍이 포함되어 있다면, Variable Name에 키 이름을 입력하면 해당 키의 값이 측정 데이터베이스에 저장됩니다.',
+
 
     'measurements_variable_amount': True,
     'channel_quantity_same_as_measurements': True,
@@ -81,7 +81,7 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': True,
             'name': 'Application ID',
-            'phrase': 'The Things Network Application ID'
+            'phrase': 'The Things Network 애플리케이션 ID를 입력하세요.'
         },
         {
             'id': 'app_api_key',
@@ -89,7 +89,7 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': True,
             'name': 'App API Key',
-            'phrase': 'The Things Network Application API Key'
+            'phrase': 'The Things Network 애플리케이션 API 키를 입력하세요.'
         },
         {
             'id': 'device_id',
@@ -97,7 +97,7 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': True,
             'name': 'Device ID',
-            'phrase': 'The Things Network Device ID'
+            'phrase': 'The Things Network 디바이스 ID를 입력하세요.'
         }
     ],
 
@@ -116,7 +116,7 @@ INPUT_INFORMATION = {
             'default_value': '',
             'required': True,
             'name': 'Variable Name',
-            'phrase': 'The TTN variable name'
+            'phrase': 'TTN 변수 이름을 입력하세요.'
         }
     ]
 }

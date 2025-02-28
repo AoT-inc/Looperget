@@ -15,7 +15,7 @@ from looperget.utils.database import db_retrieve_table_daemon
 
 ACTION_INFORMATION = {
     'name_unique': 'method_pid',
-    'name': "{}: {}".format(TRANSLATIONS['pid']['title'], lazy_gettext('Set Method')),
+    'name': "{}: {}".format(TRANSLATIONS['pid']['title'], lazy_gettext('참조궤적 설정')),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -27,8 +27,9 @@ ACTION_INFORMATION = {
 
     'message': lazy_gettext('Select a method to set the PID to use.'),
 
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will pause the selected PID Controller. '
-             'Executing <strong>self.run_action("ACTION_ID", value={"pid_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "method_id": "fe8b8f41-131b-448d-ba7b-00a044d24075"})</strong> will set a method for the PID Controller with the specified IDs. Don\'t forget to change the pid_id value to an actual PID ID that exists in your system.',
+    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 선택된 PID 컨트롤러가 일시 정지됩니다. '
+             '<strong>self.run_action("ACTION_ID", value={"pid_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "method_id": "fe8b8f41-131b-448d-ba7b-00a044d24075"})</strong>를 실행하면 지정된 ID를 가진 PID 컨트롤러에 참조궤적이 설정됩니다. '
+             '시스템에 존재하는 실제 PID ID로 pid_id 값을 변경하는 것을 잊지 마십시오.',
 
     'custom_options': [
         {
@@ -39,7 +40,7 @@ ACTION_INFORMATION = {
                 'PID'
             ],
             'name': lazy_gettext('Controller'),
-            'phrase': 'Select the PID Controller to apply the method'
+            'phrase': '참조궤적을 적용할 PID 컨트롤러를 선택하세요'
         },
         {
             'id': 'method',
@@ -49,7 +50,7 @@ ACTION_INFORMATION = {
                 'Method'
             ],
             'name': lazy_gettext('Method'),
-            'phrase': 'Select the Method to apply to the PID'
+            'phrase': 'PID에 적용할 참조궤적을 선택하세요'
         }
     ]
 }
@@ -89,7 +90,7 @@ class ActionModule(AbstractFunctionAction):
             PID, unique_id=controller_id, entry='first')
 
         if not pid:
-            msg = f" Error: PID Controller with ID '{controller_id}' not found."
+            msg = f" 오류: ID '{controller_id}'에 해당하는 PID 컨트롤러를 찾을 수 없습니다."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
@@ -98,12 +99,12 @@ class ActionModule(AbstractFunctionAction):
             Method, unique_id=method_id, entry='first')
 
         if not method:
-            msg = f" Error: Method with ID {method_id} not found."
+            msg = f" 오류: ID {method_id}에 해당하는 참조궤적을 찾을 수 없습니다."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
-        dict_vars['message'] += f" Set PID {controller_id} ({pid.name}) to Method {method_id} ({method.name})."
+        dict_vars['message'] += f" PID {controller_id} ({pid.name})에 참조궤적{method_id} ({method.name})가 설정되었습니다."
 
         if pid.is_activated:
             method_pid = threading.Thread(
@@ -119,7 +120,7 @@ class ActionModule(AbstractFunctionAction):
                 mod_pid.method_id = method_id
                 new_session.commit()
 
-        self.logger.debug(f"Message: {dict_vars['message']}")
+        self.logger.debug(f"message: {dict_vars['message']}")
 
         return dict_vars
 

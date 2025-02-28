@@ -8,7 +8,7 @@ from looperget.utils.system_pi import get_measurement
 
 ACTION_INFORMATION = {
     'name_unique': 'input_action_equation',
-    'name': "{} (Single-Measurement)".format(lazy_gettext('Equation')),
+    'name': "{} (Single-Measurement)".format(lazy_gettext('방정식')),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['inputs'],
@@ -18,7 +18,7 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': 'Modify a channel value with an equation before storing it in the database.',
+    'message': '데이터베이스에 저장하기 전에 방정식을 사용하여 채널 값을 수정합니다.',
 
     'usage': '',
 
@@ -27,16 +27,16 @@ ACTION_INFORMATION = {
             'id': 'measurement',
             'type': 'select_measurement_from_this_input',
             'default_value': None,
-            'name': lazy_gettext('Measurement'),
-            'phrase': 'Select the measurement to send as the payload'
+            'name': lazy_gettext('측정'),
+            'phrase': '페이로드로 전송할 측정을 선택하세요'
         },
         {
             'id': 'equation',
             'type': 'text',
             'default_value': 'x-10',
             'required': True,
-            'name': lazy_gettext('Equation'),
-            'phrase': 'The equation to apply to the value before storing. "x" is the measurement value. Example: x-10'
+            'name': lazy_gettext('방정식'),
+            'phrase': '값을 저장하기 전에 적용할 방정식입니다. "x"는 측정값을 의미합니다. 예: x-10'
         }
     ]
 }
@@ -67,7 +67,7 @@ class ActionModule(AbstractFunctionAction):
             self.measurement_measurement_id)
 
         if not device_measurement:
-            msg = f" Error: A measurement needs to be selected as the payload."
+            msg = f"오류: 페이로드로 사용할 측정값이 선택되어야 합니다."
             self.logger.error(msg)
             dict_vars['message'] += msg
             return dict_vars
@@ -80,7 +80,7 @@ class ActionModule(AbstractFunctionAction):
             original_value = None
 
         if original_value is None:
-            msg = f" Error: No measurement found in dictionary passed to Action for channel {channel}."
+            msg = f"오류: 채널 {channel}에 대해 액션에 전달된 딕셔너리에서 측정값을 찾을 수 없습니다."
             self.logger.debug(msg)
             dict_vars['message'] += msg
             return dict_vars
@@ -97,7 +97,7 @@ class ActionModule(AbstractFunctionAction):
             f"original value: {original_value}, "
             f"returned value: {dict_vars['measurements_dict'][channel]['value']}")
 
-        dict_vars['message'] += f" Equation '{equation_str}', return value = {dict_vars['measurements_dict'][channel]['value']}."
+        dict_vars['message'] += f" 방정식 '{equation_str}', 반환값 = {dict_vars['measurements_dict'][channel]['value']}."
 
         return dict_vars
 

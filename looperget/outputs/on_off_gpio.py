@@ -33,8 +33,7 @@ OUTPUT_INFORMATION = {
     'channels_dict': channels_dict,
     'output_types': ['on_off'],
 
-    'message': 'The specified GPIO pin will be set HIGH (3.3 volts) or LOW (0 volts) when turned '
-               'on or off, depending on the On State option.',
+    'message': '지정된 GPIO 핀은 On State 옵션에 따라 켜지면 HIGH (3.3 볼트)로, 꺼지면 LOW (0 볼트)로 설정됩니다.',
 
     'options_enabled': [
         'button_on',
@@ -56,7 +55,7 @@ OUTPUT_INFORMATION = {
             'required': False,
             'constraints_pass': constraints_pass_positive_or_zero_value,
             'name': "{}: {} ({})".format(lazy_gettext('Pin'), lazy_gettext('GPIO'), lazy_gettext('BCM')),
-            'phrase': lazy_gettext('The pin to control the state of')
+            'phrase': lazy_gettext('제어할 핀')
         },
         {
             'id': 'state_startup',
@@ -66,8 +65,8 @@ OUTPUT_INFORMATION = {
                 (0, 'Off'),
                 (1, 'On')
             ],
-            'name': lazy_gettext('Startup State'),
-            'phrase': 'Set the state when Looperget starts'
+            'name': lazy_gettext('시작 시 상태'),
+            'phrase': 'Looperget 시작 시 상태 설정'
         },
         {
             'id': 'state_shutdown',
@@ -77,8 +76,8 @@ OUTPUT_INFORMATION = {
                 (0, 'Off'),
                 (1, 'On')
             ],
-            'name': lazy_gettext('Shutdown State'),
-            'phrase': 'Set the state when Looperget shuts down'
+            'name': lazy_gettext('종료 시 상태'),
+            'phrase': 'Looperget 종료 시 상태 설정'
         },
         {
             'id': 'on_state',
@@ -88,23 +87,23 @@ OUTPUT_INFORMATION = {
                 (1, 'HIGH'),
                 (0, 'LOW')
             ],
-            'name': lazy_gettext('On State'),
-            'phrase': 'The state of the GPIO that corresponds to an On state'
+            'name': lazy_gettext('On 상태'),
+            'phrase': 'On 상태에 해당하는 GPIO 상태'
         },
         {
             'id': 'trigger_functions_startup',
             'type': 'bool',
             'default_value': False,
-            'name': lazy_gettext('Trigger Functions at Startup'),
-            'phrase': 'Whether to trigger functions when the output switches at startup'
+            'name': lazy_gettext('시작 시 작동'),
+            'phrase': '출력이 시작될 때 함수를 트리거할지 여부'
         },
         {
             'id': 'amps',
             'type': 'float',
             'default_value': 0.0,
             'required': True,
-            'name': "{} ({})".format(lazy_gettext('Current'), lazy_gettext('Amps')),
-            'phrase': 'The current draw of the device being controlled'
+            'name': "{} ({})".format(lazy_gettext('사용'), lazy_gettext('전류')),
+            'phrase': '제어되는 장치의 전류 소모'
         }
     ]
 }

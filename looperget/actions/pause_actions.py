@@ -11,7 +11,7 @@ from looperget.utils.database import db_retrieve_table_daemon
 
 ACTION_INFORMATION = {
     'name_unique': 'pause_actions',
-    'name': f"Actions: {TRANSLATIONS['pause']['title']}",
+    'name': f"액션: {TRANSLATIONS['pause']['title']}",
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -21,9 +21,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': lazy_gettext('Set a delay between executing Actions when self.run_all_actions() is used.'),
+    'message': lazy_gettext('self.run_all_actions()가 사용될 때 액션 실행 간의 지연 시간을 설정합니다.'),
 
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will create a pause for the set duration. When <strong>self.run_all_actions()</strong> is executed, this will add a pause in the sequential execution of all actions.',
+    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 설정된 시간 동안 일시 정지합니다. '
+             '<strong>self.run_all_actions()</strong>를 실행하면 모든 액션의 순차 실행 사이에 일시 정지가 추가됩니다.',
 
     'custom_options': [
         {
@@ -32,8 +33,8 @@ ACTION_INFORMATION = {
             'default_value': 0.0,
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
-            'name': "{} ({})".format(lazy_gettext('Duration'), lazy_gettext('Seconds')),
-            'phrase': 'The duration to pause'
+            'name': "{} ({})".format(lazy_gettext('지속 시간'), lazy_gettext('초')),
+            'phrase': '일시 정지할 시간을 입력하세요'
         }
     ]
 }
@@ -58,7 +59,7 @@ class ActionModule(AbstractFunctionAction):
         self.action_setup = True
 
     def run_action(self, dict_vars):
-        dict_vars['message'] += f" Pause for {self.duration} seconds."
+        dict_vars['message'] += f" {self.duration}초 동안 일시 정지합니다."
 
         time.sleep(self.duration)
 

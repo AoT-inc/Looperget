@@ -10,7 +10,7 @@ from looperget.utils.utils import random_alphanumeric
 
 ACTION_INFORMATION = {
     'name_unique': 'mqtt_publish_input',
-    'name': "MQTT: {}: {}".format(lazy_gettext('Publish'), lazy_gettext('Measurement')),
+    'name': "MQTT: {}: {}".format(lazy_gettext('발행'), lazy_gettext('측정')),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['inputs'],
@@ -20,7 +20,7 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': 'Publish an Input measurement to an MQTT server.',
+    'message': "MQTT 서버에 입력 측정을 발행합니다.",
 
     'usage': '',
 
@@ -33,32 +33,32 @@ ACTION_INFORMATION = {
             'id': 'measurement',
             'type': 'select_measurement_from_this_input',
             'default_value': None,
-            'name': lazy_gettext('Measurement'),
-            'phrase': 'Select the measurement to send as the payload'
+            'name': lazy_gettext('측정'),
+            'phrase': '페이로드로 전송할 측정을 선택하세요'
         },
         {
             'id': 'hostname',
             'type': 'text',
             'default_value': 'localhost',
             'required': True,
-            'name': lazy_gettext('Hostname'),
-            'phrase': 'The hostname of the MQTT server'
+            'name': lazy_gettext('호스트명'),
+            'phrase': 'MQTT 서버의 호스트명을 입력하세요'
         },
         {
             'id': 'port',
             'type': 'integer',
             'default_value': 1883,
             'required': True,
-            'name': lazy_gettext('Port'),
-            'phrase': 'The port of the MQTT server'
+            'name': lazy_gettext('포트'),
+            'phrase': 'MQTT 서버의 포트를 입력하세요'
         },
         {
             'id': 'topic',
             'type': 'text',
             'default_value': 'paho/test/single',
             'required': True,
-            'name': 'Topic',
-            'phrase': 'The topic to publish with'
+            'name': '토픽',
+            'phrase': '발행에 사용할 토픽을 입력하세요'
         },
         {
             'id': 'keepalive',
@@ -66,47 +66,47 @@ ACTION_INFORMATION = {
             'default_value': 60,
             'required': True,
             'constraints_pass': constraints_pass_positive_or_zero_value,
-            'name': lazy_gettext('Keep Alive'),
-            'phrase': 'The keepalive timeout value for the client. Set to 0 to disable.'
+            'name': lazy_gettext('유지 시간'),
+            'phrase': '클라이언트의 keepalive 타임아웃 값입니다. 0으로 설정하면 비활성화됩니다.'
         },
         {
             'id': 'clientid',
             'type': 'text',
             'default_value': f'client_{random_alphanumeric(8)}',
             'required': True,
-            'name': 'Client ID',
-            'phrase': 'Unique client ID for connecting to the MQTT server'
+            'name': '클라이언트 ID',
+            'phrase': 'MQTT 서버에 연결하기 위한 고유 클라이언트 ID를 입력하세요'
         },
         {
             'id': 'login',
             'type': 'bool',
             'default_value': False,
-            'name': 'Use Login',
-            'phrase': 'Send login credentials'
+            'name': '로그인 사용',
+            'phrase': '로그인 자격 증명을 전송합니다.'
         },
         {
             'id': 'username',
             'type': 'text',
             'default_value': 'user',
             'required': False,
-            'name': lazy_gettext('Username'),
-            'phrase': 'Username for connecting to the server'
+            'name': lazy_gettext('사용자 이름'),
+            'phrase': '서버에 연결하기 위한 사용자 이름을 입력하세요'
         },
         {
             'id': 'password',
             'type': 'text',
             'default_value': '',
             'required': False,
-            'name': lazy_gettext('Password'),
-            'phrase': 'Password for connecting to the server.'
+            'name': lazy_gettext('비밀번호'),
+            'phrase': '서버에 연결하기 위한 비밀번호를 입력하세요.'
         },
         {
             'id': 'mqtt_use_websockets',
             'type': 'bool',
             'default_value': False,
             'required': False,
-            'name': 'Use Websockets',
-            'phrase': 'Use websockets to connect to the server.'
+            'name': '웹소켓 사용',
+            'phrase': '서버에 연결하기 위해 웹소켓을 사용합니다.'
         }
     ]
 }
@@ -150,7 +150,7 @@ class ActionModule(AbstractFunctionAction):
             self.measurement_measurement_id)
 
         if not device_measurement:
-            msg = f" Error: A measurement needs to be selected as the payload."
+            msg = "오류: 페이로드로 사용할 측정값을 선택해야 합니다."
             self.logger.error(msg)
             dict_vars["message"] += msg
             return dict_vars
@@ -165,7 +165,7 @@ class ActionModule(AbstractFunctionAction):
         self.logger.debug(f"Input channel: {channel}, payload: {payload}")
 
         if payload is None:
-            msg = f" Error: No measurement found in payload for {channel}."
+            msg = f"오류: {channel}에 대한 페이로드에서 측정값을 찾을 수 없습니다."
             self.logger.error(msg)
             dict_vars["message"] += msg
             return dict_vars
@@ -186,9 +186,9 @@ class ActionModule(AbstractFunctionAction):
                 keepalive=self.keepalive,
                 auth=auth_dict,
                 transport='websockets' if self.mqtt_use_websockets else 'tcp')
-            dict_vars["message"] += f" MQTT Publish '{payload}'."
+            dict_vars["message"] += f" MQTT 발행 '{payload}'."
         except Exception as err:
-            msg = f" Could not execute MQTT Publish: {err}"
+            msg = f"MQTT 발행을 실행할 수 없습니다: {err}"
             self.logger.error(msg)
             dict_vars["message"] += msg
 

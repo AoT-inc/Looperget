@@ -30,7 +30,7 @@ INPUT_INFORMATION = {
     'measurements_dict': measurements_dict,
     'measurements_use_same_timestamp': True,
 
-    'message': 'The internal CPU and GPU temperature of the Raspberry Pi.',
+    'message': 'Raspberry Pi의 내부 CPU 및 GPU 온도',
 
     'options_enabled': [
         'measurements_select',
@@ -46,16 +46,16 @@ INPUT_INFORMATION = {
             'type': 'text',
             'default_value': '/sys/class/thermal/thermal_zone0/temp',
             'required': True,
-            'name': "Path for CPU Temperature",
-            'phrase': 'Reads the CPU temperature from this file'
+            'name': "CPU 온도 경로",
+            'phrase': '이 파일에서 CPU 온도를 읽습니다.'
         },
         {
             'id': 'path_temperature_gpu',
             'type': 'text',
             'default_value': '/usr/bin/vcgencmd',
             'required': True,
-            'name': "Path to vcgencmd",
-            'phrase': 'Reads the GPU from vcgencmd'
+            'name': "vcgencmd 경로",
+            'phrase': 'vcgencmd를 통해 GPU 온도를 읽습니다.'
         }
     ]
 }

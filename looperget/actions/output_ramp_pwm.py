@@ -24,10 +24,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': lazy_gettext('Ramp a PWM Output from one duty cycle to another duty cycle over a period of time.'),
+    'message': lazy_gettext('일정 시간 동안 PWM 출력의 작동 비율을 한 값에서 다른 값으로 점진적으로 변경합니다.'),
 
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will ramp the PWM output duty cycle according to the settings. '
-             'Executing <strong>self.run_action("ACTION_ID", value={"output_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "channel": 0, "start": 42, "end": 62, "increment": 1.0, "duration": 600})</strong> will ramp the duty cycle of the PWM output with the specified ID and channel. Don\'t forget to change the output_id value to an actual Output ID that exists in your system.',
+    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 설정에 따라 PWM 출력의 작동 비율이 점진적으로 변경됩니다. '
+             '<strong>self.run_action("ACTION_ID", value={"output_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "channel": 0, "start": 42, "end": 62, "increment": 1.0, "duration": 600})</strong>를 실행하면 지정된 ID와 채널의 PWM 출력의 작동 비율이 변경됩니다. 시스템에 존재하는 실제 Output ID로 output_id 값을 변경하는 것을 잊지 마십시오.',
 
     'custom_options': [
         {
@@ -38,8 +38,8 @@ ACTION_INFORMATION = {
             'options_select': [
                 'Output_Channels',
             ],
-            'name': 'Output',
-            'phrase': 'Select an output to control'
+            'name': '출력',
+            'phrase': '제어할 출력을 선택하세요'
         },
         {
             'id': 'start',
@@ -47,8 +47,8 @@ ACTION_INFORMATION = {
             'default_value': 0.0,
             'required': True,
             'constraints_pass': constraints_pass_positive_or_zero_value,
-            'name': "{}: {}".format(lazy_gettext('Duty Cycle'), lazy_gettext('Start')),
-            'phrase': lazy_gettext('Duty cycle for the PWM (percent, 0.0 - 100.0)')
+            'name': "{}: {}".format(lazy_gettext('작동 비율'), lazy_gettext('시작')),
+            'phrase': lazy_gettext('PWM의 작동 비율 (백분율, 0.0 - 100.0)')
         },
         {
             'id': 'end',
@@ -56,8 +56,8 @@ ACTION_INFORMATION = {
             'default_value': 50.0,
             'required': True,
             'constraints_pass': constraints_pass_positive_or_zero_value,
-            'name': "{}: {}".format(lazy_gettext('Duty Cycle'), lazy_gettext('End')),
-            'phrase': lazy_gettext('Duty cycle for the PWM (percent, 0.0 - 100.0)')
+            'name': "{}: {}".format(lazy_gettext('작동 비율'), lazy_gettext('종료')),
+            'phrase': lazy_gettext('PWM의 작동 비율 (백분율, 0.0 - 100.0)')
         },
         {
             'id': 'increment',
@@ -65,8 +65,8 @@ ACTION_INFORMATION = {
             'default_value': 1.0,
             'required': True,
             'constraints_pass': constraints_pass_positive_value,
-            'name': "{} ({})".format(lazy_gettext('Increment'), lazy_gettext('Duty Cycle')),
-            'phrase': 'How much to change the duty cycle every Duration'
+            'name': "{} ({})".format(lazy_gettext('증가량'), lazy_gettext('작동 비율')),
+            'phrase': '매 지속 시간마다 작동 비율을 얼마나 변경할지 지정합니다.'
         },
         {
             'id': 'duration',
@@ -74,15 +74,15 @@ ACTION_INFORMATION = {
             'default_value': 0.0,
             'required': True,
             'constraints_pass': constraints_pass_positive_or_zero_value,
-            'name': "{} ({})".format(lazy_gettext('Duration'), lazy_gettext('Seconds')),
-            'phrase': 'How long to ramp from start to finish.'
+            'name': "{} ({})".format(lazy_gettext('지속 시간'), lazy_gettext('초')),
+            'phrase': '시작부터 종료까지 변경하는 데 걸리는 시간(초)을 지정합니다.'
         }
     ]
 }
 
 
 class ActionModule(AbstractFunctionAction):
-    """Function Action: Output (On/Off/Duration)."""
+    """함수 동작: PWM 출력 작동 비율 점진 변경."""
     def __init__(self, action_dev, testing=False):
         super().__init__(action_dev, testing=testing, name=__name__)
 
@@ -140,14 +140,12 @@ class ActionModule(AbstractFunctionAction):
             Output, unique_id=output_id, entry='first')
 
         if not output:
-            msg = f" Error: Output with ID '{output_id}' not found."
+            msg = f"오류: ID '{output_id}'에 해당하는 출력이 존재하지 않습니다."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
-        dict_vars['message'] += f" Ramp output {output_id} CH{channel} ({output.name}) " \
-                                f"duty cycle from {start} % to {end} % in increments " \
-                                f"of {increment} over {duration} seconds."
+        dict_vars['message'] += f"출력 {output_id} CH{channel} ({output.name})의 작동 비율을 {start}%에서 {end}%로, 증가량 {increment}씩, {duration}초 동안 변경합니다."
 
         change_in_duty_cycle = abs(start - end)
         steps = change_in_duty_cycle * 1 / increment

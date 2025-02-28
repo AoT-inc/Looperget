@@ -10,7 +10,7 @@ from looperget.utils.database import db_retrieve_table_daemon
 
 ACTION_INFORMATION = {
     'name_unique': 'clear_total_kwh',
-    'name': "{}: {} ({})".format(lazy_gettext('Flow Meter'), lazy_gettext('Clear Total'), lazy_gettext('Kilowatt-hour')),
+    'name': "{}: {} ({})".format(lazy_gettext('유량계'), lazy_gettext('총합 초기화'), lazy_gettext('킬로와트시')),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -20,10 +20,11 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': 'Clear the total kWh saved for an energy meter Input. The Input must have the Clear Total kWh option. This will also clear all energy stats on the device, not just the total kWh.',
+    'message': '에너지 미터 입력에 저장된 총 킬로와트시(kWh)를 초기화합니다. 해당 입력에는 총 kWh 초기화 옵션이 있어야 합니다. 이 작업은 총 kWh뿐만 아니라 장치의 모든 에너지 통계도 초기화합니다.',
 
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will clear the total kWh for the selected energy meter Input. '
-             'Executing <strong>self.run_action("ACTION_ID", value={"input_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b"})</strong> will clear the total kWh for the energy meter Input with the specified ID. Don\'t forget to change the input_id value to an actual Input ID that exists in your system.',
+    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 선택한 에너지 미터 입력의 총 킬로와트시를 초기화합니다. '
+             '<strong>self.run_action("ACTION_ID", value={"input_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b"})</strong>를 실행하면 지정된 ID를 가진 에너지 미터 입력의 총 킬로와트시를 초기화합니다. '
+             '시스템에 존재하는 실제 입력 ID로 input_id 값을 변경하는 것을 잊지 마십시오.',
 
     'custom_options': [
         {
@@ -33,8 +34,8 @@ ACTION_INFORMATION = {
             'options_select': [
                 'Input'
             ],
-            'name': lazy_gettext('Controller'),
-            'phrase': 'Select the energy meter Input'
+            'name': lazy_gettext('컨트롤러'),
+            'phrase': '전력량 측정 입력을 선택하세요'
         }
     ]
 }
@@ -68,12 +69,12 @@ class ActionModule(AbstractFunctionAction):
             Input, unique_id=controller_id, entry='first')
 
         if not this_input:
-            msg = f" Error: Input with ID '{controller_id}' not found."
+            msg = f"오류: ID '{controller_id}'에 해당하는 입력을 찾을 수 없습니다."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
-        dict_vars['message'] += f" Clear total kWh of Input {controller_id} ({this_input.name})."
+        dict_vars['message'] += f"입력 {controller_id} ({this_input.name})의 총 킬로와트시를 초기화합니다."
         clear_volume = threading.Thread(
             target=self.control.module_function,
             args=("Input", this_input.unique_id, "clear_total_kwh", {},))

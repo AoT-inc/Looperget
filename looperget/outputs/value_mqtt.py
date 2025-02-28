@@ -38,7 +38,7 @@ OUTPUT_INFORMATION = {
 
     'url_additional': 'http://www.eclipse.org/paho/',
 
-    'message': 'Publish a value to an MQTT server.',
+    'message': 'MQTT 서버로 값을 발행합니다.',
 
     'dependencies_module': [
         ('pip-pypi', 'paho', 'paho-mqtt==1.5.1')
@@ -54,24 +54,24 @@ OUTPUT_INFORMATION = {
             'type': 'text',
             'default_value': 'localhost',
             'required': True,
-            'name': lazy_gettext('Hostname'),
-            'phrase': 'The hostname of the MQTT server'
+            'name': lazy_gettext('호스트명'),
+            'phrase': 'MQTT 서버의 호스트명을 입력하세요'
         },
         {
             'id': 'port',
             'type': 'integer',
             'default_value': 1883,
             'required': True,
-            'name': lazy_gettext('Port'),
-            'phrase': 'The port of the MQTT server'
+            'name': lazy_gettext('포트'),
+            'phrase': 'MQTT 서버의 포트를 입력하세요'
         },
         {
             'id': 'topic',
             'type': 'text',
             'default_value': 'paho/test/single',
             'required': True,
-            'name': 'Topic',
-            'phrase': 'The topic to publish with'
+            'name': "토픽",
+            'phrase': '발행에 사용할 토픽을 입력하세요'
         },
         {
             'id': 'keepalive',
@@ -79,55 +79,55 @@ OUTPUT_INFORMATION = {
             'default_value': 60,
             'required': True,
             'constraints_pass': constraints_pass_positive_or_zero_value,
-            'name': lazy_gettext('Keep Alive'),
-            'phrase': 'The keepalive timeout value for the client. Set to 0 to disable.'
+            'name': lazy_gettext('유지 시간'),
+            'phrase': '클라이언트의 유지 시간 타임아웃 값입니다. 0으로 설정하면 비활성화됩니다.'
         },
         {
             'id': 'clientid',
             'type': 'text',
             'default_value': 'client_{}'.format(random_alphanumeric(8)),
             'required': True,
-            'name': 'Client ID',
-            'phrase': 'Unique client ID for connecting to the MQTT server'
+            'name': "클라이언트 ID",
+            'phrase': 'MQTT 서버에 연결하기 위한 고유한 클라이언트 ID를 입력하세요'
         },
         {
             'id': 'off_value',
             'type': 'integer',
             'default_value': 0,
             'required': True,
-            'name': lazy_gettext('Off Value'),
-            'phrase': 'The value to send when an Off command is given'
+            'name': lazy_gettext('꺼짐 값'),
+            'phrase': '꺼짐 명령 시 전송할 값을 입력하세요'
         },
         {
             'id': 'login',
             'type': 'bool',
             'default_value': False,
-            'name': 'Use Login',
-            'phrase': 'Send login credentials'
+            'name': "로그인 사용",
+            'phrase': '로그인 자격 증명을 전송합니다'
         },
         {
             'id': 'username',
             'type': 'text',
             'default_value': 'user',
             'required': False,
-            'name': lazy_gettext('Username'),
-            'phrase': 'Username for connecting to the server'
+            'name': lazy_gettext('사용자 이름'),
+            'phrase': '서버에 연결하기 위한 사용자 이름을 입력하세요'
         },
         {
             'id': 'password',
             'type': 'text',
             'default_value': '',
             'required': False,
-            'name': lazy_gettext('Password'),
-            'phrase': 'Password for connecting to the server.'
+            'name': lazy_gettext('비밀번호'),
+            'phrase': '서버에 연결하기 위한 비밀번호를 입력하세요'
         },
         {
             'id': 'mqtt_use_websockets',
             'type': 'bool',
             'default_value': False,
             'required': False,
-            'name': 'Use Websockets',
-            'phrase': 'Use websockets to connect to the server.'
+            'name': "웹소켓 사용",
+            'phrase': '서버에 연결하기 위해 웹소켓을 사용합니다'
         }
     ]
 }
