@@ -236,7 +236,7 @@ MEASUREMENTS = {
     'pressure': {
         'name': lazy_gettext('Pressure'),
         'meas': 'pressure',
-        'units': ['cm_water', 'psi', 'hPa', 'Pa', 'kPa']},
+        'units': ['cm_water', 'psi', 'hPa', 'Pa', 'kPa', 'bar']},
     'pulse_width': {
         'name': lazy_gettext('Pulse Width'),
         'meas': 'pulse_width',
@@ -324,7 +324,11 @@ MEASUREMENTS = {
     'volume': {
         'name': lazy_gettext('Volume'),
         'meas': 'volume',
-        'units': ['l', 'ml']}
+        'units': ['l', 'ml']},
+    'radiation': {
+        'name': lazy_gettext('Solar Radiation'),
+        'meas': 'radiation',
+        'units': ['W/m²', 'J/cm²', 'µmol·m⁻²·s⁻¹']}
 }
 
 # Measurement units
@@ -344,6 +348,9 @@ UNITS = {
     'A': {
         'name': lazy_gettext('Amp'),
         'unit': 'A'},
+    'bar': {
+        'name': lazy_gettext('Bar'),
+        'unit': 'bar'},        
     'bearing': {
         'name': lazy_gettext('Bearing'),
         'unit': 'bearing'},
@@ -544,7 +551,16 @@ UNITS = {
         'unit': 'V'},
     'W': {
         'name': lazy_gettext('Watt'),
-        'unit': 'W'}
+        'unit': 'W'},
+    'J/cm²': {
+        'name': lazy_gettext('Joules per square centimeter'),
+        'unit': 'J/cm²'},
+    'W/m²': {
+        'name': lazy_gettext('Watts per square meter'),
+        'unit': 'W/m²'},
+    'µmol·m⁻²·s⁻¹': {
+        'name': lazy_gettext('Micromoles per square meter per second'),
+        'unit': 'µmol·m⁻²·s⁻¹'}
 }
 
 # Initial conversions
@@ -616,6 +632,14 @@ UNIT_CONVERSIONS = [
     ('decimal', 'percent', 'x*100'),
 
     # Pressure
+    ('Pa', 'bar', 'x/100000'),
+    ('bar', 'Pa', 'x*100000'),
+    ('kPa', 'bar', 'x/100'),
+    ('bar', 'kPa', 'x*100'),
+    ('hPa', 'bar', 'x/1000'),
+    ('bar', 'hPa', 'x*1000'),
+    ('psi', 'bar', 'x/14.5037738'),
+    ('bar', 'psi', 'x*14.5037738'),
     ('Pa', 'kPa', 'x/1000'),
     ('Pa', 'hPa', 'x/100'),
     ('hPa', 'Pa', 'x*100'),
@@ -658,5 +682,22 @@ UNIT_CONVERSIONS = [
 
     # Volume
     ('l', 'ml', 'x*1000'),
-    ('ml', 'l', 'x/1000')
+    ('ml', 'l', 'x/1000'),
+
+    # Light
+    ('lux', 'full', 'x*1000'),
+    ('full', 'lux', 'x/1000'),
+    
+    # Solar Radiation
+    ('J/cm²', 'W/m²', 'x * 10000'),    # 1 J/cm² = 10000 W/m²
+    ('W/m²', 'J/cm²', 'x / 10000'),    # 1 W/m² = 0.0001 J/cm²
+
+    # W/m² <-> µmol·m⁻²·s⁻¹ (대략적 변환: 1 W/m² ≈ 4.57 µmol·m⁻²·s⁻¹)
+    ('W/m²', 'µmol·m⁻²·s⁻¹', 'x * 4.57'),
+    ('µmol·m⁻²·s⁻¹', 'W/m²', 'x / 4.57'),
+
+    # J/cm² <-> µmol·m⁻²·s⁻¹ (1 J/cm² ≈ 45700 µmol·m⁻²·s⁻¹, 1초 집적 시간 가정)
+    ('J/cm²', 'µmol·m⁻²·s⁻¹', 'x * 45700'),
+    ('µmol·m⁻²·s⁻¹', 'J/cm²', 'x / 45700')
+
 ]
