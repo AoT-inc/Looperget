@@ -1,4 +1,5 @@
 #!/bin/bash
+# coding=utf-8
 #
 #  setup.sh - Looperget 설치 스크립트
 #
@@ -222,23 +223,6 @@ WantedBy=multi-user.target
 EOF
 
 # Check if the service file was created successfully
-if [ $? -ne 0 ]; then
-    printf "Error: zigbee2mqtt 서비스 파일 작성에 실패하였습니다.\n" 2>&1 | tee -a "${LOG_LOCATION}"
-    exit 1
-fi
-
-[Service]
-ExecStart=/usr/bin/npm start
-WorkingDirectory=/opt/zigbee2mqtt
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
-User=aot
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
 if [ $? -ne 0 ]; then
     printf "Error: zigbee2mqtt 서비스 파일 작성에 실패하였습니다.\n" 2>&1 | tee -a "${LOG_LOCATION}"
     exit 1
