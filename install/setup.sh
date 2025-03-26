@@ -206,27 +206,23 @@ if command -v npm >/dev/null 2>&1 && command -v zigbee2mqtt >/dev/null 2>&1; the
 else
     printf "### zigbee2mqtt 시스템 서비스 설치 시작...\n" 2>&1 | tee -a "${LOG_LOCATION}"
 
-    # Create the zigbee2mqtt service file and check for errors
-    cat << 'EOF' > /etc/systemd/system/zigbee2mqtt.service || {
-        printf "Error: zigbee2mqtt 서비스 파일 생성 실패\n" 2>&1 | tee -a "${LOG_LOCATION}"
-        exit 1
-    }
+    # Create the zigbee2mqtt service file
+    cat << 'EOF' > /etc/systemd/system/zigbee2mqtt.service
+[Unit]
+Description=zigbee2mqtt
+After=network.target
 
-    [Unit]
-    Description=zigbee2mqtt
-    After=network.target
+[Service]
+ExecStart=/usr/bin/npm start
+WorkingDirectory=/opt/zigbee2mqtt
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=aot
 
-    [Service]
-    ExecStart=/usr/bin/npm start
-    WorkingDirectory=/opt/zigbee2mqtt
-    StandardOutput=inherit
-    StandardError=inherit
-    Restart=always
-    User=aot
-
-    [Install]
-    WantedBy=multi-user.target
-    EOF
+[Install]
+WantedBy=multi-user.target
+EOF
 
     if [ $? -ne 0 ]; then
         printf "Error: zigbee2mqtt 서비스 파일 작성에 실패하였습니다.\n" 2>&1 | tee -a "${LOG_LOCATION}"
