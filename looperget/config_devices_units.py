@@ -125,6 +125,10 @@ MEASUREMENTS = {
         'name': lazy_gettext('Electrical Conductivity'),
         'meas': 'electrical_conductivity',
         'units': ['uS_cm']},
+    'electrical_conductivity_soil': {
+        'name': lazy_gettext('Electrical Conductivity (Soil)'),
+        'meas': 'electrical_conductivity_soil',
+        'units': ['dS_m']},
     'electrical_current': {
         'name': lazy_gettext('Electrical Current'),
         'meas': 'electrical_current',
@@ -404,6 +408,9 @@ UNITS = {
     'degree': {
         'name': lazy_gettext('Degree'),
         'unit': '°'},
+    'dS_m': {
+        'name': lazy_gettext('Decisiemens per meter'),
+        'unit': 'dS/m'},
     'eight_bit_color': {
         'name': lazy_gettext('8-Bit Color'),
         'unit': '8-bit'},
@@ -651,6 +658,10 @@ UNIT_CONVERSIONS = [
     ('percent', 'ppt', 'x*10'),
     ('percent', 'ppm', 'x*10000'),
     ('percent', 'ppb', 'x*10000000'),
+
+    # Electrical conductivity
+    ('uS_cm', 'dS_m', 'x/1000'),
+    ('dS_m', 'uS_cm', 'x*1000'),
 
     # Number
     ('percent', 'decimal', 'x/100'),
