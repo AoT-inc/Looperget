@@ -11,13 +11,13 @@
 
     <div class="row small-gutters">
       <div class="col-auto">
-        <button type="button" class="form-control btn btn-primary btn-block" data-dismiss="modal">{{_('Close')}}</button>
+        <button type="button" class="form-control btn btn-primary btn-block" data-dismiss="modal">{{_('닫기')}}</button>
       </div>
       <div class="col-auto">
-        <input onclick="return $(this).processRequest(this, 'output_mod');" name="output_mod" value="{{_('Save')}}" class="form-control btn btn-primary btn-block" type="button"/>
+        <input onclick="return $(this).processRequest(this, 'output_mod');" name="output_mod" value="{{_('저장')}}" class="form-control btn btn-primary btn-block" type="button"/>
       </div>
       <div class="col-auto">
-        <input onclick="return confirm('{{_('삭제하시겠습니까?')}}') && $(this).processRequest(this, 'output_delete');" name="output_delete" value="{{_('Delete')}}" class="form-control btn btn-primary btn-block" type="button"/>
+        <input onclick="return confirm('{{_('삭제하시겠습니까?')}}') && $(this).processRequest(this, 'output_delete');" name="output_delete" value="{{_('삭제')}}" class="form-control btn btn-primary btn-block" type="button"/>
       </div>
     </div>
 
@@ -240,7 +240,7 @@
         </div>
       </div>
       <div class="col-auto">
-        <input onclick="return $(this).output_on_amt(this, '{{each_output.unique_id}}', '{{each_output_channel.unique_id}}', 'seconds');" class="btn btn-success btn-block output_on_amt" id="turn_on" name="{{each_output.unique_id}}/{{each_output_channel.unique_id}}/on/sec/" type="button" value="{{_('Send')}}">
+        <input onclick="return $(this).output_on_amt(this, '{{each_output.unique_id}}', '{{each_output_channel.unique_id}}', 'seconds');" class="btn btn-success btn-block output_on_amt" id="turn_on" name="{{each_output.unique_id}}/{{each_output_channel.unique_id}}/on/sec/" type="button" value="{{_('전송')}}">
       </div>
 
       {% endif %}
@@ -254,7 +254,7 @@
         </div>
       </div>
       <div class="col-auto">
-        <input onclick="return $(this).output_on_amt(this, '{{each_output.unique_id}}', '{{each_output_channel.unique_id}}', 'value');" class="btn btn-success btn-block output_on_amt" name="{{each_output.unique_id}}/{{each_output_channel.unique_id}}/on/value/" type="button" value="{{_('Send')}}">
+        <input onclick="return $(this).output_on_amt(this, '{{each_output.unique_id}}', '{{each_output_channel.unique_id}}', 'value');" class="btn btn-success btn-block output_on_amt" name="{{each_output.unique_id}}/{{each_output_channel.unique_id}}/on/value/" type="button" value="{{_('전송')}}">
       </div>
 
       {% endif %}
@@ -268,7 +268,7 @@
         </div>
       </div>
       <div class="col-auto">
-        <input onclick="return $(this).output_on_amt(this, '{{each_output.unique_id}}', '{{each_output_channel.unique_id}}', 'volume');" class="btn btn-success btn-block output_on_amt" name="{{each_output.unique_id}}/{{each_output_channel.unique_id}}/on/vol/" type="button" value="{{_('Send')}}">
+        <input onclick="return $(this).output_on_amt(this, '{{each_output.unique_id}}', '{{each_output_channel.unique_id}}', 'volume');" class="btn btn-success btn-block output_on_amt" name="{{each_output.unique_id}}/{{each_output_channel.unique_id}}/on/vol/" type="button" value="{{_('전송')}}">
       </div>
 
       {% endif %}
@@ -282,7 +282,7 @@
         </div>
       </div>
       <div class="col-auto">
-        <input onclick="return $(this).output_on_amt(this, '{{each_output.unique_id}}', '{{each_output_channel.unique_id}}', 'pwm');" class="btn btn-success btn-block output_on_amt" name="{{each_output.unique_id}}/{{each_output_channel.unique_id}}/on/pwm/" type="button" value="{{_('Send')}}">
+        <input onclick="return $(this).output_on_amt(this, '{{each_output.unique_id}}', '{{each_output_channel.unique_id}}', 'pwm');" class="btn btn-success btn-block output_on_amt" name="{{each_output.unique_id}}/{{each_output_channel.unique_id}}/on/pwm/" type="button" value="{{_('전송')}}">
       </div>
 
       {% endif %}

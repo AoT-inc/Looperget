@@ -6,6 +6,7 @@ from flask_babel import lazy_gettext
 
 from looperget.inputs.base_input import AbstractInput
 from looperget.inputs.sensorutils import calculate_dewpoint
+from looperget.utils.influx import add_measurements_influxdb
 
 measurements_dict = {
     0: {'measurement': 'temperature', 'unit': 'C'},
@@ -83,14 +84,13 @@ class InputModule(AbstractInput):
         pass
 
     def get_measurement(self):
-        now = datetime.datetime.now()
-        last_full_hour = now.replace(minute=0, second=0, microsecond=0)
-        self.now_str = last_full_hour.strftime('%Y%m%d%H%M')
+        # The publication timestamp will be extracted from the received data
+        pub_timestamp = None
 
         if self.api_key and self.stn:
             self.api_url = (
                 "https://apihub.kma.go.kr/api/typ01/url/kma_sfctm2.php"
-                f"?tm={self.now_str}&stn={self.stn}&help=0&authKey={self.api_key}"
+                f"?help=0&authKey={self.api_key}&stn={self.stn}"
             )
             self.logger.debug("URL: {}".format(self.api_url))
         else:
@@ -98,15 +98,6 @@ class InputModule(AbstractInput):
             return
 
         self.return_dict = copy.deepcopy(measurements_dict)
-
-        # NEW: 이미 처리한 TM인지 확인
-        #      (현재 self.now_str와 last_tm_processed가 같다면, 재처리 X)
-        if self.last_tm_processed == self.now_str:
-            self.logger.info(
-                f"Skipping measurement. Already processed TM={self.now_str}"
-            )
-            return  # 중복 자료 무시
-
         try:
             response = requests.get(self.api_url, timeout=60)
             response.raise_for_status()
@@ -116,25 +107,20 @@ class InputModule(AbstractInput):
             self.logger.error(f"Error acquiring weather information: {e}")
             return
 
-        temperature = None
-        humidity = None
-        pressure = None
-        wind_speed = None
-        wind_deg = None
-
         lines = data_text.strip().split('\n')
         valid_data_found = False
         for line in lines:
             if line.startswith('#'):
-                continue  # 주석 라인은 패스
-
+                continue  # Skip comment lines
             cols = line.split()
             if len(cols) < 46:
-                # 열 개수 부족하면 스킵
-                continue
+                continue  # Skip if not enough columns
+
+            # Extract the publication timestamp from the first column
+            pub_timestamp = cols[0]
 
             try:
-                # 인덱스: WD=2, WS=3, PS=9, TA=11, HM=13 (예시)
+                # Parse the values (indices based on KMA data format)
                 WD = float(cols[2])   # 풍향
                 WS = float(cols[3])   # 풍속
                 PS = float(cols[9])   # 해면기압
@@ -148,8 +134,7 @@ class InputModule(AbstractInput):
                 wind_deg = WD
 
                 valid_data_found = True
-                break  # 한 줄만 파싱 후 종료
-
+                break  # Process only one valid data line
             except (ValueError, IndexError) as e:
                 self.logger.error(f"파싱 오류(숫자 변환 실패 등): {e}")
                 continue
@@ -158,33 +143,59 @@ class InputModule(AbstractInput):
             self.logger.error("No valid data found in KMA response.")
             return
 
-        # 압력 hPa -> Pa 변환
+        # 압력: hPa -> Pa 변환
         if pressure is not None:
             pressure *= 100.0
 
         self.logger.debug(
-            "Parsed -> "
-            f"Temp: {temperature}, Hum: {humidity}, Press: {pressure}, "
-            f"Wind Speed: {wind_speed}, Wind Deg: {wind_deg}"
+            "Parsed -> Temp: {}, Hum: {}, Press: {}, Wind Speed: {}, Wind Deg: {}"
+            .format(temperature, humidity, pressure, wind_speed, wind_deg)
         )
 
-        if self.is_enabled(0) and temperature is not None:
-            self.value_set(0, temperature)
-        if self.is_enabled(1) and humidity is not None:
-            self.value_set(1, humidity)
-        if self.is_enabled(2) and pressure is not None:
-            self.value_set(2, pressure)
+        # Duplicate check: if the publication timestamp has already been processed, skip saving.
+        if self.last_tm_processed == pub_timestamp:
+            self.logger.info(f"Skipping measurement. Already processed TM={pub_timestamp}")
+            return
 
+        # Parse the publication timestamp and convert to a datetime object.
+        # (시스템이 KST라면 단순 파싱 후 microsecond를 0으로 설정하여 "YYYY-MM-DD HH:MM:SS.000" 포맷을 맞춤)
+        try:
+            pub_dt = datetime.datetime.strptime(pub_timestamp, "%Y%m%d%H%M")
+            pub_dt = pub_dt.replace(microsecond=0)
+        except Exception as e:
+            self.logger.error(f"Publication timestamp conversion failed: {e}")
+            pub_dt = datetime.datetime.utcnow().replace(microsecond=0)
+
+        # Duplicate check using InfluxDB within the last 1 hour (3600 seconds)
+        try:
+            from looperget.utils.influx import read_influxdb_list
+            pub_epoch = int(pub_dt.timestamp())
+            duration_sec = 3600  # 1시간 내의 데이터만 조회
+            existing = read_influxdb_list(self.input_dev.unique_id, 'C', 0, 'temperature', duration_sec)
+            if existing:
+                for point in existing:
+                    if abs(int(point[0]) - pub_epoch) <= 1:
+                        self.logger.info(f"Skipping measurement. Data for timestamp {pub_dt.isoformat()} already exists in InfluxDB.")
+                        return
+        except Exception as e:
+            self.logger.error(f"Error during duplicate check in InfluxDB: {e}")
+
+        # Save measurement values using pub_dt as the timestamp
+        if self.is_enabled(0) and temperature is not None:
+            self.value_set(0, temperature, pub_dt)
+        if self.is_enabled(1) and humidity is not None:
+            self.value_set(1, humidity, pub_dt)
+        if self.is_enabled(2) and pressure is not None:
+            self.value_set(2, pressure, pub_dt)
         if self.is_enabled(3) and temperature is not None and humidity is not None:
             dew_point = calculate_dewpoint(temperature, humidity)
-            self.value_set(3, dew_point)
-
+            self.value_set(3, dew_point, pub_dt)
         if self.is_enabled(4) and wind_speed is not None:
-            self.value_set(4, wind_speed)
+            self.value_set(4, wind_speed, pub_dt)
         if self.is_enabled(5) and wind_deg is not None:
-            self.value_set(5, wind_deg)
+            self.value_set(5, wind_deg, pub_dt)
 
-        # NEW: 중복 처리 방지 위해 last_tm_processed 갱신
-        self.last_tm_processed = self.now_str
-
+        self.last_tm_processed = pub_timestamp
+        add_measurements_influxdb(self.input_dev.unique_id, self.return_dict, use_same_timestamp=False)
         return self.return_dict
+    

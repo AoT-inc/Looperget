@@ -406,6 +406,7 @@ WIDGET_INFORMATION = {
     },
 
     pane: {
+        center: [ '50%', '45%' ],
         startAngle: -120,
         endAngle: 120,
         background: [{
@@ -435,9 +436,11 @@ WIDGET_INFORMATION = {
 
         tickPixelInterval: 50,
         tickWidth: 0,
+        
         tickPosition: 'inside',
         tickLength: 0,
         tickColor: '#666',
+
         labels: {
             step: 2,
             rotation: 'auto'
@@ -487,7 +490,6 @@ WIDGET_INFORMATION = {
         backgroundColor: 'none',
         style: {
           textOutline: 'none',
-          fontFamily: 'Helvetica, Arial, sans-serif',
           fontWeight: '{{ widget_options.get("text_font_tick", 500) }}',
           fontSize: '{{ widget_options.get("text_font_size", 2) }}em'
         },
@@ -498,7 +500,15 @@ WIDGET_INFORMATION = {
           var dataFontSize = {{ widget_options.get("text_font_size", 1.5) }};
           var unitFontSize = {{ widget_options.get("unit_font_size", 0.7) }};
           // 기존 방식으로 단위 가져오기
-          var unitLabel = '{{ dict_units[device_measurements_dict[measurement_id].unit]["unit"] }}';
+          var unitLabel = {% if measurement_id in dict_measure_units and dict_measure_units[measurement_id] in dict_units and dict_units[dict_measure_units[measurement_id]]['unit'] %}
+              '{{ dict_units[dict_measure_units[measurement_id]]["unit"] }}'
+          {% else %}
+              {%- if measurement_id in device_measurements_dict -%}
+                '{{ dict_units[device_measurements_dict[measurement_id].unit]["unit"] }}'
+              {%- else -%}
+                'N/A'
+              {%- endif -%}
+          {% endif %};
           return '<span style="font-size:' + dataFontSize + 'em;">' + val + '</span>' +
                 '<span style="font-size:' + unitFontSize + 'em; margin-left:0.2em;">' + unitLabel + '</span>';
         }

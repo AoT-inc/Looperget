@@ -23,64 +23,62 @@ from looperget.config_translations import TRANSLATIONS
 #
 
 class NoteAdd(FlaskForm):
-    name = StringField(
-        TRANSLATIONS['name']['title'])
-    note_tags = SelectMultipleField('Tags')
-    files = FileField(lazy_gettext('Attached Files'))
-    enter_custom_date_time = BooleanField(lazy_gettext('Use Custom Date/Time'))
-    date_time = DateTimeField(
-        'Custom Date/Time', format='%Y-%m-%d %H:%M:%S')
-    note = TextAreaField(TRANSLATIONS['note']['title'])
-    note_add = SubmitField(TRANSLATIONS['save']['title'])
+    name = StringField('이름')
+    note_tags = SelectMultipleField('태그')
+    files = FileField('첨부 파일')
+    enter_custom_date_time = BooleanField('사용자 지정 날짜/시간 사용')
+    date_time = DateTimeField('사용자 지정 날짜/시간', format='%Y-%m-%d %H:%M:%S')
+    note = TextAreaField('노트')
+    note_add = SubmitField('저장')
 
 
 class NoteOptions(FlaskForm):
     note_unique_id = StringField(widget=widgets.HiddenInput())
-    note_mod = SubmitField(TRANSLATIONS['edit']['title'])
-    note_del = SubmitField(TRANSLATIONS['delete']['title'])
+    note_mod = SubmitField('수정')
+    note_del = SubmitField('삭제')
 
 
 class NoteMod(FlaskForm):
     note_unique_id = StringField(widget=widgets.HiddenInput())
     file_selected = StringField(widget=widgets.HiddenInput())
-    name = StringField(TRANSLATIONS['name']['title'])
-    note_tags = SelectMultipleField(lazy_gettext('Tags'))
-    files = FileField(lazy_gettext('Attached Files'))
-    enter_custom_date_time = BooleanField(lazy_gettext('Use Custom Date/Time'))
-    date_time = DateTimeField('Custom Date/Time', format='%Y-%m-%d %H:%M:%S')
-    note = TextAreaField(TRANSLATIONS['note']['title'])
-    file_del = SubmitField(TRANSLATIONS['delete']['title'])
-    note_cancel = SubmitField(TRANSLATIONS['cancel']['title'])
+    name = StringField('이름')
+    note_tags = SelectMultipleField('태그')
+    files = FileField('첨부 파일')
+    enter_custom_date_time = BooleanField('사용자 지정 날짜/시간 사용')
+    date_time = DateTimeField('사용자 지정 날짜/시간', format='%Y-%m-%d %H:%M:%S')
+    note = TextAreaField('노트')
+    file_del = SubmitField('삭제')
+    note_cancel = SubmitField('취소')
     rename_name = StringField()
-    file_rename = SubmitField(TRANSLATIONS['rename']['title'])
-    note_del = SubmitField(TRANSLATIONS['delete']['title'])
-    note_save = SubmitField(TRANSLATIONS['save']['title'])
+    file_rename = SubmitField('이름 변경')
+    note_del = SubmitField('삭제')
+    note_save = SubmitField('저장')
 
 
 class NotesShow(FlaskForm):
     sort_by_choices = [
         ('id', 'ID'),
-        ('name', 'Name'),
-        ('date', 'Date/Time'),
-        ('tag', 'Tag'),
-        ('file', 'File'),
-        ('note', 'Note')
+        ('name', '이름'),
+        ('date', '날짜/시간'),
+        ('tag', '태그'),
+        ('file', '파일'),
+        ('note', '노트')
     ]
     sort_direction_choices = [
-        ('desc', 'Descending'),
-        ('asc', 'Ascending')
+        ('desc', '내림차순'),
+        ('asc', '오름차순')
     ]
-    filter_names = StringField(lazy_gettext('Filter Names'))
-    filter_tags = StringField(lazy_gettext('Filter Tags'))
-    filter_files = StringField(lazy_gettext('Filter Files'))
-    filter_notes = StringField(lazy_gettext('Filter Notes'))
-    sort_by = SelectField(lazy_gettext('Sort By'), choices=sort_by_choices)
-    sort_direction = SelectField(
-        lazy_gettext('Sort Direction'), choices=sort_direction_choices)
-    notes_show = SubmitField(lazy_gettext('Show Notes'))
-    notes_export = SubmitField(lazy_gettext('Export Notes'))
-    notes_import_file = FileField('Note ZIP File')
-    notes_import_upload = SubmitField(lazy_gettext('Import Notes'))
+    filter_names = StringField('이름 필터')
+    filter_tags = StringField('태그 필터')
+    filter_files = StringField('파일 필터')
+    filter_notes = StringField('노트 필터')
+    sort_by = SelectField('정렬 기준', choices=sort_by_choices)
+    sort_direction = SelectField('정렬 방향', choices=sort_direction_choices)
+    notes_show = SubmitField('노트 표시')
+    notes_export = SubmitField('노트 내보내기')
+    notes_import_file = FileField('노트 ZIP 파일')
+    notes_import_upload = SubmitField('노트 가져오기')
+
 
 
 #
@@ -88,13 +86,12 @@ class NotesShow(FlaskForm):
 #
 
 class TagAdd(FlaskForm):
-    tag_name = StringField(TRANSLATIONS['tag']['title'])
-    tag_add = SubmitField(TRANSLATIONS['create']['title'])
+    tag_name = StringField('태그')
+    tag_add = SubmitField('생성')
 
 
 class TagOptions(FlaskForm):
-    tag_unique_id = StringField(
-        TRANSLATIONS['tag']['title'], widget=widgets.HiddenInput())
+    tag_unique_id = StringField('태그', widget=widgets.HiddenInput())
     rename = StringField()
-    tag_rename = SubmitField(TRANSLATIONS['rename']['title'])
-    tag_del = SubmitField(TRANSLATIONS['delete']['title'])
+    tag_rename = SubmitField('이름 변경')
+    tag_del = SubmitField('삭제')

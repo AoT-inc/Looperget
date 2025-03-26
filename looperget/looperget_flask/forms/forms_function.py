@@ -2,7 +2,6 @@
 #
 # forms_function.py - Function Flask Forms
 #
-from flask_babel import lazy_gettext
 from flask_wtf import FlaskForm
 from wtforms import BooleanField
 from wtforms import SelectField
@@ -10,23 +9,20 @@ from wtforms import StringField
 from wtforms import SubmitField
 from wtforms import widgets
 
-from looperget.config_translations import TRANSLATIONS
-
 
 class FunctionAdd(FlaskForm):
-    function_type = SelectField()
-    function_add = SubmitField(TRANSLATIONS['add']['title'])
+    function_type = SelectField('함수 유형')
+    function_add = SubmitField('추가')
 
 
 class FunctionMod(FlaskForm):
     function_id = StringField('Function ID', widget=widgets.HiddenInput())
     function_type = StringField('Function Type', widget=widgets.HiddenInput())
-    name = StringField(TRANSLATIONS['name']['title'])
-    log_level_debug = BooleanField(
-        TRANSLATIONS['log_level_debug']['title'])
+    name = StringField('이름')
+    log_level_debug = BooleanField('디버그 로그 활성화')
 
-    execute_all_actions = SubmitField(lazy_gettext('Execute All Actions'))
-    function_activate = SubmitField(TRANSLATIONS['activate']['title'])
-    function_deactivate = SubmitField(TRANSLATIONS['deactivate']['title'])
-    function_mod = SubmitField(TRANSLATIONS['save']['title'])
-    function_delete = SubmitField(TRANSLATIONS['delete']['title'])
+    execute_all_actions = SubmitField('모든 동작 실행')
+    function_activate = SubmitField('활성화')
+    function_deactivate = SubmitField('비활성화')
+    function_mod = SubmitField('저장')
+    function_delete = SubmitField('삭제')

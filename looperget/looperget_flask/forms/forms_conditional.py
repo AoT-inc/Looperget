@@ -3,7 +3,6 @@
 # forms_conditional.py - Miscellaneous Flask Forms
 #
 
-from flask_babel import lazy_gettext
 from flask_wtf import FlaskForm
 from wtforms import BooleanField
 from wtforms import DecimalField
@@ -15,7 +14,6 @@ from wtforms import widgets
 from wtforms.widgets import NumberInput
 
 from looperget.config import CONDITIONAL_CONDITIONS
-from looperget.config_translations import TRANSLATIONS
 
 
 #
@@ -25,54 +23,52 @@ from looperget.config_translations import TRANSLATIONS
 class Conditional(FlaskForm):
     function_id = StringField('Function ID', widget=widgets.HiddenInput())
     function_type = StringField('Function Type', widget=widgets.HiddenInput())
-    name = StringField(TRANSLATIONS['name']['title'])
-    conditional_import = StringField(lazy_gettext('Import Python Code'))
-    conditional_initialize = StringField(lazy_gettext('Initialize Python Code'))
-    conditional_statement = StringField(lazy_gettext('Run Python Code'))
-    conditional_status = StringField(lazy_gettext('Status Python Code'))
+    name = StringField('이름')
+    conditional_import = StringField('파이썬 코드 가져오기 (Import)')
+    conditional_initialize = StringField('파이썬 코드 초기화')
+    conditional_statement = StringField('실행할 파이썬 코드')
+    conditional_status = StringField('상태 확인 파이썬 코드')
     period = DecimalField(
-        "{} ({})".format(lazy_gettext('Period'), lazy_gettext('Seconds')),
+        "주기 (초)",
         widget=NumberInput(step='any'))
-    log_level_debug = BooleanField(
-        TRANSLATIONS['log_level_debug']['title'])
-    use_pylint = BooleanField(
-        TRANSLATIONS['use_pylint']['title'])
-    message_include_code = BooleanField(
-        TRANSLATIONS['message_include_code']['title'])
+    log_level_debug = BooleanField('디버그 로그 활성화')
+    use_pylint = BooleanField('Pylint 사용')
+    message_include_code = BooleanField('메시지에 코드 포함')
     refractory_period = DecimalField(
-        "{} ({})".format(lazy_gettext('Refractory Period'), lazy_gettext('Seconds')),
+        "불응기 (초)",
         widget=NumberInput(step='any'))
     start_offset = DecimalField(
-        "{} ({})".format(lazy_gettext('Start Offset'), lazy_gettext('Seconds')),
+        "시작 지연 (초)",
         widget=NumberInput(step='any'))
     pyro_timeout = DecimalField(
-        "{} ({})".format(lazy_gettext('Timeout'), lazy_gettext('Seconds')),
+        "타임아웃 (초)",
         widget=NumberInput(step='any'))
     condition_type = SelectField(
-        choices=[('', TRANSLATIONS['select_one']['title'])] + CONDITIONAL_CONDITIONS)
-    add_condition = SubmitField(lazy_gettext('Add'))
+        '조건 유형',
+        choices=[('', '선택하세요')] + CONDITIONAL_CONDITIONS)
+    add_condition = SubmitField('추가')
 
 
 class ConditionalConditions(FlaskForm):
     conditional_id = StringField(
-        'Conditional ID',widget=widgets.HiddenInput())
+        'Conditional ID', widget=widgets.HiddenInput())
     conditional_condition_id = StringField(
         'Conditional Condition ID', widget=widgets.HiddenInput())
 
     # Measurement
     input_id = StringField('Input ID', widget=widgets.HiddenInput())
-    measurement = StringField(TRANSLATIONS['measurement']['title'])
+    measurement = StringField('측정값')
     max_age = IntegerField(
-        TRANSLATIONS['max_age']['title'],
+        '최대 허용 기간 (초)',
         widget=NumberInput())
 
-    # GPIO State
+    # GPIO 상태
     gpio_pin = IntegerField(
-        "{}: {} ({})".format(lazy_gettext('Pin'), lazy_gettext('GPIO'), lazy_gettext('BCM')),
+        "핀 번호: GPIO (BCM)",
         widget=NumberInput())
 
-    output_id = StringField(TRANSLATIONS['output']['title'])
-    controller_id = StringField(TRANSLATIONS['controller']['title'])
+    output_id = StringField('출력 장치')
+    controller_id = StringField('컨트롤러')
 
-    save_condition = SubmitField(TRANSLATIONS['save']['title'])
-    delete_condition = SubmitField(TRANSLATIONS['delete']['title'])
+    save_condition = SubmitField('저장')
+    delete_condition = SubmitField('삭제')

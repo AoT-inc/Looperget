@@ -16,51 +16,40 @@ from looperget.config_translations import TRANSLATIONS
 
 
 class Trigger(FlaskForm):
-    function_id = StringField('Function ID', widget=widgets.HiddenInput())
-    function_type = StringField('Function Type', widget=widgets.HiddenInput())
-    name = StringField(TRANSLATIONS['name']['title'])
-    log_level_debug = BooleanField(
-        TRANSLATIONS['log_level_debug']['title'])
+    function_id = StringField('함수 ID', widget=widgets.HiddenInput())
+    function_type = StringField('함수 유형', widget=widgets.HiddenInput())
+    name = StringField('이름')
+    log_level_debug = BooleanField('디버그 로그 활성화')
 
-    # Edge detection
-    measurement = StringField(TRANSLATIONS['measurement']['title'])
-    edge_detected = StringField(lazy_gettext('If Edge Detected'))
+    # 엣지 감지 (Edge detection)
+    measurement = StringField('측정값')
+    edge_detected = StringField('엣지 감지 시')
 
-    # Sunrise/sunset
-    rise_or_set = StringField(lazy_gettext('Rise or Set'))
-    latitude = DecimalField(
-        lazy_gettext('Latitude (decimal)'), widget=NumberInput(step='any'))
-    longitude = DecimalField(
-        lazy_gettext('Longitude (decimal)'), widget=NumberInput(step='any'))
-    zenith = DecimalField(
-        lazy_gettext('Zenith'), widget=NumberInput(step='any'))
-    date_offset_days = IntegerField(
-        lazy_gettext('Date Offset (days)'), widget=NumberInput())
-    time_offset_minutes = IntegerField(
-        lazy_gettext('Time Offset (minutes)'), widget=NumberInput())
+    # 일출/일몰
+    rise_or_set = StringField('일출 또는 일몰')
+    latitude = DecimalField('위도 (소수점)', widget=NumberInput(step='any'))
+    longitude = DecimalField('경도 (소수점)', widget=NumberInput(step='any'))
+    zenith = DecimalField('천정각', widget=NumberInput(step='any'))
+    date_offset_days = IntegerField('날짜 오프셋 (일)', widget=NumberInput())
+    time_offset_minutes = IntegerField('시간 오프셋 (분)', widget=NumberInput())
 
-    # Receive infrared from remote
-    program = StringField(lazy_gettext('Program'))
-    word = StringField(lazy_gettext('Word'))
+    # 리모컨 적외선 수신
+    program = StringField('프로그램')
+    word = StringField('명령어')
 
-    # Timer
-    period = DecimalField(
-        "{} ({})".format(lazy_gettext('Period'), lazy_gettext('Seconds')), widget=NumberInput(step='any'))
-    timer_start_offset = IntegerField(
-        "{} ({})".format(lazy_gettext('Start Offset'), lazy_gettext('Seconds')), widget=NumberInput())
-    timer_start_time = StringField(lazy_gettext('Start Time (HH:MM)'))
-    timer_end_time = StringField(lazy_gettext('End Time (HH:MM)'))
+    # 타이머
+    period = DecimalField('주기 (초)', widget=NumberInput(step='any'))
+    timer_start_offset = IntegerField('시작 지연 (초)', widget=NumberInput())
+    timer_start_time = StringField('시작 시간 (HH:MM)')
+    timer_end_time = StringField('종료 시간 (HH:MM)')
 
-    # Method
-    trigger_actions_at_period = BooleanField(lazy_gettext('Trigger Every Period'))
-    trigger_actions_at_start = BooleanField(lazy_gettext('Trigger when Activated'))
+    # 메서드
+    trigger_actions_at_period = BooleanField('주기마다 동작 실행')
+    trigger_actions_at_start = BooleanField('활성화 시 동작 실행')
 
-    # Output
-    unique_id_1 = StringField(lazy_gettext('If ID 1'))
-    unique_id_2 = StringField(lazy_gettext('If ID 2'))
-    output_state = StringField(lazy_gettext('If State'))
-    output_duration = DecimalField(
-        "{} ({})".format(lazy_gettext('If Duration'), lazy_gettext('Seconds')),
-        widget=NumberInput(step='any'))
-    output_duty_cycle = DecimalField(
-        lazy_gettext('If Duty Cycle (%%)'), widget=NumberInput(step='any'))
+    # 출력
+    unique_id_1 = StringField('조건 ID 1')
+    unique_id_2 = StringField('조건 ID 2')
+    output_state = StringField('상태 조건')
+    output_duration = DecimalField('조건 지속 시간 (초)', widget=NumberInput(step='any'))
+    output_duty_cycle = DecimalField('조건 듀티 사이클 (%)', widget=NumberInput(step='any'))

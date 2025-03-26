@@ -15,7 +15,6 @@ from wtforms import widgets
 from wtforms.validators import DataRequired
 from wtforms.widgets import NumberInput
 
-from looperget.config_translations import TRANSLATIONS
 from looperget.looperget_flask.utils.utils_general import generate_form_widget_list
 from looperget.utils.widgets import parse_widget_information
 
@@ -24,13 +23,13 @@ class DashboardBase(FlaskForm):
     choices_widgets = []
     dict_widgets = parse_widget_information()
     list_widgets_sorted = generate_form_widget_list(dict_widgets)
-    choices_widgets.append(('', lazy_gettext('Add widget')))
+    choices_widgets.append(('', lazy_gettext('위젯 추가')))
 
     for each_widget in list_widgets_sorted:
         choices_widgets.append((each_widget, dict_widgets[each_widget]['widget_name']))
 
     widget_type = SelectField(
-        'Dashboard Widget Type',
+        '대시보드 위젯 유형',
         choices=choices_widgets,
         validators=[DataRequired()]
     )
@@ -39,32 +38,32 @@ class DashboardBase(FlaskForm):
     widget_id = StringField('Widget ID', widget=widgets.HiddenInput())
 
     name = StringField(
-        TRANSLATIONS['name']['title'],
+        '이름',
         validators=[DataRequired()]
     )
-    font_em_name = DecimalField(TRANSLATIONS['font_em_name']['title'])
+    font_em_name = DecimalField('글꼴 크기(em)')
     refresh_duration = IntegerField(
-        TRANSLATIONS['refresh_duration']['title'],
+        '새로고침 간격 (초)',
         validators=[validators.NumberRange(
             min=1,
-            message=TRANSLATIONS['refresh_duration']['title']
+            message='새로고침 간격은 최소 1초 이상이어야 합니다.'
         )],
         widget=NumberInput()
     )
-    enable_drag_handle = BooleanField(lazy_gettext('Enable Drag Handle'))
-    widget_add = SubmitField(TRANSLATIONS['create']['title'])
-    widget_mod = SubmitField(TRANSLATIONS['save']['title'])
-    widget_delete = SubmitField(TRANSLATIONS['delete']['title'])
+    enable_drag_handle = BooleanField('드래그 핸들 활성화')
+    widget_add = SubmitField('추가')
+    widget_mod = SubmitField('저장')
+    widget_delete = SubmitField('삭제')
 
 
 class DashboardConfig(FlaskForm):
     dashboard_id = StringField('Dashboard ID', widget=widgets.HiddenInput())
     name = StringField(
-        TRANSLATIONS['name']['title'],
+        '이름',
         validators=[DataRequired()]
     )
-    lock = SubmitField(TRANSLATIONS['lock']['title'])
-    unlock = SubmitField(TRANSLATIONS['unlock']['title'])
-    dash_modify = SubmitField(TRANSLATIONS['save']['title'])
-    dash_delete = SubmitField(TRANSLATIONS['delete']['title'])
-    dash_duplicate = SubmitField(TRANSLATIONS['duplicate']['title'])
+    lock = SubmitField('잠금')
+    unlock = SubmitField('잠금 해제')
+    dash_modify = SubmitField('저장')
+    dash_delete = SubmitField('삭제')
+    dash_duplicate = SubmitField('복제')

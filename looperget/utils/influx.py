@@ -144,6 +144,13 @@ def add_measurements_influxdb_flux(unique_id, measurements, use_same_timestamp=T
                 point = point.tag("measure", each_measurement['measurement'])
             if each_channel is not None:
                 point = point.tag("channel", each_channel)
+
+            # Add pub_time and forecast_time tags if available
+            if 'pub_time' in each_measurement and each_measurement['pub_time']:
+                point = point.tag("pub_time", str(each_measurement['pub_time']))
+            if 'forecast_time' in each_measurement and each_measurement['forecast_time']:
+                point = point.tag("forecast_time", str(each_measurement['forecast_time']))
+
             if timestamp:
                 point = point.time(timestamp)
 

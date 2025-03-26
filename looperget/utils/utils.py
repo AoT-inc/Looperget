@@ -51,7 +51,7 @@ def is_email(email):
     :rtype: Bool
     """
     if re.match('[^@]+@[^@]+\.[^@]+', email) is None:
-        print("This doesn't appear to be an email address")
+        print("적합한 이메일 주소 형식이 아닙니다.")
         return False
     else:
         return True
@@ -69,7 +69,7 @@ def pass_length_min(pw, min_len=4):
     :rtype: bool
     """
     if not len(pw) >= min_len:
-        print("The password provided is too short.")
+        print("암호가 너무 짧습니다.")
         return False
     else:
         return True
@@ -86,7 +86,7 @@ def characters(un):
     """
 
     if not un.isalnum():
-        print("A special character was detected.  Please use only Letters and Numbers.")
+        print("특수문자가 감지되었습니다. 일반문자나 숫자를 사용하세요.")
         return False
     else:
         return True
@@ -105,7 +105,7 @@ def user_length_min(un, min_len=3):
     """
 
     if not len(un) >= min_len:
-        print("This username is too short.")
+        print("사용자 ID가 너무 짧습니다.")
         return False
     else:
         return True
@@ -123,7 +123,7 @@ def user_length_max(un, max_len=64):
     :rtype:
     """
     if not len(un) <= max_len:
-        print("This username is too long.")
+        print("사용자 ID가 너무 깁니다.")
         return False
     else:
         return True
@@ -222,7 +222,7 @@ def query_yes_no(question, default="yes"):
         elif choice in valid:
             return valid[choice]
         else:
-            sys.stdout.write("Please respond with 'y' or 'n').\n")
+            sys.stdout.write("'y' 또는 'n' 을 입력하세요.).\n")
 
 
 def sort_tuple(tup):

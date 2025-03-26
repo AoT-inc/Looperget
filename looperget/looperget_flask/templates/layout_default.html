@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,113 +36,7 @@
     <link href="/static/css/bootstrap-select.min.css" rel="stylesheet">
     <script src="/static/js/bootstrap-select.min.js"></script>
 
-    <!-- 사용자 커스텀 스타일 - 내비게이션 전용 -->
-    <style>
-      /* 내비게이션 바에만 적용 (main-navbar 클래스) */
-      .navbar.main-navbar {
-        background-color: #F4D624;
-        border: none;
-        height: 50px !important;
-        margin-bottom: 1em;
-        padding: 0 1rem;
-        font-size: 1.1em !important;
-      }
-      .navbar.main-navbar .nav-link {
-        color: #333 !important;
-      }
-      .navbar.main-navbar .nav-link:hover {
-        color: #000 !important;
-      }
-      /* 내비게이션 내부 Dropdown 메뉴 (내부에만 적용) */
-      .navbar.main-navbar .dropdown-menu {
-        background-color: #F4D624;
-        border: none;
-        border-radius: 0 !important;
-        box-shadow: none;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-      }
-      .navbar.main-navbar .dropdown-toggle::after {
-        display: none;
-      }
-      .navbar.main-navbar .navbar-brand img {
-        height: 20px;
-        vertical-align: middle;
-        transform: translateY(-2px);
-      }
 
-      /* 데스크탑에서는 Bootstrap 기본 collapse(항상 열린 상태) */
-      @media (min-width: 768px) {
-        /* collapse 영역은 자동으로 펼쳐짐 */
-      }
-
-      /* 모바일 모드 (최대 767.98px) */
-      @media (max-width: 767.98px) {
-        .navbar.main-navbar {
-          position: fixed !important;
-          top: 0;
-          width: 100%;
-          z-index: 1000;
-        }
-        body {
-          padding-top: calc(50px + 1em);
-        }
-        nav.navbar.main-navbar button.navbar-toggler i.fas,
-        nav.navbar.main-navbar button.navbar-toggler i.fas:before {
-          color: #000 !important;
-          fill: #000 !important;
-          stroke: #000 !important;
-        }
-        /* 모바일 토글 버튼과 쇼핑 아이콘은 d-md-none로 보임 */
-        /* (메뉴 토글 버튼은 collapse를 제어함) */
-        /* collapse 영역 스타일 수정: 내비게이션 바 바로 아래에서 펼쳐짐 */
-        .navbar-collapse {
-          position: absolute;
-          top: 50px;
-          left: 0;
-          width: 100%;
-          background-color: #F4D624 !important;
-          z-index: 998;
-          max-height: calc(100vh - 50px);
-          overflow-y: auto;
-          transition: none;
-        }
-        .navbar-collapse.show {
-          padding-bottom: 8em; /* 필요에 따라 여백 조절 */
-        }
-        /* 모바일 메뉴 글자 크기 조정: 메인 메뉴 2em, 서브 메뉴 1.5em */
-        .navbar-nav > li > a {
-          font-size: 1.8em !important;
-          font-weight: bold;
-          padding-left: 2em !important;
-        }
-        .navbar-nav .dropdown-menu a {
-          font-size: 1.5em !important;
-          font-weight: bold;
-        }
-        .navbar-nav .dropdown-menu > .dropdown-item,
-        .navbar-nav .dropdown-menu > a {
-          padding-left: 3.75em !important;
-        }
-        .navbar-collapse .navbar-dashboard-config {
-          display: none !important;
-        }
-        .navbar.main-navbar .navbar-dashboard-config a:hover {
-          color: inherit !important;
-          background: none !important;
-        }
-        .navbar-toggler i {
-          color: #000 !important;
-          fill: #000 !important;
-        }
-        /* 모바일 내비게이션 링크 hover 효과 제거 */
-        .navbar.main-navbar a:hover {
-          background: none !important;
-          color: inherit !important;
-        }
-      }
-    </style>
 
     {% if custom_css %}
       <link href="/custom.css" rel="stylesheet">
@@ -185,13 +79,14 @@
 
         // 모바일: 메뉴 토글 시 아이콘 전환 및 로고 숨김/보이기
         $('#navbarCollapse').on('show.bs.collapse', function () {
-          $('.navbar-toggler i').removeClass('fa-grip-lines').addClass('fa-times');
-          $('.navbar-brand').hide();
-        });
-        $('#navbarCollapse').on('hide.bs.collapse', function () {
-          $('.navbar-toggler i').removeClass('fa-times').addClass('fa-grip-lines');
-          $('.navbar-brand').show();
-        });
+        $('.navbar-toggler i').removeClass('fa-bars').addClass('fa-times');
+        $('.navbar-brand, .navbar-dashboard-config').hide();  // 로고 및 대시보드 설정 숨김
+      });
+
+      $('#navbarCollapse').on('hide.bs.collapse', function () {
+        $('.navbar-toggler i').removeClass('fa-times').addClass('fa-bars');
+        $('.navbar-brand, .navbar-dashboard-config').show();  // 로고 및 대시보드 설정 표시
+      });
 
         // 창 크기 변경 시 데스크탑 모드에서 collapse 강제 닫기
         $(window).on('resize', function() {
@@ -216,11 +111,6 @@
 
       <!-- 모바일 전용: 대시보드 설정 버튼 + 메뉴 토글 버튼 (우측) -->
       <div class="d-md-none ml-auto d-flex align-items-center">
-        {% for each_dash in dashboards if each_dash.unique_id == dashboard_id %}
-          <a class="navbar-dashboard-config mr-2" href="#" data-toggle="modal" data-target="#modal_config_{{ each_dash.unique_id }}">
-            {{ each_dash.name }}{{ _('설정') }}
-          </a>
-        {% endfor %}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <!-- 3줄짜리 hamburger 아이콘 -->
           <i class="fas fa-bars"></i>
@@ -291,11 +181,7 @@
               </a>
             </div>
           </li>
-          {% for each_dash in dashboards if each_dash.unique_id == dashboard_id %}
-          <li class="nav-item navbar-dashboard-config">
-            <a class="nav-link" href="#" data-toggle="modal" data-target="#modal_config_{{each_dash.unique_id}}"> {{each_dash.name}}{{ _('설정') }}</a>
-          </li>
-        {% endfor %}
+
 
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -460,6 +346,21 @@
           }
         });
         setInterval(check_daemon_status, 60000);
+
+        let lastScrollTop = 0;
+        const navbar = $('.navbar.main-navbar');
+
+        $(window).on('scroll', function() {
+          let currentScroll = $(this).scrollTop();
+
+          if (currentScroll > lastScrollTop && currentScroll > 50) {
+            navbar.css('top', '-60px');
+          } else {
+            navbar.css('top', '0');
+          }
+
+          lastScrollTop = currentScroll;
+        });
       });
     </script>
   </body>

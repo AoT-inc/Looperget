@@ -20,25 +20,21 @@ from looperget.config_translations import TRANSLATIONS
 
 
 class PIDModBase(FlaskForm):
-    function_id = StringField('Function ID', widget=widgets.HiddenInput())
-    function_type = StringField('Function Type', widget=widgets.HiddenInput())
-    name = StringField(
-        TRANSLATIONS['name']['title'],
-        validators=[DataRequired()])
-    measurement = StringField(
-        TRANSLATIONS['measurement']['title'],
-        validators=[DataRequired()])
+    function_id = StringField('함수 ID', widget=widgets.HiddenInput())
+    function_type = StringField('함수 종류', widget=widgets.HiddenInput())
+    name = StringField('이름', validators=[DataRequired()])
+    measurement = StringField('측정값', validators=[DataRequired()])
     direction = SelectField(
-        lazy_gettext('Direction'),
+        '방향',
         choices=[
-            ('raise', lazy_gettext('Raise')),
-            ('lower', lazy_gettext('Lower')),
-            ('both', lazy_gettext('Both'))
+            ('raise', '상승'),
+            ('lower', '하강'),
+            ('both', '상승 및 하강')
         ],
         validators=[DataRequired()]
     )
     period = DecimalField(
-        TRANSLATIONS['period']['title'],
+        '주기 (초)',
         validators=[validators.NumberRange(
             min=1,
             max=86400
@@ -46,12 +42,12 @@ class PIDModBase(FlaskForm):
         widget=NumberInput(step='any')
     )
     log_level_debug = BooleanField(
-        TRANSLATIONS['log_level_debug']['title'])
+        '디버그 로그 활성화')
     start_offset = DecimalField(
-        TRANSLATIONS['start_offset']['title'],
+        '시작 지연 (초)',
         widget=NumberInput(step='any'))
     max_measure_age = DecimalField(
-        TRANSLATIONS['max_age']['title'],
+        '측정값 최대 유효 기간 (초)',
         validators=[validators.NumberRange(
             min=1,
             max=86400
@@ -59,7 +55,7 @@ class PIDModBase(FlaskForm):
         widget=NumberInput(step='any')
     )
     setpoint = DecimalField(
-        TRANSLATIONS['setpoint']['title'],
+        '목표값(Setpoint)',
         validators=[validators.NumberRange(
             min=-1000000,
             max=1000000
@@ -67,10 +63,10 @@ class PIDModBase(FlaskForm):
         widget=NumberInput(step='any')
     )
     band = DecimalField(
-        lazy_gettext('Band (+/- Setpoint)'),
+        lazy_gettext('범위 (+/- 목표값)'),
         widget=NumberInput(step='any'))
-    send_lower_as_negative = BooleanField(lazy_gettext('Send Lower as Negative'))
-    store_lower_as_negative = BooleanField(lazy_gettext('Store Lower as Negative'))
+    send_lower_as_negative = BooleanField(lazy_gettext('하강 동작을 음수로 전송'))
+    store_lower_as_negative = BooleanField(lazy_gettext('하강 동작을 음수로 저장'))
     k_p = DecimalField(
         lazy_gettext('Kp Gain'),
         validators=[validators.NumberRange(
@@ -93,29 +89,29 @@ class PIDModBase(FlaskForm):
         widget=NumberInput(step='any')
     )
     integrator_max = DecimalField(
-        lazy_gettext('Integrator Min'),
+        '적분기 최대값',
         widget=NumberInput(step='any'))
     integrator_min = DecimalField(
-        lazy_gettext('Integrator Max'),
+        '적분기 최소값',
         widget=NumberInput(step='any'))
-    raise_output_id = StringField("{} ({})".format(lazy_gettext('Output'), lazy_gettext('Raise')))
-    raise_output_type = StringField("{} ({})".format(lazy_gettext('Action'), lazy_gettext('Raise')))
-    lower_output_id = StringField("{} ({})".format(lazy_gettext('Output'), lazy_gettext('Lower')))
-    lower_output_type = StringField("{} ({})".format(lazy_gettext('Action'), lazy_gettext('Lower')))
-    setpoint_tracking_type = StringField(TRANSLATIONS['setpoint_tracking_type']['title'])
-    setpoint_tracking_method_id = StringField('Setpoint Tracking Method')
-    setpoint_tracking_input_math_id = StringField('Setpoint Tracking Input')
-    setpoint_tracking_max_age = DecimalField("{} ({})".format(lazy_gettext('Max Age'), lazy_gettext('Seconds')),
+    raise_output_id = StringField('출력 (상승)')
+    raise_output_type = StringField('동작 (상승)')
+    lower_output_id = StringField('출력 (하강)')
+    lower_output_type = StringField('동작 (하강)')
+    setpoint_tracking_type = StringField('목표값 추적 유형')
+    setpoint_tracking_method_id = StringField('목표값 추적 참조궤적')
+    setpoint_tracking_input_math_id = StringField('목표값 추적 입력t')
+    setpoint_tracking_max_age = DecimalField('최대 허용 시간 (초)',
         validators=[Optional()],
         widget=NumberInput(step='any'))
-    pid_hold = SubmitField(lazy_gettext('Hold'))
-    pid_pause = SubmitField(lazy_gettext('Pause'))
-    pid_resume = SubmitField(lazy_gettext('Resume'))
+    pid_hold = SubmitField('고정')
+    pid_pause = SubmitField('일시정지')
+    pid_resume = SubmitField('복귀')
 
 
 class PIDModRelayRaise(FlaskForm):
     raise_min_duration = DecimalField(
-        "{} ({})".format(lazy_gettext('Min On Duration'), lazy_gettext('Raise')),
+        "최소 동작 시간 (상승)",
         validators=[validators.NumberRange(
             min=0,
             max=86400
@@ -123,7 +119,7 @@ class PIDModRelayRaise(FlaskForm):
         widget=NumberInput(step='any')
     )
     raise_max_duration = DecimalField(
-        "{} ({})".format(lazy_gettext('Max On Duration'), lazy_gettext('Raise')),
+        "최대 동작 시간 (상승)",
         validators=[validators.NumberRange(
             min=0,
             max=86400
@@ -131,7 +127,7 @@ class PIDModRelayRaise(FlaskForm):
         widget=NumberInput(step='any')
     )
     raise_min_off_duration = DecimalField(
-        "{} ({})".format(lazy_gettext('Min Off Duration'), lazy_gettext('Raise')),
+        "최소 정지 시간 (상승)",
         validators=[validators.NumberRange(
             min=0,
             max=86400
@@ -142,7 +138,7 @@ class PIDModRelayRaise(FlaskForm):
 
 class PIDModRelayLower(FlaskForm):
     lower_min_duration = DecimalField(
-        "{} ({})".format(lazy_gettext('Min On Duration'), lazy_gettext('Lower')),
+       '최소 작동 시간 (하강)',
         validators=[validators.NumberRange(
             min=0,
             max=86400
@@ -150,7 +146,7 @@ class PIDModRelayLower(FlaskForm):
         widget=NumberInput(step='any')
     )
     lower_max_duration = DecimalField(
-        "{} ({})".format(lazy_gettext('Max On Duration'), lazy_gettext('Lower')),
+        '최대 작동 시간 (하강)',
         validators=[validators.NumberRange(
             min=0,
             max=86400
@@ -158,7 +154,7 @@ class PIDModRelayLower(FlaskForm):
         widget=NumberInput(step='any')
     )
     lower_min_off_duration = DecimalField(
-        "{} ({})".format(lazy_gettext('Min Off Duration'), lazy_gettext('Lower')),
+        '최소 꺼짐 시간 (하강)',
         validators=[validators.NumberRange(
             min=0,
             max=86400
@@ -169,29 +165,29 @@ class PIDModRelayLower(FlaskForm):
 
 class PIDModValueRaise(FlaskForm):
     raise_min_amount = DecimalField(
-        "{} ({})".format(lazy_gettext('Min Amount'), lazy_gettext('Raise')),
+        '최소값 (상향)',
         widget=NumberInput(step='any')
     )
     raise_max_amount = DecimalField(
-        "{} ({})".format(lazy_gettext('Max Amount'), lazy_gettext('Raise')),
+        '최대값 (상향)',
         widget=NumberInput(step='any')
     )
 
 
 class PIDModValueLower(FlaskForm):
     lower_min_amount = DecimalField(
-        "{} ({})".format(lazy_gettext('Min Amount'), lazy_gettext('Lower')),
+        '최소값 (하향)',
         widget=NumberInput(step='any')
     )
     lower_max_amount = DecimalField(
-        "{} ({})".format(lazy_gettext('Max Amount'), lazy_gettext('Lower')),
+        '최대값 (하향)',
         widget=NumberInput(step='any')
     )
 
 
 class PIDModVolumeRaise(FlaskForm):
     raise_min_amount = DecimalField(
-        "{} ({})".format(lazy_gettext('Min On Amount'), lazy_gettext('Raise')),
+        '최소 동작량 (상승)',
         validators=[validators.NumberRange(
             min=0,
             max=86400
@@ -199,7 +195,7 @@ class PIDModVolumeRaise(FlaskForm):
         widget=NumberInput(step='any')
     )
     raise_max_amount = DecimalField(
-        "{} ({})".format(lazy_gettext('Max On Amount'), lazy_gettext('Raise')),
+        '최대 동작량 (상승)',
         validators=[validators.NumberRange(
             min=0,
             max=86400
@@ -210,7 +206,7 @@ class PIDModVolumeRaise(FlaskForm):
 
 class PIDModVolumeLower(FlaskForm):
     lower_min_amount = DecimalField(
-        "{} ({})".format(lazy_gettext('Min On Amount'), lazy_gettext('Lower')),
+        '최소 동작량 (하강)',
         validators=[validators.NumberRange(
             min=0,
             max=86400
@@ -218,7 +214,7 @@ class PIDModVolumeLower(FlaskForm):
         widget=NumberInput(step='any')
     )
     lower_max_amount = DecimalField(
-        "{} ({})".format(lazy_gettext('Max On Amount'), lazy_gettext('Lower')),
+        '최대 동작량 (하강)',
         validators=[validators.NumberRange(
             min=0,
             max=86400
@@ -229,7 +225,7 @@ class PIDModVolumeLower(FlaskForm):
 
 class PIDModPWMRaise(FlaskForm):
     raise_min_duty_cycle = DecimalField(
-        "{} ({})".format(lazy_gettext('Min Duty Cycle'), lazy_gettext('Raise')),
+        '최소 듀티 사이클 (%) (상승)',
         validators=[validators.NumberRange(
             min=0,
             max=100
@@ -237,20 +233,19 @@ class PIDModPWMRaise(FlaskForm):
         widget=NumberInput(step='any')
     )
     raise_max_duty_cycle = DecimalField(
-        "{} ({})".format(lazy_gettext('Max Duty Cycle'), lazy_gettext('Raise')),
+        '최대 듀티 사이클 (%) (상승)',
         validators=[validators.NumberRange(
             min=0,
             max=100
         )],
         widget=NumberInput(step='any')
     )
-    raise_always_min_pwm = BooleanField(
-        TRANSLATIONS['raise_always_min_pwm']['title'])
+    raise_always_min_pwm = BooleanField('항상 최소 PWM으로 동작 (상승)')
 
 
 class PIDModPWMLower(FlaskForm):
     lower_min_duty_cycle = DecimalField(
-        "{} ({})".format(lazy_gettext('Min Duty Cycle'), lazy_gettext('Lower')),
+        '최소 듀티 사이클 (%) (하강)',
         validators=[validators.NumberRange(
             min=0,
             max=100
@@ -258,12 +253,12 @@ class PIDModPWMLower(FlaskForm):
         widget=NumberInput(step='any')
     )
     lower_max_duty_cycle = DecimalField(
-        "{} ({})".format(lazy_gettext('Max Duty Cycle'), lazy_gettext('Lower')),
+        '최대 듀티 사이클 (%) (하강)',
         validators=[validators.NumberRange(
             min=0,
             max=100
         )],
         widget=NumberInput(step='any')
     )
-    lower_always_min_pwm = BooleanField(
-        TRANSLATIONS['lower_always_min_pwm']['title'])
+    lower_always_min_pwm = BooleanField('항상 최소 PWM으로 동작 (하강)')
+

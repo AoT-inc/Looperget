@@ -2,9 +2,8 @@
 import http.client
 import logging
 import urllib
+from flask_babel import lazy_gettext
 from urllib.parse import urlparse
-
-from flask_gettext import lazy_gettext
 
 from looperget.databases.models import Actions
 from looperget.actions.base_action import AbstractFunctionAction
@@ -12,7 +11,7 @@ from looperget.utils.database import db_retrieve_table_daemon
 
 ACTION_INFORMATION = {
     'name_unique': 'webhook',
-    'name': lazy_gettext('웹훅'),
+    'name': lazy_gettext('webhook'),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],

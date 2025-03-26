@@ -130,72 +130,6 @@ WIDGET_INFORMATION = {
 
     # -------------------- HEAD (CSS) --------------------
     'widget_dashboard_head': """
-    <style>
-      .pause-background-aotctrl {
-        background-color: #fff3cd!important; 
-      }
-      .active-background-aotctrl {
-        background-color: #FFF9E3!important; 
-      }
-      .inactive-background-aotctrl {
-        background-color: #E9E9E9!important; 
-      }
-
-      .toggle-switch-aotctrl {
-        position: relative;
-        display: inline-block;
-        margin-top: 0.8em; 
-        margin-right: 0.5em; 
-        width: 3.2em;
-        height: 2em;
-        vertical-align: middle;
-      }
-      .toggle-switch-aotctrl input {
-        opacity: 0; width: 0; height: 0;
-      }
-      .slider-aotctrl {
-        position: absolute;
-        cursor: pointer;
-        top: 0; left: 0; right: 0; bottom: 0;
-        border-radius: 2em;
-        background-color: #929292;
-        transition: 0.3s;
-      }
-      .slider-aotctrl:before {
-        position: absolute;
-        content: "";
-        height: 1.6em;
-        width: 1.6em;
-        left: 0.2em;
-        bottom: 0.2em;
-        background-color: #fff;
-        border-radius: 100%;
-        transition: 0.3s;
-      }
-      .toggle-switch-aotctrl input:checked + .slider-aotctrl {
-        background-color: #F4D624;
-      }
-      .toggle-switch-aotctrl input:checked + .slider-aotctrl:before {
-        transform: translateX(1.2em);
-      }
-
-      .mobile-aotctrl-widget {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-        background-color: #E9E9E9; /* OFF=연분홍 */
-        transition: background-color 0.3s;
-      }
-
-      .controller-header-row-aotctrl {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-    </style>
     """,
 
     # -------------------- TITLE BAR --------------------
@@ -209,88 +143,94 @@ WIDGET_INFORMATION = {
 
     # -------------------- BODY --------------------
     'widget_dashboard_body': """
-<div id="container-aotctrl-{{each_widget.unique_id}}"
-     class="mobile-aotctrl-widget inactive-background-aotctrl">
-
-  <div style="width:100%; height:100%; box-sizing:border-box;">
-
-    <!-- 1행: 상태 문구(왼쪽) + 토글(오른쪽) -->
-    <div class="controller-header-row-aotctrl">
-      <span id="text-controller-state-{{each_widget.unique_id}}"
-            style="margin-left:0.5em;">
-        (Inactive)
-      </span>
-      <label class="toggle-switch-aotctrl">
-        <input type="checkbox"
-               id="ctrl_toggle_{{each_widget.unique_id}}"
-               class="controller_onoff_chk">
-        <span class="slider-aotctrl"></span>
-      </label>
-    </div>
+  <div class="frame-aot inactive-background"
+      id="frame_aot_{{each_widget.unique_id}}">
     
-    <!-- 필요시 추가 UI 요소 배치 -->
+    <div class="row-aot-1-1">
+      <div class="col-aot-1">
+        <span class="prt-text" id="aot_controller_txt_{{each_widget.unique_id}}">
+          대기중
+        </span>
+      </div>
+
+      <div class="col-aot-2">
+        <label class="btn-toggle">
+          <input type="checkbox"
+                 id="aot_controller_toggle_{{each_widget.unique_id}}"
+                 class="btn-toggle-input"
+                 name="{{widget_options['controller']}}">
+          <span class="btn-toggle-slider">
+            <span class="btn-toggle-thumb"></span>
+          </span>
+        </label>
+      </div>
+    </div>
 
   </div>
-</div>
 """,
 
     # -------------------- JAVASCRIPT --------------------
     'widget_dashboard_js': """
-function printControllerErrorAoT(wid){
-  let contDiv = document.getElementById("container-aotctrl-"+wid);
-  if(contDiv){
-    contDiv.classList.remove("pause-background-aotctrl",
-                             "active-background-aotctrl",
-                             "inactive-background-aotctrl");
-    contDiv.classList.add("inactive-background-aotctrl");
+  function printControllerErrorAoT(wid){
+    // 화면 업데이트를 제거하고, 오류를 콘솔 및 서버 로그로 전송합니다.
+    console.error("AoT Controller Error on widget:", wid);
+    
+    // 선택사항: AJAX로 서버 로그 엔드포인트에 오류 정보를 전송
+    $.ajax({
+      type: "POST",
+      url: "/log_error",  // 서버에 로그를 수신하는 엔드포인트 (구현 필요)
+      data: JSON.stringify({
+        widget: "AoT_controller",
+        widget_id: wid,
+        error: "(Error)"
+      }),
+      contentType: "application/json",
+      success: function(){},
+      error: function(){ console.error("Error logging failed."); }
+    });
   }
-  let stateSpan = document.getElementById("text-controller-state-"+wid);
-  if(stateSpan){
-    stateSpan.innerHTML = "(Error)";
-  }
-}
 
-// 컨트롤러 상태 확인 (1회)
-function getControllerStateAoT(wid, dev_id){
-  $.ajax({
-    url: "/controller_state/"+dev_id,
-    type: "GET",
-    success: function(data, textStatus, jqXHR){
-      if(data.status === "Error"){
+  // 컨트롤러 상태 확인 (1회)
+  function getControllerStateAoT(wid, dev_id){
+    $.ajax({
+      url: "/controller_state/" + dev_id,
+      type: "GET",
+      success: function(data, textStatus, jqXHR){
+        if(data.status === "Error"){
+          printControllerErrorAoT(wid);
+        } else {
+          let isActive = data.state; // data.state: true or false
+          updateControllerUIAoT(wid, isActive);
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown){
         printControllerErrorAoT(wid);
-      } else {
-        // data.state => true/false
-        let isActive = data.state;
-        updateControllerUIAoT(wid, isActive);
       }
-    },
-    error: function(jqXHR, textStatus, errorThrown){
-      printControllerErrorAoT(wid);
-    }
-  });
-}
-
-// UI 갱신 (토글/배경색/문구)
-function updateControllerUIAoT(wid, isActive){
-  let toggler = document.getElementById("ctrl_toggle_"+wid);
-  let contDiv = document.getElementById("container-aotctrl-"+wid);
-  let stateSpan = document.getElementById("text-controller-state-"+wid);
-  if(!toggler || !contDiv || !stateSpan) return;
-
-  contDiv.classList.remove("pause-background-aotctrl",
-                           "active-background-aotctrl",
-                           "inactive-background-aotctrl");
-
-  if(isActive){
-    toggler.checked = true;
-    contDiv.classList.add("active-background-aotctrl");
-    stateSpan.innerHTML = "작동중";
-  } else {
-    toggler.checked = false;
-    contDiv.classList.add("inactive-background-aotctrl");
-    stateSpan.innerHTML = "대기중";
+    });
   }
-}
+
+  // UI 갱신 (토글/배경색/문구)
+  function updateControllerUIAoT(wid, isActive){
+    let toggler = document.getElementById("aot_controller_toggle_"+wid);
+    let contDiv = document.getElementById("frame_aot_"+wid);
+    let stateSpan = document.getElementById("aot_controller_txt_"+wid);
+    
+    if(!toggler || !contDiv || !stateSpan) return;
+
+    contDiv.classList.remove("pause-background",
+                            "active-background",
+                            "inactive-background");
+
+    if(isActive){
+      toggler.checked = true;
+      contDiv.classList.add("active-background");
+      stateSpan.innerHTML = "작동중";
+    } else {
+      toggler.checked = false;
+      contDiv.classList.add("inactive-background");
+      stateSpan.innerHTML = "대기중";
+    }
+  }
 
 // 컨트롤러 On/Off
 function setControllerStateAoT(dev_id, newState, wid){
@@ -305,11 +245,8 @@ function setControllerStateAoT(dev_id, newState, wid){
       // 명령 후 재확인 (1회)
       getControllerStateAoT(wid, dev_id);
     },
-    error: function(err){
-      // (Toastr 메시지 제거)
-      console.error("Controller set error:", err);
-
-      // UI에 에러 표시
+    error: function(jqXHR, textStatus, errorThrown){
+      console.error("Controller set error:", textStatus, errorThrown);
       printControllerErrorAoT(wid);
     }
   });
@@ -332,39 +269,34 @@ function repeatControllerStateAoT(wid, dev_id, refSec){
 
     # -------------------- JS READY --------------------
     'widget_dashboard_js_ready': """
-$('.controller_onoff_chk').change(function(){
-  let wid = this.id.split('_')[2];  // ctrl_toggle_{wid}
-  let dev_id = $(this).attr('name');
-  let isOn = $(this).is(':checked');
+  $('#frame_aot_{{widget.unique_id}} .btn-toggle-input')
+    .off('change')
+    .on('change', function(){
+      let wid = this.id.replace('aot_controller_toggle_', '');
+      let dev_id = $(this).attr('name');
+      let isOn = $(this).is(':checked');
 
-  if(!dev_id){
-    console.log("No Controller ID found for widget:", wid);
-    return;
-  }
+      if(!dev_id){
+        console.error("No Controller ID found for widget:", wid);
+        return;
+      }
 
-  // on => 'activate', off => 'deactivate'
-  let action = isOn ? "activate" : "deactivate";
-  setControllerStateAoT(dev_id, action, wid);
-});
+      let action = isOn ? "activate" : "deactivate";
+      setControllerStateAoT(dev_id, action, wid);
+  });
 """,
 
     # -------------------- JS READY END --------------------
     'widget_dashboard_js_ready_end': """
-$('#ctrl_toggle_{{each_widget.unique_id}}')
+  $('#aot_controller_toggle_{{each_widget.unique_id}}')
   .attr('name', '{{widget_options['controller']}}');
 
-// 1) 위젯 로드 시, 현재 상태 1회 조회
-getControllerStateAoT('{{each_widget.unique_id}}', '{{widget_options['controller']}}');
+  getControllerStateAoT('{{each_widget.unique_id}}', '{{widget_options['controller']}}');
 
-// 2) refresh_seconds가 0보다 크면 주기적으로 상태 확인
-repeatControllerStateAoT(
-  '{{each_widget.unique_id}}',
-  '{{widget_options['controller']}}',
-  {{widget_options['refresh_seconds']}}
-);
+  repeatControllerStateAoT(
+    '{{each_widget.unique_id}}',
+    '{{widget_options['controller']}}',
+    {{widget_options['refresh_seconds']}}
+  );
 """
 }
-
-logger.info(
-    "widget_AoT_controller.py: 주기적 상태 갱신(=refresh_seconds) 복원 + Toastr 제거 유지."
-)

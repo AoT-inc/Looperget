@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 #
-# forms_dependencies.py - Dependencies Flask Forms
+# forms_dependencies.py - 의존성 관리 폼
 #
 
-from flask_babel import lazy_gettext
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms import SubmitField
@@ -11,5 +10,5 @@ from wtforms import widgets
 
 
 class Dependencies(FlaskForm):
-    device = StringField('Device', widget=widgets.HiddenInput())
-    install = SubmitField(lazy_gettext('Install All Dependencies'))
+    device = StringField('장치', widget=widgets.HiddenInput())
+    install = SubmitField('모든 의존성 설치하기')

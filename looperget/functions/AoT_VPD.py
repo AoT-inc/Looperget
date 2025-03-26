@@ -216,13 +216,16 @@ class CustomModule(AbstractFunction):
             device_measurement = get_measurement(
                 self.select_measurement_temperature_c_measurement_id
             )
-            conversion = db_retrieve_table_daemon(
-                Conversion, unique_id=device_measurement.conversion_id
-            )
-            channel, unit, measurement = return_measurement_info(
-                device_measurement, conversion
-            )
-            temp_c = convert_from_x_to_y_unit(unit, 'C', last_measurement_temp[1])
+            if device_measurement is not None and getattr(device_measurement, 'conversion_id', None) is not None:
+                conversion = db_retrieve_table_daemon(
+                    Conversion, unique_id=device_measurement.conversion_id
+                )
+                channel, unit, measurement = return_measurement_info(
+                    device_measurement, conversion
+                )
+                temp_c = convert_from_x_to_y_unit(unit, 'C', last_measurement_temp[1])
+            else:
+                self.logger.debug("Temperature measurement device_measurement is None or missing conversion_id, skipping temperature measurement.")
 
         # 2) 습도 측정
         last_measurement_hum = self.get_last_measurement(
@@ -236,13 +239,16 @@ class CustomModule(AbstractFunction):
             device_measurement = get_measurement(
                 self.select_measurement_humidity_measurement_id
             )
-            conversion = db_retrieve_table_daemon(
-                Conversion, unique_id=device_measurement.conversion_id
-            )
-            channel, unit, measurement = return_measurement_info(
-                device_measurement, conversion
-            )
-            hum_percent = convert_from_x_to_y_unit(unit, 'percent', last_measurement_hum[1])
+            if device_measurement is not None and getattr(device_measurement, 'conversion_id', None) is not None:
+                conversion = db_retrieve_table_daemon(
+                    Conversion, unique_id=device_measurement.conversion_id
+                )
+                channel, unit, measurement = return_measurement_info(
+                    device_measurement, conversion
+                )
+                hum_percent = convert_from_x_to_y_unit(unit, 'percent', last_measurement_hum[1])
+            else:
+                self.logger.debug("Humidity measurement device_measurement is None or missing conversion_id, skipping humidity measurement.")
 
         # 3) 잎 온도 측정(없으면 대기 온도에서 오프셋 적용)
         if temp_c is not None and hum_percent is not None:
@@ -263,7 +269,7 @@ class CustomModule(AbstractFunction):
                 )
 
                 # device_measurement가 None인지, 혹은 conversion_id가 None인지도 확인
-                if device_measurement is not None and device_measurement.conversion_id is not None:
+                if device_measurement is not None and getattr(device_measurement, 'conversion_id', None) is not None:
                     conversion = db_retrieve_table_daemon(
                         Conversion, unique_id=device_measurement.conversion_id
                     )

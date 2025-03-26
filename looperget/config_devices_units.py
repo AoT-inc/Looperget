@@ -233,10 +233,14 @@ MEASUREMENTS = {
         'name': lazy_gettext('Reactive Power'),
         'meas': 'power_reactive',
         'units': ['var']},
+    'precipitation': {
+        'name': lazy_gettext('강수'),
+        'meas': 'precipitation',
+        'units': ['mm', 'percent', 'none']},  
     'pressure': {
         'name': lazy_gettext('Pressure'),
         'meas': 'pressure',
-        'units': ['cm_water', 'psi', 'hPa', 'Pa', 'kPa', 'bar']},
+        'units': ['cm_water', 'psi', 'hPa', 'Pa', 'kPa', 'bar', 'kgf_cm2']},
     'pulse_width': {
         'name': lazy_gettext('Pulse Width'),
         'meas': 'pulse_width',
@@ -285,6 +289,10 @@ MEASUREMENTS = {
         'name': lazy_gettext('Specific Enthalpy'),
         'meas': 'specific_enthalpy',
         'units': ['kJ_kg']},
+    'snowfall': {
+        'name': lazy_gettext('신적설'),
+        'meas': 'snowfall',
+        'units': ['cm']},
     'specific_gravity': {
         'name': lazy_gettext('Specific Gravity'),
         'meas': 'specific_gravity',
@@ -297,6 +305,10 @@ MEASUREMENTS = {
         'name': lazy_gettext('Speed'),
         'meas': 'speed',
         'units': ['m_s', 'mph', 'kn']},
+    'sky_condition': {
+        'name': lazy_gettext('하늘상태'),
+        'meas': 'sky_condition',
+        'units': ['none']},    
     'temperature': {
         'name': lazy_gettext('Temperature'),
         'meas': 'temperature',
@@ -328,7 +340,12 @@ MEASUREMENTS = {
     'radiation': {
         'name': lazy_gettext('Solar Radiation'),
         'meas': 'radiation',
-        'units': ['W/m²', 'J/cm²', 'µmol·m⁻²·s⁻¹']}
+        'units': ['W/m²', 'J/cm²', 'µmol·m⁻²·s⁻¹']},
+    'visibility': {
+        'name': lazy_gettext('Visibility'),
+        'meas': 'visibility',
+        'units': ['km']
+    }
 }
 
 # Measurement units
@@ -369,6 +386,9 @@ UNITS = {
     'cm_water': {
         'name': lazy_gettext('Centimeters of water'),
         'unit': 'cm_water'},
+    'code': {
+        'name': lazy_gettext('Code'),
+        'unit': 'none'},
     'cpm': {
         'name': lazy_gettext('Counts per minute'),
         'unit': 'cpm'},
@@ -429,6 +449,9 @@ UNITS = {
     'kJ_kg': {
         'name': lazy_gettext('Kilojoule per kilogram'),
         'unit': 'kJ/kg'},
+    'km': {
+        'name': lazy_gettext('Kilometer'),
+        'unit': 'km'},
     'kn': {
         'name': lazy_gettext('Knot'),
         'unit': 'knot'},
@@ -604,6 +627,8 @@ UNIT_CONVERSIONS = [
     ('mm', 'm', 'x/1000'),
     ('cm', 'mm', 'x*10'),
     ('cm', 'm', 'x/100'),
+    ('km', 'm', 'x*1000'),
+    ('m', 'km', 'x/1000'),
 
     # Disk size
     ('kB', 'MB', 'x/1000'),
@@ -649,6 +674,8 @@ UNIT_CONVERSIONS = [
     ('psi', 'cm_water', 'x*70.306957964239'),
     ('psi', 'kPa', 'x*6.8947572932'),
     ('kPa', 'psi', 'x/6.8947572932'),
+    ('hPa', 'kgf_cm2', 'x/980.665'),
+    ('kgf_cm2', 'hPa', 'x*980.665'),
 
     # Rate - Volume
     ('l_s', 'l_min', 'x*60'),

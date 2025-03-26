@@ -11,7 +11,7 @@
   }
 
   .hide:hover {
-    color: #4E9258;
+    color: #141414;
     background-color: inherit;
   }
 </style>
@@ -23,28 +23,28 @@
 
     <div style="padding-bottom: 1.5em">
       <div style="padding-bottom: 0.5em; font-size: 1.3em">
-        {{_('Looperget Version')}}: <span style="color: #4E9258; font-weight: bold;">{{looperget_version}}</span>
-        <br>{{_('Python Version')}}: <span style="color: #4E9258; font-weight: bold;">{{python_version}}</span>
+        {{_('Looperget Version')}}: <span style="color: #141414; font-weight: bold;">{{looperget_version}}</span>
+        <br>{{_('Python Version')}}: <span style="color: #141414; font-weight: bold;">{{python_version}}</span>
         <br>{{_('Database Version')}}:&nbsp;
-        {%- if database_version == correct_database_version -%}<span style="color: #4E9258; font-weight: bold;">{{database_version}}</span>
+        {%- if database_version == correct_database_version -%}<span style="color: #141414; font-weight: bold;">{{database_version}}</span>
             {%- else -%}<span style="color: #F70D1A; font-weight: bold;">{{database_version}}</span> (Incorrect Version. Should be {{correct_database_version}}) <a href="https://aot-inc.github.io/Looperget/Troubleshooting/#incorrect-database-version"><span style="font-size: 16px" class="fas fa-question-circle"></span></a>
             {%- endif -%}
         <br>{{_('Database URL')}}: <span class="hide" style="font-weight: bold;">{{database_url}}</span>
         <br>{{_('Daemon Status')}}:&nbsp
-        {%- if daemon_status == "alive" %}<span style="color: #4E9258; font-weight: bold;">{{_('Running')}}</span>
+        {%- if daemon_status == "alive" %}<span style="color: #141414; font-weight: bold;">{{_('Running')}}</span>
         {%- else %}<span style="color: #F70D1A; font-weight: bold;">{{_('Not Running')}}</span> <a href="https://aot-inc.github.io/Looperget/Troubleshooting/#daemon-not-running"><span style="font-size: 16px" class="fas fa-question-circle"></span></a>
         {% endif %}
         {% if daemon_up %}
-          <br>{{_('Daemon RAM Usage')}}: <span style="color: #4E9258; font-weight: bold;">{{ram_use_daemon}} MB</span>
+          <br>{{_('Daemon RAM Usage')}}: <span style="color: #141414; font-weight: bold;">{{ram_use_daemon}} MB</span>
           <br>{{_('Daemon Virtualenv')}}:&nbsp
-            {%- if virtualenv_daemon -%}<span style="color: #4E9258; font-weight: bold;">{{_('예')}}</span>
+            {%- if virtualenv_daemon -%}<span style="color: #141414; font-weight: bold;">{{_('예')}}</span>
             {%- else -%}<span style="color: #F70D1A; font-weight: bold;">{{_('아니오')}}</span>
             {%- endif -%}
         {% endif %}
-        <br>{{_('Frontend Process ID')}}: <span style="color: #4E9258; font-weight: bold;">{{frontend_pid}}</span>
-        <br>{{_('Frontend RAM Usage')}}: <span style="color: #4E9258; font-weight: bold;">{{ram_use_flask}} MB</span>
+        <br>{{_('Frontend Process ID')}}: <span style="color: #141414; font-weight: bold;">{{frontend_pid}}</span>
+        <br>{{_('Frontend RAM Usage')}}: <span style="color: #141414; font-weight: bold;">{{ram_use_flask}} MB</span>
         <br>{{_('Frontend Virtualenv')}}:&nbsp
-        {%- if virtualenv_flask -%}<span style="color: #4E9258; font-weight: bold;">{{_('예')}}</span>
+        {%- if virtualenv_flask -%}<span style="color: #141414; font-weight: bold;">{{_('예')}}</span>
         {%- else -%}<span style="color: #F70D1A; font-weight: bold;">{{_('아니오')}}</span>
         {%- endif -%}
       </div>

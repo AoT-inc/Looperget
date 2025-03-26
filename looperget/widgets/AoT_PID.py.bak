@@ -245,14 +245,13 @@ WIDGET_INFORMATION = {
         display: inline-block;
         width: 3.2em;
         height: 2em;
-        margin-top: 0.9em;      /* 타이머 위젯과 동일하게 */
-        margin-right: 0.5em;    /* 타이머 위젯과 동일하게 */
+        margin: 0.0em;
+        transform: translateY(-0.1em);
         vertical-align: middle;
-        /* transform 제거: 창 크기에 따라 비율이 깨지지 않도록 */
       }
       .toggle-switch-slim input {
         opacity: 0;
-        width: 0;
+        width: 0; 
         height: 0;
       }
       .slider-slim {
@@ -260,22 +259,20 @@ WIDGET_INFORMATION = {
         cursor: pointer;
         top: 0; left: 0; right: 0; bottom: 0;
         border-radius: 2em;
-        background-color: #929292;
+        background-color: #929292; /* OFF=빨강 */
         transition: 0.3s;
       }
       .slider-slim:before {
         position: absolute;
         content: "";
-        height: 1.6em;
-        width: 1.6em;
-        left: 0.2em;
-        bottom: 0.2em;
+        height: 1.6em; width: 1.6em;
+        left: 0.2em; bottom: 0.2em;
         background-color: #fff;
         border-radius: 100%;
         transition: 0.3s;
       }
       .toggle-switch-slim input:checked + .slider-slim {
-        background-color: #F4D624;
+        background-color: #F4D624; /* ON=초록 */
       }
       .toggle-switch-slim input:checked + .slider-slim:before {
         transform: translateX(1.2em);
@@ -384,6 +381,7 @@ WIDGET_INFORMATION = {
             onclick="togglePID_AoT('{{each_widget.unique_id}}')">
       <span class="slider-slim"></span>
     </label>
+
   </div>
 
   <!-- 2행: 현재값/목표값/버튼, UI 수정 유지 -->
@@ -468,16 +466,10 @@ function togglePID_AoT(wid) {
   let toggleInput = document.getElementById("toggle_input_" + wid);
   let actBtn      = document.getElementById("hidden_pid_activate_" + wid);
   let deactBtn    = document.getElementById("hidden_pid_deactivate_" + wid);
-  
+
   if(toggleInput.checked) {
-    {% if not misc.hide_alert_info %}
-    toastr.info('Command sent to Activate PID');
-    {% endif %}
     if(actBtn) actBtn.click();
   } else {
-    {% if not misc.hide_alert_info %}
-    toastr.info('Command sent to Deactivate PID');
-    {% endif %}
     if(deactBtn) deactBtn.click();
   }
 }
@@ -487,38 +479,29 @@ function setSetpointAoT(wid) {
   let sp_id   = btn_set.name.split('/')[0]; 
   let sp_val  = document.getElementById("pid_setpoint_" + sp_id).value;
   if(sp_val) {
-    {% if not misc.hide_alert_info %}
-    toastr.info('Command sent to set PID setpoint');
-    {% endif %}
     let cmd = btn_set.name + sp_val;
     sendPIDCommandAoT(cmd);
   }
 }
 
 function sendPIDCommandAoT(cmd) {
+  if(!cmd || cmd.startsWith("None/")){
+    toastr.error("No PID selected");
+    return;
+  }
   $.ajax({
-    type: 'GET',
-    url: '/pid_mod_unique_id/' + cmd,
-    {% if not misc.hide_alert_success %}
-    success: function(res) {
+    type:'GET',
+    url:'/pid_mod_unique_id/' + cmd,
+    success:function(res){
       if(typeof res === "object") {
-        {% if not misc.hide_alert_warning %}
         toastr.error(JSON.stringify(res));
-        {% endif %}
       } else {
         toastr.success(res);
       }
     },
-    {% else %}
-    success: function(res){},
-    {% endif %}
-    {% if not misc.hide_alert_warning %}
-    error: function(err) {
+    error:function(err){
       toastr.error("Error: " + JSON.stringify(err));
     }
-    {% else %}
-    error: function(err){},
-    {% endif %}
   });
 }
 
@@ -615,6 +598,27 @@ function getPidDataAoT(wid, pidid, max_age, decs) {
     },
     error:function(err){
       printPidErrorAoT(wid);
+      toastr.error("Error: " + JSON.stringify(err));
+    }
+  });
+}
+
+function sendPIDCommandAoT(cmd) {
+  if(!cmd || cmd.startsWith("None/")){
+    toastr.error("No PID selected");
+    return;
+  }
+  $.ajax({
+    type:'GET',
+    url:'/pid_mod_unique_id/' + cmd,
+    success:function(res){
+      if(typeof res === "object") {
+        toastr.error(JSON.stringify(res));
+      } else {
+        toastr.success(res);
+      }
+    },
+    error:function(err){
       toastr.error("Error: " + JSON.stringify(err));
     }
   });

@@ -78,7 +78,7 @@ class SettingsEmail(FlaskForm):
             validators.Optional()
         ]
     )
-    save = SubmitField(TRANSLATIONS['save']['title'])
+    save = SubmitField('저장')
 
 
 
@@ -165,7 +165,7 @@ class SettingsGeneral(FlaskForm):
         "{} ({}): {}".format(lazy_gettext('Sample Rate'), lazy_gettext('Seconds'), lazy_gettext('Widget')),
         widget=NumberInput(step='any'))
 
-    settings_general_save = SubmitField(TRANSLATIONS['save']['title'])
+    settings_general_save = SubmitField('저장')
 
 
 #
@@ -179,7 +179,7 @@ class Controller(FlaskForm):
 
 class ControllerDel(FlaskForm):
     controller_id = StringField(widget=widgets.HiddenInput())
-    delete_controller = SubmitField(TRANSLATIONS['delete']['title'])
+    delete_controller = SubmitField('삭제')
 
 
 #
@@ -193,7 +193,7 @@ class Action(FlaskForm):
 
 class ActionDel(FlaskForm):
     action_id = StringField(widget=widgets.HiddenInput())
-    delete_action = SubmitField(TRANSLATIONS['delete']['title'])
+    delete_action = SubmitField('삭제')
 
 
 #
@@ -207,7 +207,7 @@ class Input(FlaskForm):
 
 class InputDel(FlaskForm):
     input_id = StringField(widget=widgets.HiddenInput())
-    delete_input = SubmitField(TRANSLATIONS['delete']['title'])
+    delete_input = SubmitField('삭제')
 
 
 #
@@ -221,7 +221,7 @@ class Output(FlaskForm):
 
 class OutputDel(FlaskForm):
     output_id = StringField(widget=widgets.HiddenInput())
-    delete_output = SubmitField(TRANSLATIONS['delete']['title'])
+    delete_output = SubmitField('삭제')
 
 
 #
@@ -235,7 +235,7 @@ class Widget(FlaskForm):
 
 class WidgetDel(FlaskForm):
     widget_id = StringField(widget=widgets.HiddenInput())
-    delete_widget = SubmitField(TRANSLATIONS['delete']['title'])
+    delete_widget = SubmitField('삭제')
 
 
 #
@@ -256,8 +256,8 @@ class MeasurementMod(FlaskForm):
     id = StringField(lazy_gettext('측정값 ID'))
     name = StringField(lazy_gettext('측정값 이름'))
     units = SelectMultipleField(lazy_gettext('측정값 단위'))
-    save_measurement = SubmitField(TRANSLATIONS['save']['title'])
-    delete_measurement = SubmitField(TRANSLATIONS['delete']['title'])
+    save_measurement = SubmitField('저장')
+    delete_measurement = SubmitField('삭제')
 
 
 class UnitAdd(FlaskForm):
@@ -274,8 +274,8 @@ class UnitMod(FlaskForm):
     id = StringField(lazy_gettext('단위 ID'))
     name = StringField(lazy_gettext('단위 이름'))
     unit = StringField(lazy_gettext('단위 기호'))
-    save_unit = SubmitField(TRANSLATIONS['save']['title'])
-    delete_unit = SubmitField(TRANSLATIONS['delete']['title'])
+    save_unit = SubmitField('저장')
+    delete_unit = SubmitField('삭제')
 
 
 class ConversionAdd(FlaskForm):
@@ -293,8 +293,8 @@ class ConversionMod(FlaskForm):
     convert_unit_from = StringField(lazy_gettext('변환 전 단위'))
     convert_unit_to = StringField(lazy_gettext('변환 후 단위'))
     equation = StringField(lazy_gettext('변환식'))
-    save_conversion = SubmitField(TRANSLATIONS['save']['title'])
-    delete_conversion = SubmitField(TRANSLATIONS['delete']['title'])
+    save_conversion = SubmitField('저장')
+    delete_conversion = SubmitField('삭제')
 
 
 #
@@ -314,8 +314,8 @@ class UserRoles(FlaskForm):
     reset_password = BooleanField(lazy_gettext('비밀번호 초기화'))
     role_id = StringField('역할 ID', widget=widgets.HiddenInput())
     user_role_add = SubmitField(lazy_gettext('역할 추가'))
-    user_role_save = SubmitField(TRANSLATIONS['save']['title'])
-    user_role_delete = SubmitField(TRANSLATIONS['delete']['title'])
+    user_role_save = SubmitField('저장')
+    user_role_delete = SubmitField('삭제')
 
 
 class User(FlaskForm):
@@ -361,7 +361,7 @@ class UserAdd(FlaskForm):
 class UserPreferences(FlaskForm):
     theme = StringField(lazy_gettext('테마'))
     language = StringField(lazy_gettext('언어'))
-    user_preferences_save = SubmitField(TRANSLATIONS['save']['title'])
+    user_preferences_save = SubmitField('저장')
 
 
 class UserMod(FlaskForm):
@@ -401,8 +401,8 @@ class UserMod(FlaskForm):
     )
     theme = StringField(lazy_gettext('테마'))
     user_generate_api_key = SubmitField("API 키 생성")
-    user_save = SubmitField(TRANSLATIONS['save']['title'])
-    user_delete = SubmitField(TRANSLATIONS['delete']['title'])
+    user_save = SubmitField('저장')
+    user_delete = SubmitField('삭제')
 
 
 #

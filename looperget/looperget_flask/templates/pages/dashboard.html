@@ -16,7 +16,6 @@
 
   <link rel="stylesheet" href="/static/css/gridstack.css" />
   <link rel="stylesheet" href="/static/css/gridstack-custom.css" />
-  <link rel="stylesheet" href="/static/css/looperget.css" />
   <script src="/static/js/gridstack-all.js"></script>
 
   {% for widget_type, file_head in list_html_files_head.items() %}
@@ -46,7 +45,35 @@
   {% include 'flash_messages.html' %}
   </div>
 
-  <div class="container-fluid">
+<div class="container-fluid" style="padding-left: 0.5em; padding-right: 0.5em;">
+  <div class="container-fluid mb-3">
+    <div class="d-flex align-items-center">
+        <!-- + button fixed size -->
+        <a href="/dashboard-add" class="btn btn-aot-dash-plus text-center" style="width: 40px; height: 40px; margin-right: 5px; margin-left: 0;">
+            <span class="d-none d-md-inline">+</span>
+            <span class="d-md-none">+</span>
+        </a>
+        {% set dash_count = dashboards[0:6]|length %}
+        {% for each_dash in dashboards[0:6] %}
+          <a href="/dashboard/{{ each_dash.unique_id }}" class="btn btn-aot-dash text-center{% if each_dash.unique_id == dashboard_id %} active{% endif %}" style="flex: 1; margin-right: 5px;">
+            <span class="d-none d-md-inline">{{ loop.index }} {{ each_dash.name }}</span>
+            <span class="d-md-none">
+              {% if dash_count > 2 %}
+                {{ loop.index }}
+              {% else %}
+                {{ loop.index }} {{ each_dash.name }}
+              {% endif %}
+            </span>
+          </a>
+        {% endfor %}
+        {% for each_dash in dashboards if each_dash.unique_id == dashboard_id %}
+        <!-- Settings button fixed size -->
+        <a href="#" data-toggle="modal" class="btn btn-aot-dash-plus text-center" data-target="#modal_config_{{ each_dash.unique_id }}" style="width: 40px; height: 40px; margin-right: 0;">
+            <i class="fa fa-cog"></i>
+        </a>
+        {% endfor %}
+    </div>
+  </div>
 
     <div class="grid-stack">
     {% for each_widget in table_widget.query.filter(table_widget.dashboard_id == dashboard_id).all() -%}
@@ -114,7 +141,7 @@
 
       <div class="form-inline btn-group" style="padding: 1em 0 1em 0">
         <div class="form-group">
-          {{form_base.widget_add(class_='btn btn-primary')}}
+          {{ form_base.widget_add(class_='btn btn-primary', value=_('위젯 추가')) }}
         </div>
       </div>
 

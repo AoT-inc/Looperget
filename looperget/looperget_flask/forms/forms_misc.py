@@ -23,20 +23,18 @@ from looperget.config_translations import TRANSLATIONS
 #
 
 class EnergyUsageAdd(FlaskForm):
-    energy_usage_select = SelectField(
-        '{}: {}'.format(lazy_gettext('Measurement'), lazy_gettext('Amp')))
-    energy_usage_add = SubmitField(TRANSLATIONS['add']['title'])
+    energy_usage_select = SelectField('측정값: Amp')
+    energy_usage_add = SubmitField('추가')
 
 
 class EnergyUsageMod(FlaskForm):
-    energy_usage_id = StringField('Energy Usage ID', widget=widgets.HiddenInput())
-    name = StringField(TRANSLATIONS['name']['title'])
-    selection_device_measure_ids = StringField(
-        '{}: {}'.format(lazy_gettext('Measurement'), lazy_gettext('Amp')))
-    energy_usage_date_range = StringField(lazy_gettext('Time Range MM/DD/YYYY HH:MM'))
-    energy_usage_range_calc = SubmitField(TRANSLATIONS['calculate']['title'])
-    energy_usage_mod = SubmitField(TRANSLATIONS['save']['title'])
-    energy_usage_delete = SubmitField(TRANSLATIONS['delete']['title'])
+    energy_usage_id = StringField('전력량 ID', widget=widgets.HiddenInput())
+    name = StringField('이름')
+    selection_device_measure_ids = StringField('측정값: Amp')
+    energy_usage_date_range = StringField('기간 (MM/DD/YYYY HH:MM)')
+    energy_usage_range_calc = SubmitField('계산')
+    energy_usage_mod = SubmitField('저장')
+    energy_usage_delete = SubmitField('삭제')
 
 
 #
@@ -44,9 +42,9 @@ class EnergyUsageMod(FlaskForm):
 #
 
 class DaemonControl(FlaskForm):
-    stop = SubmitField(lazy_gettext('Stop Daemon'))
-    start = SubmitField(lazy_gettext('Start Daemon'))
-    restart = SubmitField(lazy_gettext('Restart Daemon'))
+    stop = SubmitField('데몬 중지')
+    start = SubmitField('데몬 시작')
+    restart = SubmitField('데몬 재시작')
 
 
 #
@@ -54,22 +52,22 @@ class DaemonControl(FlaskForm):
 #
 
 class ExportMeasurements(FlaskForm):
-    measurement = StringField(lazy_gettext('Measurement to Export'))
-    date_range = StringField(lazy_gettext('Time Range MM/DD/YYYY HH:MM'))
-    export_data_csv = SubmitField(lazy_gettext('Export Data as CSV'))
+    measurement = StringField('내보낼 측정값')
+    date_range = StringField('기간 (MM/DD/YYYY HH:MM)')
+    export_data_csv = SubmitField('CSV로 데이터 내보내기')
 
 
 class ExportSettings(FlaskForm):
-    export_settings_zip = SubmitField(lazy_gettext('Export Settings'))
+    export_settings_zip = SubmitField('설정 내보내기')
 
 
 class ImportSettings(FlaskForm):
     settings_import_file = FileField()
-    settings_import_upload = SubmitField(lazy_gettext('Import Settings'))
+    settings_import_upload = SubmitField('설정 가져오기')
 
 
 class ExportInfluxdb(FlaskForm):
-    export_influxdb_zip = SubmitField(lazy_gettext('Export Influxdb'))
+    export_influxdb_zip = SubmitField('Influxdb 내보내기')
 
 
 #
@@ -78,19 +76,19 @@ class ExportInfluxdb(FlaskForm):
 
 class LogView(FlaskForm):
     lines = IntegerField(
-        'Number of Lines',
-        render_kw={'placeholder': lazy_gettext('Lines')},
+        '표시할 로그 줄 수',
+        render_kw={'placeholder': '줄 수'},
         validators=[validators.NumberRange(
             min=1,
-            message=lazy_gettext('Number of lines should be greater than 0')
+            message='표시할 줄 수는 0보다 커야 합니다.'
         )],
         widget=NumberInput()
     )
     search = StringField(
-        lazy_gettext('Search'),
-        render_kw={'placeholder': lazy_gettext('Search')},)
-    log = StringField(lazy_gettext('Log'))
-    log_view = SubmitField(lazy_gettext('View Log'))
+        '검색',
+        render_kw={'placeholder': '검색'},)
+    log = StringField('로그')
+    log_view = SubmitField('로그 보기')
 
 
 #
@@ -98,9 +96,8 @@ class LogView(FlaskForm):
 #
 
 class Upgrade(FlaskForm):
-    upgrade = SubmitField(lazy_gettext('Upgrade Looperget'))
-    upgrade_next_major_version = SubmitField(lazy_gettext(
-        'Upgrade Looperget to Next Major Version'))
+    upgrade = SubmitField('Looperget 업그레이드')
+    upgrade_next_major_version = SubmitField('Looperget 다음 주요 버전으로 업그레이드')
 
 
 #
@@ -108,9 +105,9 @@ class Upgrade(FlaskForm):
 #
 
 class Backup(FlaskForm):
-    download = SubmitField(lazy_gettext('Download Backup'))
-    backup = SubmitField(lazy_gettext('Create Backup'))
-    restore = SubmitField(lazy_gettext('Restore Backup'))
-    delete = SubmitField(lazy_gettext('Delete Backup'))
+    download = SubmitField('백업 다운로드')
+    backup = SubmitField('백업 생성')
+    restore = SubmitField('백업 복원')
+    delete = SubmitField('백업 삭제')
     full_path = HiddenField()
     selected_dir = HiddenField()

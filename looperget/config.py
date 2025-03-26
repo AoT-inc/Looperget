@@ -13,7 +13,8 @@ from flask_babel import lazy_gettext as lg
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 from config_translations import TRANSLATIONS as T
 
-LOOPERGET_VERSION = '8.16.0'
+LOOPERGET_VERSION = '0.1.0'
+MYCODO_VERSION = '8.16.0'
 ALEMBIC_VERSION = '435f35958689'
 
 # FORCE UPGRADE MASTER
@@ -41,6 +42,7 @@ DATABASE_PATH = os.path.join(INSTALL_DIRECTORY, 'databases')
 ALEMBIC_UPGRADE_POST = os.path.join(ALEMBIC_PATH, 'alembic_post_upgrade_versions')
 SQL_DATABASE_LOOPERGET = os.path.join(DATABASE_PATH, DATABASE_NAME)
 LOOPERGET_DB_PATH = f'sqlite:///{SQL_DATABASE_LOOPERGET}'
+KMA_PATH = os.path.join(DATABASE_PATH, 'kma')
 
 try:
     import config_override
@@ -67,6 +69,7 @@ PATH_TEMPLATE_LAYOUT_DEFAULT = os.path.join(PATH_TEMPLATE, 'layout_default.html'
 PATH_TEMPLATE_USER = os.path.join(PATH_TEMPLATE, 'user_templates')
 PATH_STATIC = os.path.join(INSTALL_DIRECTORY, 'looperget/looperget_flask/static')
 PATH_CSS = os.path.join(INSTALL_DIRECTORY, 'looperget/looperget_flask/static/css')
+PATH_JSON = os.path.join(INSTALL_DIRECTORY, 'looperget/looperget_flask/static/json')
 PATH_CSS_USER = os.path.join(PATH_CSS, 'user_css')
 PATH_JS_USER = os.path.join(INSTALL_DIRECTORY, 'looperget/looperget_flask/static/js/user_js')
 PATH_FONTS_USER = os.path.join(INSTALL_DIRECTORY, 'looperget/looperget_flask/static/fonts/user_fonts')

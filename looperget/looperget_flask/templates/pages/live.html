@@ -86,7 +86,7 @@
 
     {%- if not activated_inputs and not activated_functions -%}
     <div>
-      {{_('활성화된 입력 또는 기능이 없습니다')}}. <a href="/input">여기를 클릭</a>하여 입력 페이지로 이동하세요. <a href="https://aot-inc.github.io/Looperget">매뉴얼</a>을 읽고 시스템 및 설정 옵션을 익혀보세요.
+      {{_('활성화된 입력 또는 함수가 없습니다')}}. <a href="/input">여기를 클릭</a>하여 입력 페이지로 이동하세요. <a href="https://aot-inc.github.io/Looperget">매뉴얼</a>을 읽고 시스템 및 설정 옵션을 익혀보세요.
     </div>
     {%- endif -%}
 
@@ -96,7 +96,7 @@
 
       <div class="row">
         <div class="col-12 col-sm-6 text-left">
-          {{each_input.name}} (Input {{each_input.unique_id[:8]}})
+          {{each_input.name}} (입력 {{each_input.unique_id[:8]}})
       {%- if each_input.device != 'EDGE' -%}
             <div>
                {{_('입력 (%(type)s), %(sec)s 초 간격', type=each_input.device, sec=each_input.period)}}
@@ -149,12 +149,12 @@
 
       <div class="row">
         <div class="col-12 col-sm-6 text-left">
-          {{each_function.name}} ({{_('기능')}} {{each_function.unique_id[:8]}})
+          {{each_function.name}} ({{_('함수')}} {{each_function.unique_id[:8]}})
           <div>
         {% if function_period %}
-            {{_('기능 (%(type)s), %(sec)s 초 간격', type=each_function.device, sec=function_period)}}
+            {{_('함수 (%(type)s), %(sec)s 초 간격', type=each_function.device, sec=function_period)}}
         {% else %}
-            {{_('기능 (%(type)s)', type=each_function.function_type)}}
+            {{_('함수 (%(type)s)', type=each_function.function_type)}}
         {% endif %}
           </div>
         </div>

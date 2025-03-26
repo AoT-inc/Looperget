@@ -27,6 +27,9 @@ fi
 
 # https://github.com/pypa/setuptools/issues/3278 및 https://github.com/aot-inc/Looperget/issues/1149 참고
 export SETUPTOOLS_USE_DISTUTILS=stdlib
+export LANG=ko_KR.UTF-8
+export LANGUAGE=ko_KR.UTF-8
+export LC_ALL=ko_KR.UTF-8
 
 if [ "$EUID" -ne 0 ]; then
     printf "에러: 스크립트는 루트 권한으로 실행되어야 합니다. \"sudo /bin/bash %s/install/setup.sh\" 명령으로 다시 실행하십시오.\n" "${INSTALL_DIRECTORY}"
@@ -197,6 +200,47 @@ ${INSTALL_CMD} update-packages 2>&1 | tee -a "${LOG_LOCATION}"
 ${INSTALL_CMD} setup-virtualenv 2>&1 | tee -a "${LOG_LOCATION}"
 ${INSTALL_CMD} update-pip3 2>&1 | tee -a "${LOG_LOCATION}"
 ${INSTALL_CMD} update-pip3-packages 2>&1 | tee -a "${LOG_LOCATION}"
+
+printf "### zigbee2mqtt 시스템 서비스 설치 시작...\n" 2>&1 | tee -a "${LOG_LOCATION}"
+
+# Create the zigbee2mqtt service file and check for errors
+cat << 'EOF' > /etc/systemd/system/zigbee2mqtt.service || { 
+    printf "Error: zigbee2mqtt 서비스 파일 생성 실패\n" 2>&1 | tee -a "${LOG_LOCATION}" 
+    exit 1
+}
+[Unit]
+Description=zigbee2mqtt
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/npm start
+WorkingDirectory=/opt/zigbee2mqtt
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=aot
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+if [ $? -ne 0 ]; then
+    printf "Error: zigbee2mqtt 서비스 파일 작성에 실패하였습니다.\n" 2>&1 | tee -a "${LOG_LOCATION}"
+    exit 1
+fi
+
+systemctl daemon-reload 2>&1 | tee -a "${LOG_LOCATION}" || { 
+    printf "Error: systemctl daemon-reload 실패\n" 2>&1 | tee -a "${LOG_LOCATION}"
+    exit 1
+}
+
+systemctl enable zigbee2mqtt 2>&1 | tee -a "${LOG_LOCATION}" || { 
+    printf "Error: zigbee2mqtt 서비스 활성화 실패\n" 2>&1 | tee -a "${LOG_LOCATION}"
+    exit 1
+}
+
+printf "### zigbee2mqtt 시스템 서비스 설치 완료.\n" 2>&1 | tee -a "${LOG_LOCATION}"
+
 ${INSTALL_CMD} install-wiringpi 2>&1 | tee -a "${LOG_LOCATION}"
 if [[ ${INFLUX_B} == '0)' ]]; then
     ${INSTALL_CMD} update-influxdb-2 2>&1 | tee -a "${LOG_LOCATION}"
