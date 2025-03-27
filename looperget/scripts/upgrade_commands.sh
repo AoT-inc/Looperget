@@ -723,6 +723,7 @@ case "${1:-''}" in
         mkdir -p "${LOOPERGET_PATH}"/install
         mkdir -p "${LOOPERGET_PATH}"/looperget
         mkdir -p "${LOOPERGET_PATH}"/databases
+        mkdir -p "${LOOPERGET_PATH}"/databases/kma
         mkdir -p "${LOOPERGET_PATH}"/note_attachments
         mkdir -p "${LOOPERGET_PATH}"/looperget/scripts
         mkdir -p "${LOOPERGET_PATH}"/looperget/looperget_flask/static/js/user_js

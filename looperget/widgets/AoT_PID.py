@@ -153,7 +153,7 @@ WIDGET_INFORMATION = {
     'widget_library': 'controller',
     'no_class': True,
 
-    'message': 'PID 컨트롤',
+    'message': 'Displays and allows control of a PID Controller.',
 
     'widget_width': 24,
     'widget_height': 7,
@@ -439,11 +439,15 @@ function printPidErrorAoT(wid) {
 
 function getPidDataAoT(wid, pidid, max_age, decs) {
   if(!pidid || pidid==='None'){
+    printPidErrorAoT(wid);
+    toastr.error("No PID selected");
     return;
   }
   $.ajax("/last_pid/"+pidid+"/"+max_age, {
     success:function(data, txtStatus, jqXHR){
       if(jqXHR.status===204) {
+        printPidErrorAoT(wid);
+        toastr.error("No PID found or no measurement");
         return;
       }
       if(data.actual){
@@ -494,7 +498,8 @@ function getPidDataAoT(wid, pidid, max_age, decs) {
       }
     },
     error:function(err){
-      console.error("Error:", err);
+      printPidErrorAoT(wid);
+      toastr.error("Error: " + JSON.stringify(err));
     }
   });
 }
