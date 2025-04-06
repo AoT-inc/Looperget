@@ -697,25 +697,22 @@ main.container > p {
   right: 35px !important;
   z-index: 999 !important;
 }
-
 .widget-graph-controls .fa-bars {
   transform: translateY(0); /* 기존 이동 제거 */
 }
 .modal {
   margin-top: calc(50px + 1em) !important;
-
+  max-height: calc(100vh - 10rem);
 }
 /* 모달 내부 폼의 col-auto 요소 간격 조정 */
 .modal .col-auto {
   margin-top: 5px;
   margin-bottom: 10px;
 }
-
 .modal .control-label {
   margin-bottom: 0 !important;
-  margin-top: 5px;
+  margin-top: 3px;
 }
-
 
 /* aot 위젯 최상위 컨테이너 */
 .frame-aot {
@@ -1061,12 +1058,16 @@ textarea::-moz-focus-inner {
 .row-aot-weather-1 {
   display: flex;
   flex-direction: row;
-  gap: 16px; 
+  justify-content: center;
   padding-left: 16px;
   padding-right: 16px;
-  padding-top: 16px;
+  padding-top: 42px;
   width: 100%;
-  height: 100px;
+  gap: 16px;
+  min-width: 300px;
+  max-width: 420px;
+  height: 120px;
+  margin: 0 auto;
 }
 
 /* col-wether-graphic: 아이콘 및 풍향 정보를 세로로 배치 */
@@ -1074,26 +1075,29 @@ textarea::-moz-focus-inner {
   display: flex;             /* flex 컨테이너 */
   align-items: center;       /* 수직 중앙 정렬 */
   justify-content: center;   /* 수평 중앙 정렬 */
-  width: 40% !important;   /* 아이콘보다 살짝 여유 있는 크기 */
+  width: 38% !important;   /* 아이콘보다 살짝 여유 있는 크기 */
   height: auto !important;  /* 아이콘 크기에 맞춤 */
 }
 .icon-aot-weather {
   align-self: center;
-  width: auto;
-  height: 100%;
+  width: 120% !important;
+  height: 120% !important;
+  margin: 0;
+  padding: 0;
 }
 .col-wether-tmp {
+  margin-top: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 30% !important;
+  width: 32% !important;
   height: auto !important;
 }
 .col-wether-tmntmx {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left !important;
   justify-content: center;
   width: 30% !important;
   height: auto !important;
@@ -1103,31 +1107,67 @@ textarea::-moz-focus-inner {
   flex: 1;
   margin: 0;
   padding: 0;
+  align-items: left !important;
 }
 .row-aot-weather-2 {
   display: flex;
-  justify-content: center !important;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-end; /* or flex-start, depending on desired vertical alignment */
+  min-width: 300px;
+  max-width: 420px;
+  margin: 10px auto;
+}
+.row-aot-weather-3 {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* or flex-start, depending on desired vertical alignment */
+  min-width: 100px;
+  max-width: 420px;
   width: 100%;
-  margin: 10px;
+  height: 54px;
+  margin: 10px auto;
 }
 .col-weather-slider {
   display: flex;
   margin-top: 0;
   margin-bottom: 10px;
+  width: 100%;
   align-items: center;
 }
 .btn-aot-slide-time {
-  display: flex;
-  align-self: center;
-  margin-top: 0px;
-  margin-bottom: auto;
+  -webkit-appearance: none; /* 브라우저 기본 스타일 제거 */
+  appearance: none;
+  width: 80%;        /* 슬라이더 전체 너비 */
+  height: 8px;        /* 트랙 높이 */
+  background: #999;   /* 트랙 배경색 */
+  border-radius: 4px; /* 트랙 둥근 모서리 */
+  outline: none;      /* 포커스 시 테두리 제거 */
+}
+
+/* WebKit 기반 브라우저용 썸 스타일 */
+.btn-aot-slide-time::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;        /* 썸 너비 */
+  height: 30px;       /* 썸 높이 */
+  background: #F4D624; /* 썸 배경색 */
+  border-radius: 50%; /* 썸을 원형으로 */
+  cursor: pointer;    /* 마우스 커서 포인터 */
+}
+
+/* Firefox용 썸 스타일 */
+.btn-aot-slide-time::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #F4D624;
+  border-radius: 50%;
+  cursor: pointer;
 }
 .day-background {
-  background-color: var(--light); /* 밝은 배경 (예: 흰색) */
-  color: #000; /* 글자색 검정 */
+  background-color: var(--light) !important; /* 밝은 배경 (예: 흰색) */
+  color: #000 !important; /* 글자색 검정 */
 }
 .night-background {
-  background-color: #2E435B; /* 어두운 배경 (예: 진한 회색) */
-  color: #fff; /* 글자색 흰색 */
+  background-color: #2E435B !important; /* 어두운 배경 (예: 진한 회색) */
+  color: #fff !important; /* 글자색 흰색 */
 }
