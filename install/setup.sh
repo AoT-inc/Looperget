@@ -69,6 +69,7 @@ clear
 LANGUAGE=$(dialog --title "Looperge+ AI Installer" \
                   --backtitle "Looperget" \
                   --menu "User Interface Language" 23 68 14 \
+                  "ko": "한국어 (Korean)" \
                   "en": "English" \
                   "de": "Deutsche (German)" \
                   "es": "Español (Spanish)" \
