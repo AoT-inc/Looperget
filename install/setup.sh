@@ -27,7 +27,7 @@ fi
 
 # Fix for below issue(s)
 # https://github.com/pypa/setuptools/issues/3278
-# https://github.com/kizniche/Looperget/issues/1149
+# https://github.com/aot-inc/Looperget/issues/1149
 export SETUPTOOLS_USE_DISTUTILS=stdlib
 
 if [ "$EUID" -ne 0 ]; then

@@ -118,6 +118,7 @@ case "${1:-''}" in
     ;;
     'compile-translations')
         printf "\n#### Compiling Translations\n"
+        sudo chmod -R +x "${LOOPERGET_PATH}/env/bin/"
         cd "${LOOPERGET_PATH}"/looperget || return
         "${LOOPERGET_PATH}"/env/bin/pybabel compile -d looperget_flask/translations
     ;;
@@ -509,7 +510,7 @@ case "${1:-''}" in
             printf "#### Attempting to create database...\n" &&
             influx -execute "CREATE DATABASE looperget_db" &&
             printf "#### Attempting to set up user...\n" &&
-            influx -database looperget_db -execute "CREATE USER looperget WITH PASSWORD 'p9Bz8qR2t4Wk6vX7y'" &&
+            influx -database looperget_db -execute "CREATE USER looperget WITH PASSWORD 'mmdu77sj3nIoiajjs'" &&
             printf "#### Influxdb database and user successfully created\n" &&
             break ||
             # Else wait 60 seconds if the influxd port is not accepting connections
@@ -533,7 +534,7 @@ case "${1:-''}" in
                        --org looperget \
                        --bucket looperget_db \
                        --username looperget \
-                       --password p9Bz8qR2t4Wk6vX7y \
+                       --password mmdu77sj3nIoiajjs \
                        --force &&
                 printf "#### Influxdb database and user successfully created\n" &&
                 break ||
@@ -689,8 +690,12 @@ case "${1:-''}" in
         printf "\n#### Restarting nginx\n"
         service nginx restart
         sleep 5
-        printf "#### Reloading loopergetflask\n"
-        service loopergetflask reload
+        printf "#### Checking loopergetflask status and starting/restarting it\n"
+        if systemctl is-active --quiet loopergetflask; then
+            systemctl reload loopergetflask
+        else
+            systemctl start loopergetflask
+        fi
     ;;
     'web-server-disable')
         printf "\n#### Disabling service for nginx web server\n"

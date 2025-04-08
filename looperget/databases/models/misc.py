@@ -89,7 +89,7 @@ class Misc(CRUDMixin, db.Model):
     measurement_db_host = db.Column(db.String(36), default=db_host)
     measurement_db_port = db.Column(db.String(36), default=db_port)
     measurement_db_user = db.Column(db.String(36), default='looperget')
-    measurement_db_password = db.Column(db.String(36), default='p9Bz8qR2t4Wk6vX7y')
+    measurement_db_password = db.Column(db.String(36), default='mmdu77sj3nIoiajjs')
     measurement_db_dbname = db.Column(db.String(36), default='looperget_db')
 
     def __repr__(self):
