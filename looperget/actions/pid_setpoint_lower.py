@@ -14,7 +14,7 @@ from looperget.utils.database import db_retrieve_table_daemon
 
 ACTION_INFORMATION = {
     'name_unique': 'setpoint_pid_lower',
-    'name': "{}: {}: {}".format(TRANSLATIONS['pid']['title'], lazy_gettext('낮추기'), lazy_gettext("설정점")),
+    'name': "{}: {}: {}".format(TRANSLATIONS['pid']['title'], lazy_gettext('Lower'), lazy_gettext("Setpoint")),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -24,10 +24,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': lazy_gettext('PID의 설정점을 낮춥니다.'),
+    'message': lazy_gettext('Lower the Setpoint of a PID.'),
 
-    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong>를 실행하면 선택한 PID 컨트롤러의 설정점을 낮춥니다. '
-             'Executing <strong>self.run_action("ACTION_ID", value={"pid_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "amount": 2})</strong>를 실행하면 지정된 ID의 PID 컨트롤러의 설정점을 낮춥니다. 시스템에 존재하는 실제 PID ID로 pid_id 값을 변경하는 것을 잊지 마십시오.',
+    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will lower the setpoint of the selected PID Controller. '
+             'Executing <strong>self.run_action("ACTION_ID", value={"pid_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "amount": 2})</strong> will lower the setpoint of the PID with the specified ID. Don\'t forget to change the pid_id value to an actual PID ID that exists in your system.',
 
     'custom_options': [
         {
@@ -37,23 +37,23 @@ ACTION_INFORMATION = {
             'options_select': [
                 'PID'
             ],
-            'name': lazy_gettext('컨트롤러'),
-            'phrase': '설정점을 낮출 PID 컨트롤러를 선택하세요'
+            'name': lazy_gettext('Controller'),
+            'phrase': 'Select the PID Controller to lower the setpoint of'
         },
         {
             'id': 'amount',
             'type': 'float',
             'default_value': 0.0,
             'required': False,
-            'name': lazy_gettext('설정점 낮추기'),
-            'phrase': 'PID 설정점을 낮추는 값을 입력하세요'
+            'name': lazy_gettext('Lower Setpoint'),
+            'phrase': 'The amount to lower the PID setpoint by'
         }
     ]
 }
 
 
 class ActionModule(AbstractFunctionAction):
-    """함수 동작: PID 설정점 낮추기."""
+    """Function Action: PID Setpoint Lower."""
     def __init__(self, action_dev, testing=False):
         super().__init__(action_dev, testing=testing, name=__name__)
 
@@ -86,13 +86,13 @@ class ActionModule(AbstractFunctionAction):
             PID, unique_id=controller_id, entry='first')
 
         if not pid:
-            msg = f"오류: ID '{controller_id}'에 해당하는 PID 컨트롤러를 찾을 수 없습니다."
+            msg = f" Error: PID Controller with ID '{controller_id}' not found."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
         new_setpoint = pid.setpoint - amount
-        dict_vars['message'] += f"PID {controller_id} ({pid.name})의 설정점을 {amount}만큼 낮춰 {new_setpoint}(으)로 변경합니다."
+        dict_vars['message'] += f" Lower Setpoint of PID {controller_id} ({pid.name}) by {amount}, to {new_setpoint}."
 
         if pid.is_activated:
             setpoint_pid = threading.Thread(

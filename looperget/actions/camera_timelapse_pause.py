@@ -22,10 +22,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
+    'message': 'Pause a camera time-lapse',
 
-    'message': '카메라 타임랩스를 일시 정지합니다.',
-    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 선택한 카메라 타임랩스가 일시 정지됩니다. '
-             '<strong>self.run_action("ACTION_ID", value={"camera_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b"})</strong>를 실행하면 지정된 ID의 카메라 타임랩스가 일시 정지됩니다. 시스템에 존재하는 실제 카메라 ID로 camera_id 값을 변경하는 것을 잊지 마십시오.',
+    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will pause the selected Camera time-lapse. '
+             'Executing <strong>self.run_action("ACTION_ID", value={"camera_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b"})</strong> will pause the Camera time-lapse with the specified ID. Don\'t forget to change the camera_id value to an actual Camera ID that exists in your system.',
 
     'custom_options': [
         {
@@ -36,7 +36,7 @@ ACTION_INFORMATION = {
                 'Camera'
             ],
             'name': lazy_gettext('Camera'),
-            'phrase': '타임랩스를 일시 정지할 카메라를 선택하세요'
+            'phrase': 'Select the Camera to pause the time-lapse'
         }
     ]
 }
@@ -70,12 +70,12 @@ class ActionModule(AbstractFunctionAction):
             Camera, unique_id=controller_id, entry='first')
 
         if not this_camera:
-            msg = f"오류: ID '{controller_id}'에 해당하는 카메라를 찾을 수 없습니다."
+            msg = f" Error: Camera with ID '{controller_id}' not found."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
-        dict_vars['message'] += f"카메라 {controller_id} ({this_camera.name})의 타임랩스를 일시 정지합니다."
+        dict_vars['message'] += f" Pause timelapse with Camera {controller_id} ({this_camera.name})."
         with session_scope(LOOPERGET_DB_PATH) as new_session:
             mod_camera = new_session.query(Camera).filter(
                 Camera.unique_id == controller_id).first()

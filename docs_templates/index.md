@@ -41,4 +41,4 @@ https://127.0.0.1
 
 %%%text_6_1%%%: [github.com/sponsors/aot-inc](https://github.com/sponsors/aot-inc)
 
-%%%text_6_2%%%: [KyleGabriel.com/donate](https://aot-inc.com/donate)
+%%%text_6_2%%%: [KyleGabriel.com/donate](https://kylegabriel.com/donate)

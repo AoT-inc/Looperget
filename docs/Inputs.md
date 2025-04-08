@@ -218,7 +218,7 @@ Every Period the Input will acquire measurements and store then in the time-seri
 </tbody>
 </table>
 
-1.  [Debouncing a signal](https://aot-inc.com/projects/2016/02/morse-code-translator.html#debouncing)
+1.  [Debouncing a signal](https://kylegabriel.com/projects/2016/02/morse-code-translator.html#debouncing)
 
 ### The Things Network
 

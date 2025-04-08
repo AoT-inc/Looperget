@@ -12,4 +12,4 @@ Looperget有许多不同的用途。一些用户只是简单地存储传感器�
 
 触发器可以被设置为根据特定的日期和时间，根据时间的长短，或特定经纬度的日出/日落来激活事件。
 
-Looperget has been translated to several languages. By default, the language of the browser will determine which language is used, but may be overridden in the General Settings, on the `[Gear Icon] -> Configure -> General` page. If you find an issue and would like to correct a translation or would like to add another language, this can be done at [https://translate.aot-inc.com](https://translate.aot-inc.com/engage/looperget/).
+Looperget has been translated to several languages. By default, the language of the browser will determine which language is used, but may be overridden in the General Settings, on the `[Gear Icon] -> Configure -> General` page. If you find an issue and would like to correct a translation or would like to add another language, this can be done at [https://translate.kylegabriel.com](https://translate.kylegabriel.com/engage/looperget/).

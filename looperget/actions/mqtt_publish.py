@@ -9,7 +9,7 @@ from looperget.utils.utils import random_alphanumeric
 
 ACTION_INFORMATION = {
     'name_unique': 'mqtt_publish',
-    'name': "MQTT: {}".format(lazy_gettext('발행')),
+    'name': "MQTT: {}".format(lazy_gettext('Publish')),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -19,12 +19,12 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': 'MQTT 서버에 값을 발행합니다.',
+    'message': 'Publish a value to an MQTT server.',
 
-    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 저장된 페이로드 텍스트 옵션이 MQTT 서버에 발행됩니다. '
-             '<strong>self.run_action("ACTION_ID", value={"payload": 42})</strong>를 실행하면 지정된 페이로드(모든 타입)가 MQTT 서버에 발행됩니다. '
-             '또한 토픽을 지정할 수도 있습니다 (예: value={"topic": "my_topic", "payload": 42}). '
-             '경고: 여러 MQTT 입력 또는 함수를 사용하는 경우, 클라이언트 ID가 고유한지 확인하십시오.',
+    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will publish the saved payload text options to the MQTT server. '
+             'Executing <strong>self.run_action("ACTION_ID", value={"payload": 42})</strong> will publish the specified payload (any type) to the MQTT server. '
+             'You can also specify the topic (e.g. value={"topic": "my_topic", "payload": 42}). '
+             'Warning: If using multiple MQTT Inputs or Functions, ensure the Client IDs are unique.',
 
     'dependencies_module': [
         ('pip-pypi', 'paho', 'paho-mqtt==1.5.1')
@@ -36,32 +36,32 @@ ACTION_INFORMATION = {
             'type': 'text',
             'default_value': 'localhost',
             'required': True,
-            'name': lazy_gettext('호스트명'),
-            'phrase': 'MQTT 서버의 호스트명을 입력하세요'
+            'name': lazy_gettext('Hostname'),
+            'phrase': 'The hostname of the MQTT server'
         },
         {
             'id': 'port',
             'type': 'integer',
             'default_value': 1883,
             'required': True,
-            'name': lazy_gettext('포트'),
-            'phrase': 'MQTT 서버의 포트를 입력하세요'
+            'name': lazy_gettext('Port'),
+            'phrase': 'The port of the MQTT server'
         },
         {
             'id': 'topic',
             'type': 'text',
             'default_value': 'paho/test/single',
             'required': True,
-            'name': '토픽',
-            'phrase': '발행에 사용할 토픽을 입력하세요'
+            'name': 'Topic',
+            'phrase': 'The topic to publish with'
         },
         {
             'id': 'payload',
             'type': 'text',
             'default_value': '',
             'required': False,
-            'name': '페이로드',
-            'phrase': '발행할 페이로드를 입력하세요'
+            'name': 'Payload',
+            'phrase': 'The payload to publish'
         },
         {
             'id': 'payload_type',
@@ -69,12 +69,12 @@ ACTION_INFORMATION = {
             'default_value': 'text',
             'required': True,
             'options_select': [
-                ('text', '텍스트'),
-                ('integer', '정수'),
-                ('float', '실수/소수')
+                ('text', 'Text'),
+                ('integer', 'Integer'),
+                ('float', 'Float/Decimal')
             ],
-            'name': '페이로드 유형',
-            'phrase': '페이로드를 형 변환할 유형을 지정하세요'
+            'name': 'Payload Type',
+            'phrase': 'The type to cast the payload'
         },
         {
             'id': 'keepalive',
@@ -82,54 +82,54 @@ ACTION_INFORMATION = {
             'default_value': 60,
             'required': True,
             'constraints_pass': constraints_pass_positive_or_zero_value,
-            'name': lazy_gettext('유지 시간'),
-            'phrase': '클라이언트의 keepalive 타임아웃 값입니다. 0으로 설정하면 비활성화됩니다.'
+            'name': lazy_gettext('Keep Alive'),
+            'phrase': 'The keepalive timeout value for the client. Set to 0 to disable.'
         },
         {
             'id': 'clientid',
             'type': 'text',
             'default_value': f'client_{random_alphanumeric(8)}',
             'required': True,
-            'name': '클라이언트 ID',
-            'phrase': 'MQTT 서버에 연결하기 위한 고유 클라이언트 ID를 입력하세요'
+            'name': 'Client ID',
+            'phrase': 'Unique client ID for connecting to the MQTT server'
         },
         {
             'id': 'login',
             'type': 'bool',
             'default_value': False,
-            'name': '로그인 사용',
-            'phrase': '로그인 자격 증명을 전송합니다.'
+            'name': 'Use Login',
+            'phrase': 'Send login credentials'
         },
         {
             'id': 'username',
             'type': 'text',
             'default_value': 'user',
             'required': False,
-            'name': lazy_gettext('사용자 이름'),
-            'phrase': '서버에 연결하기 위한 사용자 이름을 입력하세요'
+            'name': lazy_gettext('Username'),
+            'phrase': 'Username for connecting to the server'
         },
         {
             'id': 'password',
             'type': 'text',
             'default_value': '',
             'required': False,
-            'name': lazy_gettext('비밀번호'),
-            'phrase': '서버에 연결하기 위한 비밀번호를 입력하세요'
+            'name': lazy_gettext('Password'),
+            'phrase': 'Password for connecting to the server'
         },
         {
             'id': 'mqtt_use_websockets',
             'type': 'bool',
             'default_value': False,
             'required': False,
-            'name': '웹소켓 사용',
-            'phrase': '서버에 연결하기 위해 웹소켓을 사용합니다.'
+            'name': 'Use Websockets',
+            'phrase': 'Use websockets to connect to the server.'
         }
     ]
 }
 
 
 class ActionModule(AbstractFunctionAction):
-    """함수 동작: MQTT 발행."""
+    """Function Action: MQTT Publish."""
     def __init__(self, action_dev, testing=False):
         super().__init__(action_dev, testing=testing, name=__name__)
 
@@ -177,13 +177,13 @@ class ActionModule(AbstractFunctionAction):
                 elif self.payload_type == 'float':
                     payload = float(payload)
             except:
-                msg = f"오류: 페이로드를 {self.payload_type}로 형 변환할 수 없습니다."
+                msg = f" Error: Could not cast payload as {self.payload_type}."
                 self.logger.error(msg)
                 dict_vars['message'] += msg
                 return dict_vars
 
         if not payload:
-            msg = "오류: 페이로드 없이 MQTT 서버에 발행할 수 없습니다."
+            msg = f" Error: Cannot publish to MQTT server without a payload."
             self.logger.error(msg)
             dict_vars['message'] += msg
             return dict_vars
@@ -204,9 +204,9 @@ class ActionModule(AbstractFunctionAction):
                 keepalive=self.keepalive,
                 auth=auth_dict,
                 transport='websockets' if self.mqtt_use_websockets else 'tcp')
-            dict_vars['message'] += f" MQTT 발행 '{payload}'."
+            dict_vars['message'] += f" MQTT Publish '{payload}'."
         except Exception as err:
-            msg = f"MQTT 발행을 실행할 수 없습니다: {err}"
+            msg = f" Could not execute MQTT Publish: {err}"
             self.logger.error(msg)
             dict_vars['message'] += msg
 

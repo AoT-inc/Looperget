@@ -15,7 +15,7 @@ from looperget.utils.send_data import send_email
 
 ACTION_INFORMATION = {
     'name_unique': 'photo_email',
-    'name': '사진 첨부 이메일 전송',
+    'name': 'Send Email with Photo',
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -25,14 +25,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': '사진을 촬영하고 첨부된 이메일을 전송합니다.',
-    
-    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 시스템 구성에 설정된 SMTP 자격증명을 사용하여 사진을 촬영하고 지정된 수신자에게 이메일을 전송합니다. '
-             '여러 수신자는 콤마(,)로 구분합니다. 이메일 본문은 자동 생성된 메시지가 사용됩니다. '
-             '<strong>self.run_action("ACTION_ID", value={"camera_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "email_address": ["email1@email.com", "email2@email.com"], "message": "My message"})</strong>를 실행하면, '
-             '지정된 ID의 카메라로 사진을 촬영하고 해당 사진을 첨부하여 지정된 이메일 주소로 메시지를 전송합니다. '
-             '실제 시스템에 존재하는 카메라 ID로 camera_id 값을 변경하는 것을 잊지 마십시오.',
-    
+    'message': 'Take a photo and send an email with it attached.',
+
+    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will take a photo and email it to the specified recipient(s) using the SMTP credentials in the system configuration. Separate multiple recipients with commas. The body of the email will be the self-generated message. Executing <strong>self.run_action("ACTION_ID", value={"camera_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "email_address": ["email1@email.com", "email2@email.com"], "message": "My message"})</strong> will capture a photo using the camera with the specified ID and send an email to the specified email(s) with message and attached photo. Don\'t forget to change the camera_id value to an actual Camera ID that exists in your system.',
+
     'custom_options': [
         {
             'id': 'controller',
@@ -41,23 +37,23 @@ ACTION_INFORMATION = {
             'options_select': [
                 'Camera'
             ],
-            'name': lazy_gettext('카메라'),
-            'phrase': '사진 촬영에 사용할 카메라를 선택하세요'
+            'name': lazy_gettext('Camera'),
+            'phrase': 'Select the Camera to take a photo with'
         },
         {
             'id': 'email',
             'type': 'text',
             'default_value': 'email@domain.com',
             'required': True,
-            'name': '이메일 주소',
-            'phrase': '수신자 이메일 주소를 입력하세요. 여러 주소는 콤마(,)로 구분합니다.'
+            'name': 'E-Mail Address',
+            'phrase': 'E-mail recipient(s). Separate multiple with commas.'
         }
     ]
 }
 
 
 class ActionModule(AbstractFunctionAction):
-    """함수 동작: 사진 첨부 이메일 전송."""
+    """Function Action: Send Email with Photo."""
     def __init__(self, action_dev, testing=False):
         super().__init__(action_dev, testing=testing, name=__name__)
 
@@ -90,7 +86,7 @@ class ActionModule(AbstractFunctionAction):
                 email_recipients = [self.email]
 
         if not email_recipients:
-            msg = "오류: 수신자가 지정되지 않았습니다."
+            msg = f" Error: No recipients specified."
             self.logger.error(msg)
             dict_vars['message'] += msg
             return dict_vars
@@ -104,7 +100,7 @@ class ActionModule(AbstractFunctionAction):
             Camera, unique_id=controller_id, entry='first')
 
         if not this_camera:
-            msg = f"오류: ID '{controller_id}'에 해당하는 카메라를 찾을 수 없습니다."
+            msg = f" Error: Camera with ID '{controller_id}' not found."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
@@ -112,9 +108,10 @@ class ActionModule(AbstractFunctionAction):
         path, filename = camera_record('photo', this_camera.unique_id)
         if path and filename:
             attachment_file = os.path.join(path, filename)
+            # If the emails per hour limit has not been exceeded
             smtp_wait_timer, allowed_to_send_notice = check_allowed_to_email()
             if allowed_to_send_notice:
-                dict_vars['message'] += f" 이메일 '{','.join(email_recipients)}'로 사진 첨부 이메일을 전송합니다."
+                dict_vars['message'] += f" Email '{','.join(email_recipients)}' with photo attached."
                 if not message_send:
                     message_send = dict_vars['message']
                 smtp = db_retrieve_table_daemon(SMTP, entry='first')
@@ -125,11 +122,11 @@ class ActionModule(AbstractFunctionAction):
                            attachment_type="still")
             else:
                 self.logger.error(
-                    f"이메일 전송을 다시 시도하기 전에 {smtp_wait_timer - time.time():.0f}초 기다리세요.")
+                    f"Wait {smtp_wait_timer - time.time():.0f} seconds to email again.")
         else:
-            dict_vars['message'] += " 이미지를 획득할 수 없으므로 이메일을 전송하지 않습니다."
+            dict_vars['message'] += " An image could not be acquired. Not sending email."
 
-        self.logger.debug(f"메시지: {dict_vars['message']}")
+        self.logger.debug(f"Message: {dict_vars['message']}")
 
         return dict_vars
 

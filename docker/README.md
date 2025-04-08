@@ -170,7 +170,7 @@ After logging in and changing the admin password, select "Add data source", then
 -  URL: http://looperget_influxdb:8086
 -  Database: looperget_db
 -  User: looperget
--  Password: p9Bz8qR2t4Wk6vX7y
+-  Password: mmdu77sj3nIoiajjs
 
 Click "Save and Test"
 

@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-#  setup.sh - Looperget 설치 스크립트
+#  setup.sh - Looperget install script
 #
-#  사용법: sudo /bin/bash /opt/Looperget/install/setup.sh
+#  Usage: sudo /bin/bash /opt/Looperget/install/setup.sh
 #
 
 INSTALL_DIRECTORY=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd -P )
@@ -14,70 +14,61 @@ INFLUX_A='NONE'
 INFLUX_B='NONE'
 
 if [[ "$INSTALL_DIRECTORY" == "/opt/Looperget" ]]; then
-  printf "## 현재 /opt/Looperget/install/setup.sh로 설치 중입니다.\n"
+  printf "## Currently installing with /opt/Looperget/install/setup.sh\n"
 elif [[ "$INSTALL_DIRECTORY" != "/opt/Looperget" && ! -d /opt/Looperget ]]; then
-  printf "## 현재 설치 디렉터리 (${INSTALL_DIRECTORY})는 /opt/Looperget이 아니며 /opt/Looperget도 존재하지 않습니다. 복사 후 설치를 진행합니다...\n"
+  printf "## Current install directory (${INSTALL_DIRECTORY}) is not /opt/Looperget and /opt/Looperget doesn't exist. Copying and installing...\n"
   sudo cp -Rp "${INSTALL_DIRECTORY}" /opt/Looperget
   sudo /opt/Looperget/install/setup.sh
   exit 1
 elif [[ "$INSTALL_DIRECTORY" != "/opt/Looperget" && -d /opt/Looperget ]]; then
-  printf "## 에러: 설치가 중단되었습니다. /opt/Looperget 디렉터리가 이미 존재하며, 현재 ${INSTALL_DIRECTORY}에서 설치를 진행 중입니다. 이전 설치가 감지되어 설치가 불가능합니다. /opt/Looperget을 이동하거나 삭제한 후, 스크립트를 다시 실행하십시오.\n"
+  printf "## 에러: Install aborted. /opt/Looperget exists and you're running setup from ${INSTALL_DIRECTORY}. Install not possible if a previous install is detected. Move or delete /opt/Looperget and rerun this script or run /opt/Looperget/install/setup.sh\n"
   exit 1
 fi
 
-# https://github.com/pypa/setuptools/issues/3278 및 https://github.com/aot-inc/Looperget/issues/1149 참고
+# Fix for below issue(s)
+# https://github.com/pypa/setuptools/issues/3278
+# https://github.com/kizniche/Looperget/issues/1149
 export SETUPTOOLS_USE_DISTUTILS=stdlib
-export LANG=ko_KR.UTF-8
-export LANGUAGE=ko_KR.UTF-8
-export LC_ALL=ko_KR.UTF-8
 
 if [ "$EUID" -ne 0 ]; then
-    printf "에러: 스크립트는 루트 권한으로 실행되어야 합니다. \"sudo /bin/bash %s/install/setup.sh\" 명령으로 다시 실행하십시오.\n" "${INSTALL_DIRECTORY}"
+    printf "Error: Script must be run as root, \"sudo /bin/bash %s/install/setup.sh\"\n" "${INSTALL_DIRECTORY}"
     exit 1
 fi
 
-printf "Python 버전 확인 중...\n"
+printf "Checking Python version...\n"
 if hash python3 2>/dev/null; then
   if ! python3 "${INSTALL_DIRECTORY}"/looperget/scripts/upgrade_check.py --min_python_version "3.6"; then
-    printf "에러: 잘못된 Python 버전이 감지되었습니다. Looperget은 Python 3.6 이상을 필요로 합니다.\n"
+    printf "Error: Incorrect Python version found. Looperget requires Python >= 3.6.\n"
     exit 1
   else
-    printf "Python 3.6 이상 확인됨.\n"
+    printf "Python >= 3.6 found.\n"
   fi
 else
-  printf "\n에러: 올바른 Python 버전을 찾을 수 없습니다. 설치를 진행하려면 PATH에 Python 3.6 이상이 필요합니다.\n"
+  printf "\nError: correct python version not found. Python >= 3.6 required in PATH to proceed with the install.\n"
   exit 1
 fi
 
 DIALOG=$(command -v dialog)
 exitstatus=$?
 if [ $exitstatus != 0 ]; then
-    printf "\n에러: dialog가 설치되어 있지 않습니다. dialog를 설치한 후 Looperget 설치를 다시 시도하십시오.\n"
+    printf "\nError: dialog not installed. Install it then try the Looperget setup again.\n"
     exit 1
 fi
 
 START_A=$(date)
-printf "### Looperge+ AI 설치 시작: %s\n" "${START_A}" 2>&1 | tee -a "${LOG_LOCATION}"
+printf "### Looperge+ AI installation initiated %s\n" "${START_A}" 2>&1 | tee -a "${LOG_LOCATION}"
 
 clear
-LICENSE=$(dialog --title "Looperge+ AI 설치 프로그램: 라이선스 동의" \
+LICENSE=$(dialog --title "Looperge+ AI Installer: License Agreement" \
                    --backtitle "Looperget" \
-                   --yesno "Looperget은 자유 소프트웨어입니다. 사용자는 GNU 일반 공중 라이선스(GPL) 제3판(또는 선택에 따라 이후 버전)의 조건에 따라 소스코드를 재배포하거나 수정할 수 있습니다.
-                    
-이 소프트웨어는 유용하게 사용되기를 바라며 배포되었으나, 어떠한 보증도 제공하지 않습니다. (상품성이나 특정 목적에의 적합성에 대한 묵시적 보증 포함 없음)
-자세한 내용은 GNU 일반 공중 라이선스를 참조하십시오.
-
-Looperget+ AI와 함께 GNU 일반 공중 라이선스 사본이 제공되었어야 합니다. 없다면 gnu.org/licenses 를 확인하십시오.
-
-라이선스 조건에 동의하십니까?" \
+                   --yesno "Looperget is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nMycodo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License along with Looperget. If not, see gnu.org/licenses\n\nDo you agree to the license terms?" \
                    20 68 \
                    3>&1 1>&2 2>&3)
 
 clear
-LANGUAGE=$(dialog --title "Looperge+ AI 설치 프로그램" \
+LANGUAGE=$(dialog --title "Looperge+ AI Installer" \
                   --backtitle "Looperget" \
-                  --menu "사용자 인터페이스 언어 선택" 23 68 14 \
-                  "ko": "한국어 (Korean)" \
+                  --menu "User Interface Language" 23 68 14 \
                   "en": "English" \
                   "de": "Deutsche (German)" \
                   "es": "Español (Spanish)" \
@@ -95,71 +86,71 @@ LANGUAGE=$(dialog --title "Looperge+ AI 설치 프로그램" \
                   3>&1 1>&2 2>&3)
 exitstatus=$?
 if [ $exitstatus != 0 ]; then
-    printf "Looperge+ AI 설치가 사용자에 의해 취소되었습니다.\n" 2>&1 | tee -a "${LOG_LOCATION}"
+    printf "Looperge+ AI install cancelled by user\n" 2>&1 | tee -a "${LOG_LOCATION}"
     exit 1
 else
     echo "${LANGUAGE}" > "${INSTALL_DIRECTORY}/.language"
 fi
 
 clear
-INSTALL=$(dialog --title "Looperge+ AI 설치 프로그램: 설치" \
+INSTALL=$(dialog --title "Looperge+ AI Installer: Install" \
                    --backtitle "Looperget" \
-                   --yesno "Looperget은 현재 사용자의 홈 디렉터리에 설치됩니다. 또한, nginx 웹 서버 등 여러 소프트웨어 패키지가 apt를 통해 설치되며, Looperget 웹 사용자 인터페이스는 해당 서버에서 호스팅됩니다. 설치를 진행하시겠습니까?" \
+                   --yesno "Looperget will be installed in the home directory of the current user. Several software packages will be installed via apt, including the nginx web server that the Looperget web user interface will be hosted on. Proceed with the installation?" \
                    20 68 \
                    3>&1 1>&2 2>&3)
 exitstatus=$?
 if [ $exitstatus != 0 ]; then
-    printf "Looperge+ AI 설치가 사용자에 의해 취소되었습니다.\n" 2>&1 | tee -a "${LOG_LOCATION}"
+    printf "Looperge+ AI install cancelled by user\n" 2>&1 | tee -a "${LOG_LOCATION}"
     exit 1
 fi
 
 clear
 if [[ ${MACHINE_TYPE} == 'armhf' ]]; then
-    INFLUX_A=$(dialog --title "Looperge+ AI 설치 프로그램: 측정 데이터베이스" \
+    INFLUX_A=$(dialog --title "Looperge+ AI Installer: Measurement Database" \
                         --backtitle "Looperget" \
-                        --menu "InfluxDB를 설치하시겠습니까?\n\nInfluxDB를 설치하지 않으면, 설치 후 설정에서 InfluxDB 서버 및 자격 증명 설정을 직접 구성해야 합니다." 20 68 4 \
-                        "0)" "InfluxDB 1.x 설치 (기본값)" \
-                        "1)" "InfluxDB 설치 안 함" \
+                        --menu "Install Influxdb?\n\nIf you do not install InfluxDB now, you will need to set the InfluxDB server/credential settings in the Configuration after Looperget is installed." 20 68 4 \
+                        "0)" "Install Influxdb 1.x (default)" \
+                        "1)" "Do Not Install Influxdb" \
                         3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ $exitstatus != 0 ]; then
-        printf "Looperge+ AI 설치가 사용자에 의해 취소되었습니다.\n" 2>&1 | tee -a "${LOG_LOCATION}"
+        printf "Looperge+ AI install cancelled by user\n" 2>&1 | tee -a "${LOG_LOCATION}"
         exit 1
     fi
 elif [[ ${MACHINE_TYPE} == 'arm64' || ${UNAME_TYPE} == 'x86_64' ]]; then
-    INFLUX_B=$(dialog --title "Looperget 설치 프로그램: 측정 데이터베이스" \
+    INFLUX_B=$(dialog --title "Looperget Installer: Measurement Database" \
                         --backtitle "Looperget" \
-                        --menu "InfluxDB를 설치하시겠습니까?\n\n설치하지 않으면, 나중에 InfluxDB 서버 설정 및 자격 증명을 직접 구성해야 합니다. 32비트 CPU의 경우 InfluxDB 1.x만 사용 가능합니다 (2.x는 64비트 CPU 전용입니다)." 20 68 4 \
-                        "0)" "InfluxDB 2.x 설치 (권장)" \
-                        "1)" "InfluxDB 1.x 설치 (이전 버전)" \
-                        "2)" "InfluxDB 설치 안 함" \
+                        --menu "Install Influxdb?\n\nIf you do not install InfluxDB now, you will need to configure the InfluxDB server settings and credentials after Looperget is installed. If using a 32-bit CPU, you can only use 1.x (do not use 2.x, as it only works with 64-bit CPUs)." 20 68 4 \
+                        "0)" "Install Influxdb 2.x (recommended)" \
+                        "1)" "Install Influxdb 1.x (old)" \
+                        "2)" "Do Not Install Influxdb" \
                         3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ $exitstatus != 0 ]; then
-        printf "Looperge+ AI 설치가 사용자에 의해 취소되었습니다.\n" 2>&1 | tee -a "${LOG_LOCATION}"
+        printf "Looperge+ AI install cancelled by user\n" 2>&1 | tee -a "${LOG_LOCATION}"
         exit 1
     fi
 else
-    printf "\n에러: 아키텍처를 감지할 수 없습니다.\n"
+    printf "\nError: Could not detect architecture\n"
     exit 1
 fi
 
 if [[ ${INFLUX_A} == '1)' || ${INFLUX_B} == '2)' ]]; then
     clear
-    INSTALL=$(dialog --title "Looperge+ AI 설치 프로그램: 측정 데이터베이스" \
+    INSTALL=$(dialog --title "Looperge+ AI Installer: Measurement Database" \
                        --backtitle "Looperget" \
-                       --yesno "InfluxDB 설치를 선택하지 않으셨습니다. 이는 기존 InfluxDB 서버를 사용할 경우에 해당합니다. 설치 후 Looperget 설정에서 InfluxDB 클라이언트 옵션을 변경하여 측정 데이터가 올바르게 저장/조회되도록 하십시오. InfluxDB를 설치하려면 취소를 선택한 후, 설치 프로그램을 다시 실행하십시오." \
+                       --yesno "You have chosen not to install Influxdb. This is typically done if you want to use an existing influxdb server. Make sure to change the influxdb client options in the Looperget Configuration after installing to ensure measurements can be properly saved/queried. If you would like to install influxdb, select cancel and start the Looperget Installer over again." \
                        20 68 \
                        3>&1 1>&2 2>&3)
     exitstatus=$?
     if [ $exitstatus != 0 ]; then
-        printf "Looperge+ AI 설치가 사용자에 의해 취소되었습니다.\n" 2>&1 | tee -a "${LOG_LOCATION}"
+        printf "Looperge+ AI install cancelled by user\n" 2>&1 | tee -a "${LOG_LOCATION}"
         exit 1
     fi
 fi
 
 if [[ ${INFLUX_A} == 'NONE' && ${INFLUX_B} == 'NONE' ]]; then
-    printf "\n에러: InfluxDB 설치 옵션이 선택되지 않았습니다.\n"
+    printf "\nError: Influx install option not selected\n"
     exit 1
 fi
 
@@ -167,17 +158,19 @@ abort()
 {
     printf "
 ****************************************
-** Looperge+ AI 설치 중 에러 발생! **
+** ERROR During Looperge+ AI Install! **
 ****************************************
 
-설치가 올바르게 진행되지 않았을 수 있는 에러가 발생하였습니다.
+An error occurred that may have prevented Looperge+ AI 
+from being installed properly!
 
-전체 에러 메시지를 보려면 설치 로그 파일 끝부분을 확인하십시오:
+Open to the end of the setup log to view the full error:
 %s/install/setup.log
 
-문제가 지속된다면, 아래의 URL로 버그 리포트를 제출하여 개발자에게 연락해 주시기 바랍니다:
-https://github.com/AoT-inc/Looperget/issues
-설치 로그 (%s/install/setup.log)의 관련 부분을 함께 첨부해 주십시오.
+Please contact the developer by submitting a bug report
+at https://github.com/AoT-inc/Looperget/issues with the
+pertinent excerpts from the setup log located at:
+%s/install/setup.log
 " "${INSTALL_DIRECTORY}" "${INSTALL_DIRECTORY}" 2>&1 | tee -a "${LOG_LOCATION}"
     exit 1
 }
@@ -189,9 +182,7 @@ set -e
 clear
 SECONDS=0
 START_B=$(date)
-printf "#### Looperge+ AI 설치 시작됨: %s\n" "${START_B}" 2>&1 | tee -a "${LOG_LOCATION}"
-
-# (이후 설치 진행 관련 명령어는 동일하게 유지)
+printf "#### Looperge+ AI installation began %s\n" "${START_B}" 2>&1 | tee -a "${LOG_LOCATION}"
 
 ${INSTALL_CMD} update-swap-size 2>&1 | tee -a "${LOG_LOCATION}"
 ${INSTALL_CMD} update-apt 2>&1 | tee -a "${LOG_LOCATION}"
@@ -208,7 +199,7 @@ elif [[ ${INFLUX_A} == '0)' || ${INFLUX_B} == '1)' ]]; then
     ${INSTALL_CMD} update-influxdb-1 2>&1 | tee -a "${LOG_LOCATION}"
     ${INSTALL_CMD} update-influxdb-1-db-user 2>&1 | tee -a "${LOG_LOCATION}"
 elif [[ ${INFLUX_A} == '1)' || ${INFLUX_B} == '2)' ]]; then
-    printf "InfluxDB 설치를 건너뛰도록 선택되었습니다.\n"
+    printf "Instructed to not install InfluxDB/n"
 fi
 ${INSTALL_CMD} initialize 2>&1 | tee -a "${LOG_LOCATION}"
 ${INSTALL_CMD} update-logrotate 2>&1 | tee -a "${LOG_LOCATION}"
@@ -232,20 +223,21 @@ if [[ -z ${IP} ]]; then
 fi
 
 END=$(date)
-printf "#### Looperge+ AI 설치 프로그램 종료: %s\n" "${END}" 2>&1 | tee -a "${LOG_LOCATION}"
+printf "#### Looperge+ AI Installer finished %s\n" "${END}" 2>&1 | tee -a "${LOG_LOCATION}"
 
 DURATION=$SECONDS
-printf "#### 총 설치 시간: %d분 %d초\n" "$((DURATION / 60))" "$((DURATION % 60))" 2>&1 | tee -a "${LOG_LOCATION}"
+printf "#### Total install time: %d minutes and %d seconds\n" "$((DURATION / 60))" "$((DURATION % 60))" 2>&1 | tee -a "${LOG_LOCATION}"
 
 printf "
 ***************************************
-** Looperge+ AI 설치 완료! **
+** Looperge+ AI finished installing! **
 ***************************************
 
-모든 설치가 완료되었습니다. 단, 모든 설정이 완료되었음을 의미하지는 않습니다.
-문제가 발생할 경우 아래의 로그 파일을 확인하십시오:
+모든 설치가 완료되었습니다. 하지만 모든 설정이 완료된 것을 의미하지는 않습니다.
+만약 어떠한 문제가 발생했다면, 아래의 로그를 확인해주세요:
 %s/install/setup.log
 
-웹 브라우저에서 https://%s/ 또는 장치의 IP 주소를 입력하여 Looperge+ AI 홈페이지에 접속한 후,
-관리자 계정을 생성하고 추가 설정을 진행해 주십시오.
+다음 주소: https://${IP}/, 또는 무엇이든 장치의 IP 주소를 입력하여 
+웹 브라우저에 입력하면 Looperge+ AI의 홈페이지로 이동할 수 있습니다.
+관리자 계정을 생성하고 설정을 진행해주세요.
 " "${INSTALL_DIRECTORY}" "${IP}" 2>&1 | tee -a "${LOG_LOCATION}"

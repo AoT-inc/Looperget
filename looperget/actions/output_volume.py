@@ -22,10 +22,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': lazy_gettext('출력에 부피를 분배하도록 지시합니다.'),
+    'message': lazy_gettext('Instruct the Output to dispense a volume.'),
 
-    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 부피 출력이 작동됩니다. '
-             '<strong>self.run_action("ACTION_ID", value={"output_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "channel": 0, "volume": 42})</strong>를 실행하면 지정된 ID와 채널의 출력으로 부피가 전송됩니다. 시스템에 존재하는 실제 Output ID로 output_id 값을 변경하는 것을 잊지 마십시오.',
+    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will actuate a volume output. '
+             'Executing <strong>self.run_action("ACTION_ID", value={"output_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "channel": 0, "volume": 42})</strong> will send a volume to the output with the specified ID and channel. Don\'t forget to change the output_id value to an actual Output ID that exists in your system.',
 
     'custom_options': [
         {
@@ -36,8 +36,8 @@ ACTION_INFORMATION = {
             'options_select': [
                 'Output_Channels',
             ],
-            'name': '출력',
-            'phrase': '제어할 출력을 선택하세요'
+            'name': 'Output',
+            'phrase': 'Select an output to control'
         },
         {
             'id': 'volume',
@@ -45,8 +45,8 @@ ACTION_INFORMATION = {
             'default_value': 0.0,
             'required': False,
             'constraints_pass': constraints_pass_positive_value,
-            'name': lazy_gettext('부피'),
-            'phrase': '출력으로 전송할 부피를 입력하세요'
+            'name': lazy_gettext('Volume'),
+            'phrase': 'The volume to send to the output'
         }
     ]
 }
@@ -93,12 +93,12 @@ class ActionModule(AbstractFunctionAction):
             Output, unique_id=output_id, entry='first')
 
         if not output:
-            msg = f"오류: ID '{output_id}'에 해당하는 출력이 존재하지 않습니다."
+            msg = f" Error: Output with ID '{output_id}' not found."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
-        dict_vars['message'] += f"출력 {output_id} CH{channel} ({output.name})의 부피를 {volume}으로 설정합니다."
+        dict_vars['message'] += f" Turn output {output_id} CH{channel} ({output.name}) with volume of {volume}."
 
         output_on = threading.Thread(
             target=self.control.output_on,

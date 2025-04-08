@@ -73,7 +73,7 @@ def upgrade():
     op.execute(
         '''
         UPDATE misc
-        SET measurement_db_password='p9Bz8qR2t4Wk6vX7y'
+        SET measurement_db_password='mmdu77sj3nIoiajjs'
         '''
     )
 

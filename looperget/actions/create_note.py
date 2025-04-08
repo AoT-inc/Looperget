@@ -14,7 +14,7 @@ from looperget.utils.database import db_retrieve_table_daemon
 ACTION_INFORMATION = {
     'name_unique': 'create_note',
     'name': f"{TRANSLATIONS['create']['title']}: {TRANSLATIONS['note']['title']}",
-    'message': lazy_gettext('선택된 태그로 노트를 생성합니다.'),
+    'message': lazy_gettext('Create a note with the selected Tag.'),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -24,10 +24,8 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 선택한 태그와 노트로 노트가 생성됩니다. '
-             '<strong>self.run_action("ACTION_ID", value={"tags": ["tag1", "tag2"], "name": "My Note", "note": "this is a message"})</strong>를 실행하면 지정된 태그 목록과 노트를 사용하여 작업이 실행됩니다. '
-             '태그가 하나만 사용되는 경우, 리스트의 유일한 요소로 만드십시오 (예: ["tag1"]). '
-             '노트가 지정되지 않은 경우, 작업 메시지가 노트로 사용됩니다.',
+    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will create a note with the selected tag and note. '
+             'Executing <strong>self.run_action("ACTION_ID", value={"tags": ["tag1", "tag2"], "name": "My Note", "note": "this is a message"})</strong> will execute the action with the specified list of tag(s) and note. If using only one tag, make it the only element of the list (e.g. ["tag1"]). If note is not specified, then the action message will be used as the note.',
 
     'custom_options': [
         {
@@ -37,34 +35,35 @@ ACTION_INFORMATION = {
             'options_select': [
                 'Tag'
             ],
-            'name': lazy_gettext('태그'),
-            'phrase': '하나 이상의 태그를 선택하세요'
+            'name': lazy_gettext('Tags'),
+            'phrase': 'Select one or more tags'
         },
         {
             'id': 'name',
             'type': 'text',
             'default_value': 'Name',
             'required': False,
-            'name': lazy_gettext('이름'),
-            'phrase': '노트의 이름'
+            'name': lazy_gettext('Name'),
+            'phrase': 'The name of the note'
         },
         {
             'id': 'note',
             'type': 'text',
             'default_value': 'Note',
             'required': False,
-            'name': lazy_gettext('노트'),
-            'phrase': '노트의 본문'
+            'name': lazy_gettext('Note'),
+            'phrase': 'The body of the note'
         },
         {
             'id': 'include_message',
             'type': 'bool',
             'default_value': False,
-            'name': '생성된 노트에 메시지 포함',
-            'phrase': "생성된 노트에 작업으로 전달된 메시지를 포함합니다."
+            'name': 'Include Message in Note',
+            'phrase': "Include the message passed to the action in the note that's created"
         }
     ]
 }
+
 
 class ActionModule(AbstractFunctionAction):
     """Function Action: Create Note."""
@@ -121,14 +120,14 @@ class ActionModule(AbstractFunctionAction):
                     self.logger.error(f"Tag with ID '{each_tag}' does not exist.")
 
             if not list_tag_ids:
-                msg = "유효한 태그가 지정되지 않았습니다. 노트를 생성할 수 없습니다."
+                msg = "No valid tags specified. Cannot create note."
                 dict_vars['message'] += msg
                 self.logger.error(msg)
                 return dict_vars
 
-            dict_vars['message'] += f" 이름 '{name}', 태그 ID(s) '{','.join(list_tag_ids)}'로 노트를 생성합니다"
+            dict_vars['message'] += f" Create note with name '{name}', tag ID(s) '{','.join(list_tag_ids)}'"
             if note:
-                dict_vars['message'] += f", 노트는 {note}"
+                dict_vars['message'] += f", and note {note}"
             dict_vars['message'] += "."
 
             new_note = Notes()

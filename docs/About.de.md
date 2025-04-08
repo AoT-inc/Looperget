@@ -12,4 +12,4 @@ Wenn Eingänge und Ausgänge kombiniert werden, können Funktionsregler verwende
 
 Auslöser können so eingestellt werden, dass sie Ereignisse auf der Grundlage bestimmter Daten und Uhrzeiten, Zeitspannen oder des Sonnenaufgangs/Sonnenuntergangs an einem bestimmten Breiten- und Längengrad aktivieren.
 
-Looperget has been translated to several languages. By default, the language of the browser will determine which language is used, but may be overridden in the General Settings, on the `[Gear Icon] -> Configure -> General` page. If you find an issue and would like to correct a translation or would like to add another language, this can be done at [https://translate.aot-inc.com](https://translate.aot-inc.com/engage/looperget/).
+Looperget has been translated to several languages. By default, the language of the browser will determine which language is used, but may be overridden in the General Settings, on the `[Gear Icon] -> Configure -> General` page. If you find an issue and would like to correct a translation or would like to add another language, this can be done at [https://translate.kylegabriel.com](https://translate.kylegabriel.com/engage/looperget/).

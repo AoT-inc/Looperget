@@ -22,11 +22,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': lazy_gettext('출력에 값을 전송합니다.'),
+    'message': lazy_gettext('Send a value to the Output.'),
 
-    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 값 출력이 활성화됩니다. '
-             '<strong>self.run_action("ACTION_ID", value={"output_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "channel": 0, "value": 42})</strong>를 실행하면 지정된 ID와 채널의 출력으로 값이 전송됩니다. '
-             '시스템에 존재하는 실제 Output ID로 output_id 값을 변경하는 것을 잊지 마십시오.',
+    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will actuate a value output. '
+             'Executing <strong>self.run_action("ACTION_ID", value={"output_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b", "channel": 0, "value": 42})</strong> will send a value to the output with the specified ID and channel. Don\'t forget to change the output_id value to an actual Output ID that exists in your system.',
 
     'custom_options': [
         {
@@ -38,7 +37,7 @@ ACTION_INFORMATION = {
                 'Output_Channels',
             ],
             'name': 'Output',
-            'phrase': '제어할 출력을 선택하세요'
+            'phrase': 'Select an output to control'
         },
         {
             'id': 'value',
@@ -46,14 +45,14 @@ ACTION_INFORMATION = {
             'default_value': 0.0,
             'required': True,
             'name': lazy_gettext('Value'),
-            'phrase': '출력으로 전송할 값을 입력하세요'
+            'phrase': 'The value to send to the output'
         }
     ]
 }
 
 
 class ActionModule(AbstractFunctionAction):
-    """함수 동작: 출력 (값)."""
+    """Function Action: Output (Value)."""
     def __init__(self, action_dev, testing=False):
         super().__init__(action_dev, testing=testing, name=__name__)
 
@@ -93,12 +92,12 @@ class ActionModule(AbstractFunctionAction):
             Output, unique_id=output_id, entry='first')
 
         if not output:
-            msg = f"오류: ID '{output_id}'에 해당하는 출력이 존재하지 않습니다."
+            msg = f" Error: Output with ID '{output_id}' not found."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
-        dict_vars['message'] += f"출력 {output_id} CH{channel} ({output.name})에 값을 {value}로 전송합니다."
+        dict_vars['message'] += f" Turn output {output_id} CH{channel} ({output.name}) with value of {value}."
 
         output_on = threading.Thread(
             target=self.control.output_on,

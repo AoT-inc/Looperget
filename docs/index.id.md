@@ -40,4 +40,4 @@ https://127.0.0.1
 
 Menjadi Sponsor: [github.com/sponsors/aot-inc](https://github.com/sponsors/aot-inc)
 
-Metode Lain: [KyleGabriel.com/donate](https://aot-inc.com/donate)
+Metode Lain: [KyleGabriel.com/donate](https://kylegabriel.com/donate)

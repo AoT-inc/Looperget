@@ -40,4 +40,4 @@ https://127.0.0.1
 
 Conviértase en patrocinador: [github.com/sponsors/aot-inc](https://github.com/sponsors/aot-inc)
 
-Otros métodos: [KyleGabriel.com/donate](https://aot-inc.com/donate)
+Otros métodos: [KyleGabriel.com/donate](https://kylegabriel.com/donate)

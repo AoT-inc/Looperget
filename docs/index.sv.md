@@ -40,4 +40,4 @@ https://127.0.0.1
 
 Bli en sponsor: [github.com/sponsors/aot-inc](https://github.com/sponsors/aot-inc)
 
-Andra metoder: [KyleGabriel.com/donate](https://aot-inc.com/donate)
+Andra metoder: [KyleGabriel.com/donate](https://kylegabriel.com/donate)

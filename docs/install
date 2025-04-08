@@ -1,17 +1,26 @@
 #
 #  install - Looperget install script
 #
+#  Do not execute this script if the Looperget archive has been downloaded and extracted.
+#  If Looperget has been extracted (/opt/Looperget/ already exists), then execute:
+#
 #  sudo /bin/bash /opt/Looperget/install/setup.sh
+#
+#
+#  If Looperget has not yet been downloaded/extracted, execute the following to install:
+#
+#  curl -L https://aot-inc.github.io/Looperget/install | bash
+#
 
 INSTALL_DIRECTORY=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )
 
 if [ "$EUID" -eq 0 ]; then
-    printf "root 계정으로 실행하지 마시오: \"/bin/bash %s/install\"\n" "${INSTALL_DIRECTORY}"
+    printf "root 계정이 아닌 일반 계정으로 실행하세요.: \"/bin/bash %s/install\"\n" "${INSTALL_DIRECTORY}"
     exit 1
 fi
 
 if [ -d /opt/Looperget ]; then
-  printf "## Error: 설치가 취소 되었습니다. /opt/Looperget 디렉터리가 이미 존재 합니다. /opt/Looperget 디렉터리를 삭제하고 실행하세요. /opt/Looperget/install/setup.sh.\n"
+  printf "## 에러: 설치가 취소 되었습니다. 이유: /opt/Looperget 디렉토리가 이미 존재 합니다. 이전에 설치한 Looperget 디렉터리가 감지되어 설치를 중단 합니다. /opt/Looperget 디렉터리를 이동 또는 삭제하고 다시 설치를 진행 하세요"
   exit 1
 fi
 
@@ -22,12 +31,12 @@ sudo apt install -y jq dialog python3 wget
 # Create install directory
 sudo mkdir -p /opt/Looperget
 sudo chown -R ${USER}: /opt/Looperget
-cd /opt/Looperget
+cd /opt
 
 # Download and install
-curl -s https://api.github.com/repos/AoT-inc/Looperget/releases/latest | \
-jq -r '.tarball_url' | wget -i - -O looperget-latest.tar.gz
-sudo tar xzf looperget-latest.tar.gz --strip-components=1
+curl -s https://api.github.com/repos/aot-inc/Looperget/releases/latest | \
+jq -r '.tarball_url' | sudo wget -i - -O looperget-latest.tar.gz
+sudo tar xzf looperget-latest.tar.gz -C Looperget --strip-components=1
 sudo rm -f looperget-latest.tar.gz
-cd install
+cd Looperget/install
 sudo /bin/bash ./setup.sh

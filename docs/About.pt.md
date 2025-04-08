@@ -12,4 +12,4 @@ Quando as Entradas e Saídas são combinadas, os controladores de funções pode
 
 Os gatilhos podem ser definidos para activar eventos com base em datas e horas específicas, de acordo com durações de tempo, ou o nascer/pôr-do-sol a uma latitude e longitude específicas.
 
-Looperget has been translated to several languages. By default, the language of the browser will determine which language is used, but may be overridden in the General Settings, on the `[Gear Icon] -> Configure -> General` page. If you find an issue and would like to correct a translation or would like to add another language, this can be done at [https://translate.aot-inc.com](https://translate.aot-inc.com/engage/looperget/).
+Looperget has been translated to several languages. By default, the language of the browser will determine which language is used, but may be overridden in the General Settings, on the `[Gear Icon] -> Configure -> General` page. If you find an issue and would like to correct a translation or would like to add another language, this can be done at [https://translate.kylegabriel.com](https://translate.kylegabriel.com/engage/looperget/).

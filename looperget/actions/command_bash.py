@@ -8,7 +8,7 @@ from looperget.utils.system_pi import cmd_output
 
 ACTION_INFORMATION = {
     'name_unique': 'command',
-    'name': "{}: Bash/Shell Command".format(lazy_gettext('실행')),
+    'name': "{}: Bash/Shell Command".format(lazy_gettext('Execute')),
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['functions'],
@@ -18,10 +18,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': lazy_gettext('리눅스 bash 쉘 명령어를 실행합니다.'),
+    'message': lazy_gettext('Execute a Linux bash shell command.'),
 
-    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 bash 명령어가 실행됩니다. '
-             '<strong>self.run_action("ACTION_ID", value={"user": "looperget", "command": "/home/pi/my_script.sh on"})</strong>를 실행하면 지정된 명령어와 사용자를 이용해 작업이 실행됩니다.',
+    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will execute the bash command.'
+             'Executing <strong>self.run_action("ACTION_ID", value={"user": "looperget", "command": "/home/pi/my_script.sh on"})</strong> will execute the action with the specified command and user.',
 
     'custom_options': [
         {
@@ -29,16 +29,16 @@ ACTION_INFORMATION = {
             'type': 'text',
             'default_value': 'looperget',
             'required': True,
-            'name': lazy_gettext('사용자'),
-            'phrase': lazy_gettext('명령어 실행에 사용할 사용자를 지정합니다.')
+            'name': lazy_gettext('User'),
+            'phrase': lazy_gettext('The user to execute the command')
         },
         {
             'id': 'command',
             'type': 'text',
             'default_value': '/home/pi/my_script.sh on',
             'required': True,
-            'name': lazy_gettext('명령어'),
-            'phrase': '실행할 명령어'
+            'name': lazy_gettext('Command'),
+            'phrase': 'Command to execute'
         },
     ]
 }
@@ -74,11 +74,11 @@ class ActionModule(AbstractFunctionAction):
         except:
             user = self.user
 
-        dict_vars['message'] += f" '{command}' 명령어를 {user} 사용자로 실행합니다."
+        dict_vars['message'] += f" Execute '{command}' as {user}."
 
         cmd_out, cmd_err, cmd_status = cmd_output(command, user=user)
 
-        dict_vars['message'] += f" 반환 결과: 출력: {cmd_out}, 에러: {cmd_err}, 상태: {cmd_status}."
+        dict_vars['message'] += f" return out: {cmd_out}, err: {cmd_err}, status: {cmd_status}."
 
         self.logger.debug(f"Message: {dict_vars['message']}")
 

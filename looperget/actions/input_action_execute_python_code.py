@@ -33,6 +33,7 @@ class PythonActionRun:
 
     def python_code_run(self, dict_vars):
 """
+
     indented_code = textwrap.indent(python_code, ' ' * 8)
     action_python_code_run = pre_statement_run + indented_code
 
@@ -52,7 +53,7 @@ class PythonActionRun:
 
 ACTION_INFORMATION = {
     'name_unique': 'action_input_execute_python_code',
-    'name': "파이썬 3 코드 실행",
+    'name': "Execute Python 3 Code",
     'library': None,
     'manufacturer': 'Looperget',
     'application': ['inputs'],
@@ -62,7 +63,7 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': "측정값이 획득되면 파이썬 3 코드를 실행합니다.",
+    'message': 'Execute Python 3 code when measurements are acquired.',
 
     'usage': '',
 
@@ -80,15 +81,15 @@ self.logger.info(f"Input measurements: {dict_vars['measurements_dict']}")
 return dict_vars""",
             'required': True,
             'col_width': 12,
-            'name': "파이썬 3 코드",
-            'phrase': "실행할 코드를 입력하세요"
+            'name': 'Python 3 Code',
+            'phrase': 'The code to execute'
         },
     ]
 }
 
 
 class ActionModule(AbstractFunctionAction):
-    """함수 동작: 파이썬 코드 실행."""
+    """Function Action: Execute Python Code."""
     def __init__(self, action_dev, testing=False):
         super().__init__(action_dev, testing=testing, name=__name__)
 

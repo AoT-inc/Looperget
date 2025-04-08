@@ -12,4 +12,4 @@ Wanneer ingangen en uitgangen worden gecombineerd, kunnen functieregelaars worde
 
 Triggers kunnen worden ingesteld om gebeurtenissen te activeren op basis van specifieke data en tijden, volgens tijdsduur, of de zonsopgang/ondergang op een specifieke breedte- en lengtegraad.
 
-Looperget has been translated to several languages. By default, the language of the browser will determine which language is used, but may be overridden in the General Settings, on the `[Gear Icon] -> Configure -> General` page. If you find an issue and would like to correct a translation or would like to add another language, this can be done at [https://translate.aot-inc.com](https://translate.aot-inc.com/engage/looperget/).
+Looperget has been translated to several languages. By default, the language of the browser will determine which language is used, but may be overridden in the General Settings, on the `[Gear Icon] -> Configure -> General` page. If you find an issue and would like to correct a translation or would like to add another language, this can be done at [https://translate.kylegabriel.com](https://translate.kylegabriel.com/engage/looperget/).

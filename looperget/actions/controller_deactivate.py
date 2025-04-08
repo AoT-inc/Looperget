@@ -24,11 +24,10 @@ ACTION_INFORMATION = {
     'url_product_purchase': None,
     'url_additional': None,
 
-    'message': lazy_gettext('컨트롤러를 비활성화합니다.'),
+    'message': lazy_gettext('Deactivate a controller.'),
 
-    'usage': '<strong>self.run_action("ACTION_ID")</strong>를 실행하면 선택한 컨트롤러가 비활성화됩니다. '
-             '<strong>self.run_action("ACTION_ID", value={"controller_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b"})</strong>를 실행하면 지정된 ID의 컨트롤러가 비활성화됩니다. '
-             '시스템에 존재하는 실제 컨트롤러 ID로 controller_id 값을 변경하는 것을 잊지 마십시오.',
+    'usage': 'Executing <strong>self.run_action("ACTION_ID")</strong> will deactivate the selected Controller. '
+             'Executing <strong>self.run_action("ACTION_ID", value={"controller_id": "959019d1-c1fa-41fe-a554-7be3366a9c5b"})</strong> will deactivate the controller with the specified ID. Don\'t forget to change the controller_id value to an actual Controller ID that exists in your system.',
 
     'custom_options': [
         {
@@ -43,8 +42,8 @@ ACTION_INFORMATION = {
                 'PID',
                 'Trigger'
             ],
-            'name': lazy_gettext('컨트롤러'),
-            'phrase': '비활성화할 컨트롤러를 선택하세요'
+            'name': lazy_gettext('Controller'),
+            'phrase': 'Select the controller to deactivate'
         }
     ]
 }
@@ -83,25 +82,25 @@ class ActionModule(AbstractFunctionAction):
          controller_entry) = which_controller(controller_id)
 
         if not controller_entry:
-            msg = f"오류: ID '{controller_id}'의 컨트롤러를 찾을 수 없습니다."
+            msg = f" Error: Controller with ID '{controller_id}' not found."
             dict_vars['message'] += msg
             self.logger.error(msg)
             return dict_vars
 
-        dict_vars['message'] += f"컨트롤러 {controller_id} ({controller_entry.name})를 비활성화합니다."
+        dict_vars['message'] += f" Deactivate Controller {controller_id} ({controller_entry.name})."
 
         if not controller_entry.is_activated:
-            dict_vars['message'] += " 알림: 컨트롤러가 이미 비활성화되어 있습니다!"
+            dict_vars['message'] += " Notice: Controller is already not active!"
         else:
             with session_scope(LOOPERGET_DB_PATH) as new_session:
                 mod_cont = new_session.query(controller_object).filter(
                     controller_object.unique_id == controller_id).first()
                 mod_cont.is_activated = False
                 new_session.commit()
-            deactivate_controller = threading.Thread(
+            activate_controller = threading.Thread(
                 target=self.control.controller_deactivate,
                 args=(controller_id,))
-            deactivate_controller.start()
+            activate_controller.start()
 
         self.logger.debug(f"Message: {dict_vars['message']}")
 
