@@ -1171,3 +1171,32 @@ textarea::-moz-focus-inner {
   background-color: #2E435B !important; /* 어두운 배경 (예: 진한 회색) */
   color: #fff !important; /* 글자색 흰색 */
 }
+
+/* 기본 드롭다운 토글 ::after 가상 요소 제거 */
+.bootstrap-select .dropdown-toggle::after {
+  display: none !important;
+}
+
+/* 기존 .bs-caret와 그 내부의 .caret 숨기기 */
+.bootstrap-select .dropdown-toggle .bs-caret,
+.bootstrap-select .dropdown-toggle .bs-caret .caret {
+  display: none !important;
+}
+
+/* 오른쪽 커스텀 화살표 영역 설정 */
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+  position: relative;
+  padding-right: 1.8em;  /* 화살표가 들어갈 공간 확보 (필요에 따라 조절) */
+}
+
+/* 오른쪽 위치에 작은 삼각형(▼) 추가 */
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner::after {
+  content: "\25BC";        /* ▼ 문자 */
+  position: absolute;
+  right: 0;            /* 오른쪽 여백 (디자인에 맞게 조절) */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 8px;         /* 원하는 작은 크기로 설정 */
+  color: #000;             /* 색상 설정 (원하는 색으로 조절) */
+  pointer-events: none;
+}
