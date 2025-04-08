@@ -118,6 +118,7 @@ case "${1:-''}" in
     ;;
     'compile-translations')
         printf "\n#### Compiling Translations\n"
+        sudo chmod -R +x "${LOOPERGET_PATH}/env/bin/"
         cd "${LOOPERGET_PATH}"/looperget || return
         "${LOOPERGET_PATH}"/env/bin/pybabel compile -d looperget_flask/translations
     ;;
