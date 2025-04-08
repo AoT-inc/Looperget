@@ -691,10 +691,16 @@ case "${1:-''}" in
         service nginx restart
         sleep 5
         printf "#### Checking loopergetflask status and starting/restarting it\n"
-        if systemctl is-active --quiet loopergetflask; then
-            systemctl reload loopergetflask
-        else
+        if ! systemctl is-active --quiet loopergetflask; then
             systemctl start loopergetflask
+            printf "#### Waiting for loopergetflask to start...\n"
+            for i in {1..10}; do
+                sleep 2
+                if systemctl is-active --quiet loopergetflask; then
+                    printf "#### loopergetflask has started successfully.\n"
+                    break
+                fi
+            done
         fi
     ;;
     'web-server-disable')
