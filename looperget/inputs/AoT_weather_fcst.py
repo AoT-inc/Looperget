@@ -75,9 +75,6 @@ def pty_code_to_text(code):
     except Exception:
         return fix_korean(str(code))
 
-    except Exception:
-        return fix_korean(str(code))
-
 def fix_korean(text):
     """Attempt to fix garbled Korean text by re-encoding from latin1 to utf-8."""
     try:
