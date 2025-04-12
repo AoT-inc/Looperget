@@ -544,7 +544,6 @@ class InputModule(AbstractInput):
     def generate_forecast_json(self, forecast_hours=None):
         # 1. 현재 시각을 기준으로 now 값을 구합니다.
         now = datetime.datetime.now()
-        # 현재 시각에서 분, 초, 마이크로초를 0으로 반올림 (예: 202503162000)
         now_rounded = now.replace(minute=0, second=0, microsecond=0)
         
         # 2. 파일 목록 로드: KMA_PATH 디렉터리에서 해당 unique_id로 시작하는 모든 JSON 파일을 수정 시간 기준 오름차순(가장 오래된 파일부터) 정렬
@@ -572,8 +571,7 @@ class InputModule(AbstractInput):
             except Exception as e:
                 self.logger.error(f"Error loading file {filename}: {e}")
         
-        # 4. 발표시간(pub_dt) 계산: 최신 데이터(가장 마지막 파일, 즉 최신 파일가장 뒤에 있는 파일)를 사용
-        #    (여기서는 오름차순으로 정렬했으므로, 최신 파일는 file_list_sorted[-1]입니다.)
+        # 4. 최신 파일에서 발표시간(pub_dt) 계산
         latest_file = file_list_sorted[-1]
         latest_items = file_data_dict.get(latest_file, [])
         if latest_items:
@@ -584,25 +582,52 @@ class InputModule(AbstractInput):
                 all_items_tmp.extend(items)
             pub_dt = self._calculate_publication_time(all_items_tmp)
         
-        # 5. 조회 기준 시간 범위 설정: now_rounded 기준 -25시간부터 +49시간까지 (총 75시간)
-        forecast_offsets = list(range(-25, 50))
+        # --- 일별 TMX/TMN 최신값 추출 (TMX는 fcstTime "1500", TMN은 "0600"만 대상) ---
+        daily_extremes = {}
+        for filename in file_list_sorted:
+            items = file_data_dict.get(filename, [])
+            for item in items:
+                fcstDate = item.get("fcstDate", "").strip()
+                category = item.get("category")
+                fcstTime = item.get("fcstTime", "").strip()
+                if category == "TMX" and fcstTime != "1500":
+                    continue
+                if category == "TMN" and fcstTime != "0600":
+                    continue
+                if fcstDate not in daily_extremes:
+                    daily_extremes[fcstDate] = {}
+                current_entry = daily_extremes[fcstDate]
+                # 각각의 카테고리에 대해 해당 fcstTime 조건에 맞는 값만 업데이트 (기존 값과 baseTime 비교)
+                existing_baseTime = current_entry.get(category + "_baseTime", "0000")
+                current_baseTime = item.get("baseTime", "0000")
+                if current_baseTime > existing_baseTime:
+                    try:
+                        current_entry[category] = float(item.get("fcstValue"))
+                    except Exception:
+                        current_entry[category] = 0.0
+                    current_entry[category + "_baseTime"] = current_baseTime
+                daily_extremes[fcstDate] = current_entry
+        self.logger.info(f"Daily extremes for TMX/TMN: {daily_extremes}")
+        # --- 끝 ---
         
-        # 6. 각 시간 슬롯에 대해, 각 카테고리별로 파일 목록(가장 오래된 파일부터) 순회하며 데이터를 조회하고,
-        #    만약 후보가 있으면 최신(나중에 나온 파일의 값으로) 데이터로 업데이트합니다.
+        # 5. forecast_offsets 설정 (예: -25 ~ 49)
+        forecast_offsets = list(range(-25, 50))
         forecasts = {}
+        now = datetime.datetime.now()
+        now_rounded = now.replace(minute=0, second=0, microsecond=0)
+        
         for offset in forecast_offsets:
             target_dt = now_rounded + datetime.timedelta(hours=offset)
             target_timestamp = target_dt.strftime("%Y%m%d%H%M")
             forecast_data = {}
             for cat in measurements_dict.keys():
                 candidate = None
-                # 오름차순(가장 오래된 파일부터)로 순회
+                candidate_diff = None
                 for filename in file_list_sorted:
                     items = file_data_dict.get(filename, [])
                     for item in items:
                         if item.get("category") != cat:
                             continue
-                        # fcstDate와 fcstTime 정규화: 양쪽 공백 제거 후 결합, 반드시 12자리여야 함.
                         fcst_date = item.get("fcstDate", "").strip()
                         fcst_time = item.get("fcstTime", "").strip()
                         key = fcst_date + fcst_time
@@ -613,16 +638,12 @@ class InputModule(AbstractInput):
                         except Exception as e:
                             self.logger.error(f"Datetime parsing error for key {key}: {e}")
                             continue
-
-                        target_dt = datetime.datetime.strptime(target_timestamp, "%Y%m%d%H%M")
                         diff = abs((fcst_dt - target_dt).total_seconds())
-                        threshold = 3600  # 1시간 이내의 데이터만 고려
-
+                        threshold = 3600  # 1시간 이내
                         if diff <= threshold:
                             if candidate is None or diff < candidate_diff:
                                 candidate = item
                                 candidate_diff = diff
-                    # 계속해서 최신 파일의 데이터로 candidate를 덮어쓰도록 함
                 if candidate is not None:
                     try:
                         raw_val = candidate.get("fcstValue")
@@ -650,13 +671,16 @@ class InputModule(AbstractInput):
                             forecast_data[cat] = float(raw_val)
                     except Exception as e:
                         self.logger.error(f"Error processing {cat} at {target_timestamp}: {e}")
-                        # candidate가 있더라도 에러가 발생하면 해당 카테고리는 업데이트하지 않습니다.
-                else:
-                    self.logger.warning(f"No data for category {cat} at target time {target_timestamp}")
-                    # 해당 카테고리는 업데이트하지 않고, 누락 처리
+            # --- TMX/TMN 오버라이드: 같은 날짜이면 일별 최신 TMX, TMN 값 사용 ---
+            target_date = target_dt.strftime("%Y%m%d")
+            if target_date in daily_extremes:
+                daily = daily_extremes[target_date]
+                if "TMX" in daily:
+                    forecast_data["TMX"] = daily["TMX"]
+                if "TMN" in daily:
+                    forecast_data["TMN"] = daily["TMN"]
             forecasts[str(offset)] = forecast_data
         
-        # 7. 최종 JSON 구성: 현재 시각(now_rounded)을 "now" 필드에 추가
         json_obj = {
             "now": now_rounded.strftime("%Y%m%d%H%M"),
             "pub_dt": pub_dt.strftime("%Y%m%d%H%M"),
