@@ -128,7 +128,7 @@ def generate_page_variables(widget_unique_id, widget_options):
                 'hex': each_range.split(',')[2]})
     except IndexError:
         logger.exception(1)
-        flash("Colors Index Error", "error")
+        # flash("Colors Index Error", "error")
 
     return {"colors_gauge_angular": colors_gauge_angular}
 
